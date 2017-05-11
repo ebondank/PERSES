@@ -42,16 +42,16 @@ config.pvcPipeThresholdList['noTemp'] = list(config.pvcPipeThresholdList['real']
 config.pvcPipeThresholdList['noTime'] = list(config.pvcPipeThresholdList['real'])
 
 for index, item in enumerate(config.ironPipesList):
-    config.ironFailureStatus.append(0)
-    config.ironPipeThresholdList.append(np.random.uniform(0, 1, 1)[0])
+    config.ironFailureStatus['real'].append(0)
+    config.ironPipeThresholdList['real'].append(np.random.uniform(0, 1, 1)[0])
 config.ironFailureStatus['noTemp'] = list(config.ironFailureStatus['real'])
 config.ironFailureStatus['noTime'] = list(config.ironFailureStatus['real'])
 config.ironPipeThresholdList['noTemp'] = list(config.ironPipeThresholdList['real'])
 config.ironPipeThresholdList['noTime'] = list(config.ironPipeThresholdList['real'])
 
 for index, item in enumerate(config.pumpAgeList):
-    config.pumpFailureStatusFile.append(0)
-    config.pumpThresholdFile.append(np.random.uniform(0, 1, 1)[0])
+    config.pumpFailureStatus['real'].append(0)
+    config.pumpThresholdList['real'].append(np.random.uniform(0, 1, 1)[0])
 config.pumpFailureStatus['noTemp'] = list(config.pumpFailureStatus['real'])
 config.pumpFailureStatus['noTime'] = list(config.pumpFailureStatus['real'])
 config.pumpThresholdList['noTemp'] = list(config.pumpThresholdList['real'])
