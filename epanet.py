@@ -124,6 +124,7 @@ def epanet(biHour, simType, dbCursor, dbObject):
         epalib.ENsaveH()
         # Reports the data from the previous run
         epalib.ENreport()
+        epalib.ENclose()
         # Closes all of the files open during the simulation
         f.close()
         fi.close()
