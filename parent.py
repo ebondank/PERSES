@@ -4,7 +4,7 @@ import numpy as np
 import epanet
 from config import *
 
-# TODO Need to set env variables for server
+# TODO Environment variables for server aren't persisting for some reason
 os.environ['SIMCOUNT'] = '0'
 
 pvcPipesFile = open('D:\\Austin_Michne\\1_11_17\\pvcPipes.txt', 'r')
@@ -74,14 +74,5 @@ databaseCursor_noTime = databaseObject_noTime.cursor()
 databaseCursor_noTime.execute('''CREATE TABLE NodeData (Bihour_Count real, NodeID real, DemandGPM real, Head real, Pressure real)''')
 databaseCursor_noTime.execute('''CREATE TABLE linkData (Bihour_Count real, LinkID real, Flow real, Velocity real, Headloss real)''')
 
-
-batch = 0
-while batch < 2525:
-    epanet.epanet(biHour, 'real', databaseCursorReal, databaseObjectReal)
-    epanet.epanet(biHour, 'noTemp', databaseCursor_noTemp, databaseObject_noTemp)
-    epanet.epanet(biHour, 'noTime', databaseCursor_noTime, databaseObject_noTime)
-
-    batch += 1
-    print(batch)
-
-os.environ['SIMCOUNT'] = str(int(os.environ['SIMCOUNT']) + 1)
+inputField = input('What type of simulation would you like to run: ')
+epanet.epanet(biHour, inputField, databaseCursorReal, databaseObjectReal)
