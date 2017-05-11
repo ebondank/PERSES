@@ -8,9 +8,7 @@ from supporting import pipeDisable, pipeFix, pumpDisable, parsingRpt
 def epanet(biHour, simType, dbCursor, dbObject):
     epalib = cdll.LoadLibrary('D:\\Austin_Michne\\1_11_17\\epanet2mingw64.dll')
     epaCount = 0
-    while epaCount < 131400:
-        if (epaCount % 1000 == 0):
-            print('Still working...')
+    while epaCount < 144:
         dayCount = math.floor(biHour / 12)
         tasMaxACT = float(tasMaxACTList[dayCount])
         periodCount = (biHour % 24)

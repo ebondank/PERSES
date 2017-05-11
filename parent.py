@@ -74,5 +74,16 @@ databaseCursor_noTime = databaseObject_noTime.cursor()
 databaseCursor_noTime.execute('''CREATE TABLE NodeData (Bihour_Count real, NodeID real, DemandGPM real, Head real, Pressure real)''')
 databaseCursor_noTime.execute('''CREATE TABLE linkData (Bihour_Count real, LinkID real, Flow real, Velocity real, Headloss real)''')
 
-inputField = input('What type of simulation would you like to run: ')
-epanet.epanet(biHour, inputField, databaseCursorReal, databaseObjectReal)
+
+batch = 0
+while batch < 2525:
+    epanet.epanet(biHour, 'real', databaseCursorReal, databaseObjectReal)
+    print('First instance done')
+    epanet.epanet(biHour, 'noTemp', databaseCursor_noTemp, databaseObject_noTemp)
+    print('Second instance done')
+    epanet.epanet(biHour, 'noTime', databaseCursor_noTime, databaseObject_noTime)
+    print('Third instance done')
+    batch += 1
+    print(batch)
+
+os.environ['SIMCOUNT'] = str(int(os.environ['SIMCOUNT']) + 1)
