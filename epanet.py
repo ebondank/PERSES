@@ -1,11 +1,11 @@
 from ctypes import cdll
 import math
-from config import *
 import numpy as np
 from supporting import pipeDisable, pipeFix, pumpDisable, parsingRpt
 
 
 def epanet(simType, dbCursor, dbObject):
+    from config import *
     epalib = cdll.LoadLibrary('D:\\Austin_Michne\\1_11_17\\epanet2mingw64.dll')
     epaCount = 0
     while epaCount < 144:
