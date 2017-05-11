@@ -18,10 +18,10 @@ def epanet(biHour, simType, dbCursor, dbObject):
             if (int(pvcFailureStatus[simType][index]) != 0):
                 pvcFailureStatus[simType][index] = int(pvcFailureStatus[simType][index]) - 1
                 if (int(pvcFailureStatus[simType][index]) <= 0):
-                    self.pipeFixCount = 0
+                    pipeFixCount = 0
                     while (pipeFixCount < 24):
-                        pipeFix(pvcPipesList, pvcTriggerList, index, self.pipeFixCount, simType)
-                        self.pipeFixCount += 1
+                        pipeFix(pvcPipesList, pvcTriggerList, index, pipeFixCount, simType)
+                        pipeFixCount += 1
                     pvcPipeAges[simType][index] = 0
                 else:
                     pipeDisable(pvcPipesList, pvcTriggerList, index, periodCount, simType)
@@ -48,10 +48,10 @@ def epanet(biHour, simType, dbCursor, dbObject):
             if (int(ironFailureStatus[simType][index]) != 0):
                 ironFailureStatus[simType][index] = int(ironFailureStatus[simType][index]) - 1
                 if (int(ironFailureStatus[simType][index]) <= 0):
-                    self.ironPipeFixCount = 0
-                    while (self.ironPipeFixCount < 24):
-                        pipeFix(ironPipesList, ironTriggerList, index, self.ironPipeFixCount, simType)
-                        self.ironPipeFixCount += 1
+                    ironPipeFixCount = 0
+                    while (ironPipeFixCount < 24):
+                        pipeFix(ironPipesList, ironTriggerList, index, ironPipeFixCount, simType)
+                        ironPipeFixCount += 1
                 else:
                     pipeDisable(ironPipesList, ironTriggerList, index, periodCount, simType)
                 ironPipeAges[simType][index] = 0
