@@ -107,23 +107,24 @@ def epanet(biHour, simType, dbCursor, dbObject):
 
         f = open('D:\\Austin_Michne\\tripleSim\\input\\%s\\NorthMarin_%s.inp' % (simType, periodCount), 'r')
         fi = open('D:\\Austin_Michne\\tripleSim\\output\\%s\\NorthMarin_%s.rpt' % (simType, biHour), 'w')
-        fu = open('D:\\Austin_Michne\\tripleSim\\output\\%s\\NorthMarin_%s.bin' % (simType, biHour), 'w')
+        # fu = open('D:\\Austin_Michne\\tripleSim\\output\\%s\\NorthMarin_%s.bin' % (simType, biHour), 'w')
         # Initializes the files for encoding
         a = 'D:\\Austin_Michne\\tripleSim\\input\\%s\\NorthMarin_%s.inp' % (simType, periodCount)
         b = 'D:\\Austin_Michne\\tripleSim\\output\\%s\\NorthMarin_%s.rpt' % (simType, biHour)
-        c = 'D:\\Austin_Michne\\tripleSim\\output\\%s\\NorthMarin_%s.bin' % (simType, biHour)
+        # c = 'D:\\Austin_Michne\\tripleSim\\output\\%s\\NorthMarin_%s.bin' % (simType, biHour)
         # Byte objects
         b_a = a.encode('UTF-8')
         b_b = b.encode('UTF-8')
-        b_c = c.encode('UTF-8')
+        # b_c = c.encode('UTF-8')
         # Opens the toolkit
-        epalib.ENopen(b_a, b_b, b_c)
+        epalib.ENopen(b_a, b_b, "")
         # Does the hydraulic solving
         epalib.ENsolveH()
         # Saves the hydraulic results file
         epalib.ENsaveH()
         # Reports the data from the previous run
         epalib.ENreport()
+        epalib.ENcloseH()
         epalib.ENclose()
         # Closes all of the files open during the simulation
         f.close()
