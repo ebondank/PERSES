@@ -1,8 +1,8 @@
-def pipeDisable(pipeList, triggerList, index, Remainder):
+def pipeDisable(pipeList, triggerList, index, Remainder, simType):
     stringToFind = pipeList[index]
     stringToMute = triggerList[index]
 
-    breakingPipeFile = open('D:\\Austin_Michne\\1_11_17\\NorthMarin_%s.inp' % (Remainder), 'r')
+    breakingPipeFile = open('D:\\Austin_Michne\\tripleSim\\input\\%s\\NorthMarin_%s.inp' % (simType, Remainder), 'r')
     fileToBreakList = breakingPipeFile.read().expandtabs().splitlines()
     breakingPipeFile.close()
 
@@ -10,17 +10,17 @@ def pipeDisable(pipeList, triggerList, index, Remainder):
         if itm == stringToFind:
             fileToBreakList[idx] = stringToMute
 
-    newlyBrokenFile = open('D:\\Austin_Michne\\1_11_17\\NorthMarin_%s.inp' % (Remainder), 'w')
+    newlyBrokenFile = open('D:\\Austin_Michne\\tripleSim\\input\\%s\\NorthMarin_%s.inp' % (simType, Remainder), 'w')
     for inx, ite in enumerate(fileToBreakList):
         newlyBrokenFile.write('%s\n' % fileToBreakList[inx])
     newlyBrokenFile.close()
 
 
-def pipeFix(pipeList, triggerList, index, Remainder):
+def pipeFix(pipeList, triggerList, index, Remainder, simType):
     stringToEnable = pipeList[index]
     stringToFind = triggerList[index]
 
-    breakingPipeFile = open('D:\\Austin_Michne\\1_11_17\\NorthMarin_%s.inp' % (Remainder), 'r')
+    breakingPipeFile = open('D:\\Austin_Michne\\tripleSim\\input\\%s\\NorthMarin_%s.inp' % (simType, Remainder), 'r')
     fileToBreakList = breakingPipeFile.read().expandtabs().splitlines()
     breakingPipeFile.close()
 
@@ -28,7 +28,7 @@ def pipeFix(pipeList, triggerList, index, Remainder):
         if itm == stringToFind:
             fileToBreakList[idx] = stringToEnable
 
-    newlyBrokenFile = open('D:\\Austin_Michne\\1_11_17\\NorthMarin_%s.inp' % (Remainder), 'w')
+    newlyBrokenFile = open('D:\\Austin_Michne\\tripleSim\\input\\%s\\NorthMarin_%s.inp' % (simType, Remainder), 'w')
     for inx, ite in enumerate(fileToBreakList):
         newlyBrokenFile.write('%s\n' % fileToBreakList[inx])
     newlyBrokenFile.close()
@@ -40,7 +40,6 @@ def triggerListCreation(inputList):
         stringToMute = str(item)
         fixedString = stringToMute.replace('Open', 'Closed')
         triggerList.append(fixedString)
-
     return triggerList
 
 
@@ -50,15 +49,14 @@ def pumpMuteListCreation(inputList):
         if ("SPEED 1" in item):
             newString = item.replace("SPEED 1", "SPEED 0")
             triggerList.append(newString)
-
     return triggerList
 
 
-def pumpDisable(pumpDependenciesList, pumpDependenciesMuteList, index, Remainder):
+def pumpDisable(pumpDependenciesList, pumpDependenciesMuteList, index, Remainder, simType):
     stringToFind = pumpDependenciesList[index]
     stringToMute = pumpDependenciesMuteList[index]
 
-    breakingPumpFile = open('D:\\Austin_Michne\\1_11_17\\NorthMarin_%s.inp' % (Remainder), 'r')
+    breakingPumpFile = open('D:\\Austin_Michne\\tripleSim\\input\\%s\\NorthMarin_%s.inp' % (simType, Remainder), 'r')
     fileToBreakList = breakingPumpFile.read().expandtabs().splitlines()
 
     breakingPumpFile.close()
@@ -66,7 +64,7 @@ def pumpDisable(pumpDependenciesList, pumpDependenciesMuteList, index, Remainder
         if (itm == (stringToFind)):
             fileToBreakList[idx] = stringToMute
 
-    newlyBrokenFile = open('D:\\Austin_Michne\\1_11_17\\NorthMarin_%s.inp' % (Remainder), 'w')
+    newlyBrokenFile = open('D:\\Austin_Michne\\tripleSim\\input\\%s\\NorthMarin_%s.inp' % (simType, Remainder), 'w')
     for inx, ite in enumerate(fileToBreakList):
         newlyBrokenFile.write('%s\n' % fileToBreakList[inx])
     newlyBrokenFile.close()

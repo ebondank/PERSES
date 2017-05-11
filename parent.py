@@ -1,8 +1,9 @@
 import os
 import sqlite3 as sql
 import numpy as np
-from epanet import epanet
+import epanet
 import config
+import sys
 
 # TODO Need to set env variables for server
 
@@ -78,9 +79,12 @@ databaseObject_noTime.close()
 
 batch = 0
 while batch < 2525:
-    epanet('real', databaseCursorReal, databaseObjectReal)
-    epanet('noTemp', databaseCursor_noTemp, databaseObject_noTemp)
-    epanet('noTime', databaseCursor_noTime, databaseObject_noTime)
+    epanet.epanet('real', databaseCursorReal, databaseObjectReal)
+    epanet.epanet('noTemp', databaseCursor_noTemp, databaseObject_noTemp)
+    epanet.epanet('noTime', databaseCursor_noTime, databaseObject_noTime)
+    del epanet
+    del sys.modules['epanet']
+    import epanet
     batch += 1
     print(batch)
 
