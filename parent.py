@@ -2,7 +2,9 @@ import os
 import sqlite3 as sql
 import numpy as np
 from epanet import epanet
+import config
 
+# TODO qwd
 
 pvcPipesFile = open('D:\\Austin_Michne\\1_11_17\\pvcPipes.txt', 'r')
 pvcPipesList = pvcPipesFile.read().expandtabs().splitlines()
@@ -16,59 +18,69 @@ ironPipesFile = open('D:\\Austin_Michne\\1_11_17\\ironPipes.txt', 'r')
 ironPipesList = ironPipesFile.read().expandtabs().splitlines()
 ironPipesFile.close()
 
-ironPipeAges = np.random.uniform(0, 85, len(ironPipesList))
-pvcCount = len(pvcPipesList)
-pvcPipeAges = np.append(np.random.normal(40, 9, pvcCount - 20), np.random.normal(13, 3, 20))
-pumpAgeList = np.array([10, 25])
+config.ironPipeAges['real'] = np.random.uniform(0, 85, len(ironPipesList))
+config.ironPipeAges['noTemp'] = config.ironPipeAges['real']
+config.ironPipeAges['noTime'] = config.ironPipeAges['real']
 
-pvcFailureStatusFile = open('D:\\Austin_Michne\\1_11_17\\pvcFailureStatus.txt', 'w')
-pvcAgeFile = open('D:\\Austin_Michne\\1_11_17\\pvcAgeFile.txt', 'w')
-pvcPipeThresholdFile = open('D:\\Austin_Michne\\1_11_17\\pvcPipeThresholdFile.txt', 'w')
-for index, item in enumerate(pvcPipesList):
-    pvcFailureStatusFile.write('0\n')
-    pvcAgeFile.write('%s\n' % (pvcPipeAges[index]))
-    pvcPipeThresholdFile.write('%s\n' % (np.random.uniform(0, 1, 1))[0])
-pvcFailureStatusFile.close()
-pvcAgeFile.close()
-pvcPipeThresholdFile.close()
+pvcCount = len(config.pvcPipesList)
+config.pvcPipeAges['real'] = np.append(np.random.normal(40, 9, pvcCount - 20), np.random.normal(13, 3, 20))
+config.pvcPipeAges['noTemp'] = config.pvcPipeAges['real']
+config.pvcPipeAges['noTime'] = config.pvcPipeAges['real']
 
-ironFailureStatusFile = open('D:\\Austin_Michne\\1_11_17\\ironFailureStatus.txt', 'w')
-ironAgeFile = open('D:\\Austin_Michne\\1_11_17\\ironAgeFile.txt', 'w')
-ironPipeThresholdFile = open('D:\\Austin_Michne\\1_11_17\\ironPipeThresholdFile.txt', 'w')
-for index, item in enumerate(ironPipesList):
-    ironFailureStatusFile.write('0\n')
-    ironAgeFile.write('%s\n' % (ironPipeAges[index]))
-    ironPipeThresholdFile.write('%s\n' % (np.random.uniform(0, 1, 1))[0])
-ironFailureStatusFile.close()
-ironAgeFile.close()
-ironPipeThresholdFile.close()
+config.pumpAgeList['real'] = np.array([10, 25])
+config.pumpAgeList['noTemp'] = config.pumpAgeList['real']
+config.pumpAgeList['noTime'] = config.pumpAgeList['real']
 
-pumpFailureStatusFile = open('D:\\Austin_Michne\\1_11_17\\pumpFailureStatus.txt', 'w')
-pumpAgeFile = open('D:\\Austin_Michne\\1_11_17\\pumpAgeFile.txt', 'w')
-pumpThresholdFile = open('D:\\Austin_Michne\\1_11_17\\pumpThresholdFile.txt', 'w')
-for index, item in enumerate(pumpAgeList):
-    pumpFailureStatusFile.write('0\n')
-    pumpAgeFile.write('%s\n' % (pumpAgeList[index]))
-    pumpThresholdFile.write('%s\n' % (np.random.uniform(0, 1, 1))[0])
-pumpFailureStatusFile.close()
-pumpAgeFile.close()
-pumpThresholdFile.close()
-try:
-    os.remove('D:\\Austin_Michne\\1_11_17\\testing.db')
-except IOError:
-    print("There was no such file found")
+for index, item in enumerate(config.pvcPipesList):
+    config.pvcFailureStatus['real'].append(0)
+    config.pvcPipeThresholdList['real'].append(np.random.uniform(0, 1, 1)[0])
+config.pvcFailureStatus['noTemp'] = config.pvcFailureStatus['real']
+config.pvcFailureStatus['noTime'] = config.pvcFailureStatus['real']
+config.pvcPipeThresholdList['noTemp'] = config.pvcPipeThresholdList['real']
+config.pvcPipeThresholdList['noTime'] = config.pvcPipeThresholdList['real']
 
-databaseObject = sql.connect('D:\\Austin_Michne\\1_11_17\\testing.db')
-databaseCursor = databaseObject.cursor()
-databaseCursor.execute('''CREATE TABLE NodeData (Bihour_Count real, NodeID real, DemandGPM real, Head real, Pressure real)''')
-databaseCursor.execute('''CREATE TABLE linkData (Bihour_Count real, LinkID real, Flow real, Velocity real, Headloss real)''')
-databaseObject.close()
-readCountFile = open('D:\\Austin_Michne\\1_11_17\\countKeeper.txt', 'w')
-readCountFile.write('0')
-readCountFile.close()
+for index, item in enumerate(config.ironPipesList):
+    config.ironFailureStatus.append(0)
+    config.ironPipeThresholdList.append(np.random.uniform(0, 1, 1)[0])
+config.ironFailureStatus['noTemp'] = config.ironFailureStatus['real']
+config.ironFailureStatus['noTime'] = config.ironFailureStatus['real']
+config.ironPipeThresholdList['noTemp'] = config.ironPipeThresholdList['real']
+config.ironPipeThresholdList['noTime'] = config.ironPipeThresholdList['real']
+
+for index, item in enumerate(config.pumpAgeList):
+    config.pumpFailureStatusFile.append(0)
+    config.pumpThresholdFile.append(np.random.uniform(0, 1, 1)[0])
+config.pumpFailureStatus['noTemp'] = config.pumpFailureStatus['real']
+config.pumpFailureStatus['noTime'] = config.pumpFailureStatus['real']
+config.pumpThresholdList['noTemp'] = config.pumpThresholdList['real']
+config.pumpThresholdList['noTime'] = config.pumpThresholdList['real']
+
+# Creating all three databases
+databaseObjectReal = sql.connect(('D:\\Austin_Michne\\tripleSim\\realistic{}.db').format(os.environ['SIMCOUNT']))
+databaseCursorReal = databaseObjectReal.cursor()
+databaseCursorReal.execute('''CREATE TABLE NodeData (Bihour_Count real, NodeID real, DemandGPM real, Head real, Pressure real)''')
+databaseCursorReal.execute('''CREATE TABLE linkData (Bihour_Count real, LinkID real, Flow real, Velocity real, Headloss real)''')
+databaseObjectReal.close()
+
+databaseObject_noTemp = sql.connect(('D:\\Austin_Michne\\tripleSim\\noTemp{}.db').format(os.environ['SIMCOUNT']))
+databaseCursor_noTemp = databaseObject_noTemp.cursor()
+databaseCursor_noTemp.execute('''CREATE TABLE NodeData (Bihour_Count real, NodeID real, DemandGPM real, Head real, Pressure real)''')
+databaseCursor_noTemp.execute('''CREATE TABLE linkData (Bihour_Count real, LinkID real, Flow real, Velocity real, Headloss real)''')
+databaseObject_noTemp.close()
+
+databaseObject_noTime = sql.connect(('D:\\Austin_Michne\\tripleSim\\noTime{}.db').format(os.environ['SIMCOUNT']))
+databaseCursor_noTime = databaseObject_noTime.cursor()
+databaseCursor_noTime.execute('''CREATE TABLE NodeData (Bihour_Count real, NodeID real, DemandGPM real, Head real, Pressure real)''')
+databaseCursor_noTime.execute('''CREATE TABLE linkData (Bihour_Count real, LinkID real, Flow real, Velocity real, Headloss real)''')
+databaseObject_noTime.close()
+
 
 batch = 0
 while batch < 2525:
-    epanet()
+    epanet('real', databaseCursorReal, databaseObjectReal)
+    epanet('noTemp', databaseCursor_noTemp, databaseObject_noTemp)
+    epanet('noTime', databaseCursor_noTime, databaseObject_noTime)
     batch += 1
     print(batch)
+
+os.environ['SIMCOUNT'] = str(int(os.environ['SIMCOUNT']) + 1)

@@ -5,7 +5,7 @@ import numpy as np
 from supporting import pipeDisable, pipeFix, pumpDisable, parsingRpt
 
 
-def epanet():
+def epanet(simType, dbCursor, dbObject):
     epalib = cdll.LoadLibrary('D:\\Austin_Michne\\1_11_17\\epanet2mingw64.dll')
     biHourt = 0
     while biHourt < 144:
@@ -36,7 +36,7 @@ def epanet():
                     pvcPipeAges[index] = 0
                     pvcPipeThresholdList[index] = (np.random.uniform(0, 1, 1))[0]
                     pipeDisable(pvcPipesList, pvcTriggerList, index, periodCount)
-                    pipeFailureFile = open('D:\\Austin_Michne\\1_11_18_pvcPipeFail.txt', 'a')
+                    pipeFailureFile = open(('{}pvcPipeFail.txt').format(simType), 'a')
                     pipeFailureFile.write('%s %s\n' % (index, biHour))
                     pipeFailureFile.close()
                     # This is based off of the 88 hr repair time, can be
@@ -68,8 +68,7 @@ def epanet():
                     ironPipeThresholdList[index] = (np.random.uniform(0, 1, 1))[0]
                     pipeDisable(ironPipesList, ironTriggerList, index, periodCount)
                     # Writing to the seperate failure statistics file
-                    pipeFailureFile = open(
-                        'D:\\Austin_Michne\\1_11_18_ironPipeFail.txt', 'a')
+                    pipeFailureFile = open(('{}ironPipeFail.txt').format(simType), 'a')
                     pipeFailureFile.write('%s %s\n' % (index, biHour))
                     pipeFailureFile.close()
                     # This is based off of the 88 hr repair time, can be
@@ -98,7 +97,7 @@ def epanet():
                 if float(pumpWeibullList[indexSelect]) > float(pumpThresholdList[index]):
                     pumpAgeList[index] = 0
                     pumpThresholdList[index] = (np.random.uniform(0, 1, 1))[0]
-                    pumpFailureFile = open('D:\\Austin_Michne\\1_11_18_pumpFail.txt', 'a')
+                    pumpFailureFile = open(('{}pumpFail.txt').format(simType), 'a')
                     pumpFailureFile.write('%s %s\n' % (index, biHour))
                     pumpFailureFile.close()
                     pumpDisable(pumpList, mutedPumpList, index, periodCount)
@@ -108,13 +107,13 @@ def epanet():
 
                 pumpAgeList[index] = float(pumpAgeList[index]) + biHourToYear
 
-        f = open('D:\\Austin_Michne\\1_11_17\\NorthMarin_%s.inp' % (periodCount), 'r')
-        fi = open('D:\\Austin_Michne\\1_11_17\\output\\NorthMarin_%s.rpt' % (biHour), 'w')
-        fu = open('D:\\Austin_Michne\\1_11_17\\output\\NorthMarin_%s.bin' % (biHour), 'w')
+        f = open('D:\\Austin_Michne\\tripleSim\\input\\%s\\NorthMarin_%s.inp' % (simType, periodCount), 'r')
+        fi = open('D:\\Austin_Michne\\tripleSim\\output\\%s\\NorthMarin_%s.rpt' % (simType, biHour), 'w')
+        fu = open('D:\\Austin_Michne\\tripleSim\\output\\%s\\NorthMarin_%s.bin' % (simType, biHour), 'w')
         # Initializes the files for encoding
-        a = 'D:\\Austin_Michne\\1_11_17\\NorthMarin_%s.inp' % (periodCount)
-        b = 'D:\\Austin_Michne\\1_11_17\\output\\NorthMarin_%s.rpt' % (biHour)
-        c = 'D:\\Austin_Michne\\1_11_17\\output\\NorthMarin_%s.bin' % (biHour)
+        a = 'D:\\Austin_Michne\\tripleSim\\input\\%s\\NorthMarin_%s.inp' % (simType, periodCount)
+        b = 'D:\\Austin_Michne\\tripleSim\\output\\%s\\NorthMarin_%s.rpt' % (simType, biHour)
+        c = 'D:\\Austin_Michne\\tripleSim\\output\\%s\\NorthMarin_%s.bin' % (simType, biHour)
         # Byte objects
         b_a = a.encode('UTF-8')
         b_b = b.encode('UTF-8')
@@ -132,48 +131,6 @@ def epanet():
         fi.close()
         fu.close()
 
-        parsingRpt('D:\\Austin_Michne\\1_11_17\\output\\NorthMarin_%s.rpt' % (biHour), databaseCursor, databaseObject)
-
-        biHour += 1
+        parsingRpt('D:\\Austin_Michne\\tripleSim\\output\\%s\\NorthMarin_%s.rpt' % (simType, biHour), config.databaseCursor, config.databaseObject)
+        config.biHour += 1
         biHourt += 1
-
-    extCountFile = open('D:\\Austin_Michne\\1_11_17\\countKeeper.txt', 'w')
-    extCountFile.write('%s' % (biHour))
-    extCountFile.close()
-
-    # Iron list updating
-    ironAgeFile = open('D:\\Austin_Michne\\1_11_17\\ironAgeFile.txt', 'w')
-    ironFailureStatusFile = open('D:\\Austin_Michne\\1_11_17\\ironFailureStatus.txt', 'w')
-    ironPipeThresholdFile = open('D:\\Austin_Michne\\1_11_17\\ironPipeThresholdFile.txt', 'w')
-    for index, item in enumerate(ironPipeAges):
-        ironAgeFile.write('%s\n' % ironPipeAges[index])
-        ironFailureStatusFile.write('%s\n' % ironFailureStatus[index])
-        ironPipeThresholdFile.write('%s\n' % ironPipeThresholdList[index])
-    ironPipeThresholdFile.close()
-    ironAgeFile.close()
-    ironFailureStatusFile.close()
-
-    # PVC list updating
-    pvcFailureStatusFile = open('D:\\Austin_Michne\\1_11_17\\pvcFailureStatus.txt', 'w')
-    pvcAgeFile = open('D:\\Austin_Michne\\1_11_17\\pvcAgeFile.txt', 'w')
-    pvcPipeThresholdFile = open(
-        'D:\\Austin_Michne\\1_11_17\\pvcPipeThresholdFile.txt', 'w')
-    for index, item in enumerate(pvcPipeAges):
-        pvcFailureStatusFile.write('%s\n' % pvcFailureStatus[index])
-        pvcAgeFile.write('%s\n' % pvcPipeAges[index])
-        pvcPipeThresholdFile.write('%s\n' % pvcPipeThresholdList[index])
-    pvcPipeThresholdFile.close()
-    pvcAgeFile.close()
-    pvcFailureStatusFile.close()
-
-    # Pump list updating
-    pumpFailureStatusFile = open('D:\\Austin_Michne\\1_11_17\\pumpFailureStatus.txt', 'w')
-    pumpThresholdFile = open('D:\\Austin_Michne\\1_11_17\\pumpThresholdFile.txt', 'w')
-    pumpAgeFile = open('D:\\Austin_Michne\\1_11_17\\pumpAgeFile.txt', 'w')
-    for index, item in enumerate(pumpAgeList):
-        pumpFailureStatusFile.write('%s\n' % pumpFailureStatus[index])
-        pumpThresholdFile.write('%s\n' % pumpThresholdList[index])
-        pumpAgeFile.write('%s\n' % pumpAgeList[index])
-    pumpAgeFile.close()
-    pumpFailureStatusFile.close()
-    pumpThresholdFile.close()
