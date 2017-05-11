@@ -21,16 +21,16 @@ ironPipesFile.close()
 
 ironPipeAges['real'] = list(np.random.uniform(0, 85, len(ironPipesList)))
 ironPipeAges['noTemp'] = list(ironPipeAges['real'])
-ironPipeAges['noTime'] = list(ironPipeAges['real'])
+ironPipeAges['noTime'] = list([65] * len(ironPipesList))
 
 pvcCount = len(pvcPipesList)
 pvcPipeAges['real'] = np.append(np.random.normal(40, 9, pvcCount - 20), np.random.normal(13, 3, 20))
 pvcPipeAges['noTemp'] = list(pvcPipeAges['real'])
-pvcPipeAges['noTime'] = list(pvcPipeAges['real'])
+pvcPipeAges['noTime'] = list([33] * pvcCount)
 
 pumpAgeList['real'] = np.array([10, 25])
 pumpAgeList['noTemp'] = list(pumpAgeList['real'])
-pumpAgeList['noTime'] = list(pumpAgeList['real'])
+pumpAgeList['noTime'] = list([11, 11])
 
 for index, item in enumerate(pvcPipesList):
     pvcFailureStatus['real'].append(0)

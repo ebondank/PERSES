@@ -10,7 +10,7 @@ def epanet(biHour, simType, dbCursor, dbObject):
     epaCount = 0
     while epaCount < 144:
         dayCount = math.floor(biHour / 12)
-        tasMaxACT = float(tasMaxACTList[dayCount])
+        tasMaxACT = float(tasMaxACTList[simType][dayCount])
         periodCount = (biHour % 24)
 
         for index, item in enumerate(pvcPipesList):
@@ -22,7 +22,8 @@ def epanet(biHour, simType, dbCursor, dbObject):
                     while (pipeFixCount < 24):
                         pipeFix(pvcPipesList, pvcTriggerList, index, pipeFixCount, simType)
                         pipeFixCount += 1
-                    pvcPipeAges[simType][index] = 0
+                    if (simType != 'noTime'):
+                        pvcPipeAges[simType][index] = 0
                 else:
                     pipeDisable(pvcPipesList, pvcTriggerList, index, periodCount, simType)
             else:
@@ -42,7 +43,8 @@ def epanet(biHour, simType, dbCursor, dbObject):
                     # This is based off of the 88 hr repair time, can be
                     # changed to w/e
                     pvcFailureStatus[simType][index] = 44
-                pvcPipeAges[simType][index] = float(pvcPipeAges[simType][index]) + biHourToYear
+                if (simType != 'noTime'):
+                    pvcPipeAges[simType][index] = float(pvcPipeAges[simType][index]) + biHourToYear
 
         for index, item in enumerate(ironPipesList):
             if (int(ironFailureStatus[simType][index]) != 0):
@@ -54,7 +56,8 @@ def epanet(biHour, simType, dbCursor, dbObject):
                         ironPipeFixCount += 1
                 else:
                     pipeDisable(ironPipesList, ironTriggerList, index, periodCount, simType)
-                ironPipeAges[simType][index] = 0
+                if (simType != 'noTime'):
+                    ironPipeAges[simType][index] = 0
 
             else:
                 indexSelect = 0
@@ -74,7 +77,8 @@ def epanet(biHour, simType, dbCursor, dbObject):
                     # This is based off of the 88 hr repair time, can be
                     # changed to w/e
                     ironFailureStatus[simType][index] = 44
-                ironPipeAges[simType][index] = float(ironPipeAges[simType][index]) + biHourToYear
+                if (simType != 'noTime'):
+                    ironPipeAges[simType][index] = float(ironPipeAges[simType][index]) + biHourToYear
         for index, item in enumerate(pumpList):
             if (int(pumpFailureStatus[simType][index]) != 0):
                 pumpFailureStatus[simType][index] = int(pumpFailureStatus[simType][index]) - 1
@@ -84,7 +88,8 @@ def epanet(biHour, simType, dbCursor, dbObject):
                     while (pumpFixCount < 24):
                         pumpDisable(mutedPumpList, pumpList, index, pumpFixCount, simType)
                         pumpFixCount += 1
-                    pumpAgeList[simType][index] = 0
+                    if (simType != 'noTime'):
+                        pumpAgeList[simType][index] = 0
 
             else:
                 indexSelect = (math.trunc(tasMaxACT) - 19)
@@ -93,7 +98,8 @@ def epanet(biHour, simType, dbCursor, dbObject):
                 indexSelect = indexSelect + \
                     (30 * int(math.trunc(float(pumpAgeList[simType][index]))))
                 if float(pumpWeibullList[indexSelect]) > float(pumpThresholdList[simType][index]):
-                    pumpAgeList[simType][index] = 0
+                    if (simType != 'noTime'):
+                        pumpAgeList[simType][index] = 0
                     pumpThresholdList[simType][index] = float((np.random.uniform(0, 1, 1))[0])
                     pumpFailureFile = open(('{}_pumpFail.txt').format(simType), 'a')
                     pumpFailureFile.write('%s %s\n' % (index, biHour))
@@ -102,8 +108,8 @@ def epanet(biHour, simType, dbCursor, dbObject):
                     # This is based off of the 16 hr repair time, can be
                     # changed to w/e
                     pumpFailureStatus[simType][index] = 8
-
-                pumpAgeList[simType][index] = float(pumpAgeList[simType][index]) + biHourToYear
+                if (simType != 'noTime'):
+                    pumpAgeList[simType][index] = float(pumpAgeList[simType][index]) + biHourToYear
 
         f = open('D:\\Austin_Michne\\tripleSim\\input\\%s\\NorthMarin_%s.inp' % (simType, periodCount), 'r')
         fi = open('D:\\Austin_Michne\\tripleSim\\output\\%s\\NorthMarin_%s.rpt' % (simType, biHour), 'w')
