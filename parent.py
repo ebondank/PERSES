@@ -75,11 +75,11 @@ databaseCursor_noTime.execute('''CREATE TABLE linkData (Bihour_Count real, LinkI
 
 batch = 0
 while batch < 2525:
-    epanet.epanet(biHour, 'real', databaseCursorReal, databaseObjectReal)
+    epanet.epanet(batch, 'real', databaseCursorReal, databaseObjectReal)
     print('First instance done')
-    epanet.epanet(biHour, 'noTemp', databaseCursor_noTemp, databaseObject_noTemp)
+    epanet.epanet(batch, 'noTemp', databaseCursor_noTemp, databaseObject_noTemp)
     print('Second instance done')
-    epanet.epanet(biHour, 'noTime', databaseCursor_noTime, databaseObject_noTime)
+    epanet.epanet(batch, 'noTime', databaseCursor_noTime, databaseObject_noTime)
     print('Third instance done')
     batch += 1
     print(batch)

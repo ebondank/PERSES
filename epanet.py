@@ -5,9 +5,10 @@ import numpy as np
 from supporting import pipeDisable, pipeFix, pumpDisable, parsingRpt
 
 
-def epanet(biHour, simType, dbCursor, dbObject):
+def epanet(batch, simType, dbCursor, dbObject):
     epalib = cdll.LoadLibrary('D:\\Austin_Michne\\1_11_17\\epanet2mingw64.dll')
     epaCount = 0
+    biHour = (batch * 144)
     while epaCount < 144:
         dayCount = math.floor(biHour / 12)
         tasMaxACT = float(tasMaxACTList[simType][dayCount])
