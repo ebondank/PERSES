@@ -2,7 +2,7 @@ import os
 import sqlite3 as sql
 import numpy as np
 import epanet
-import config
+from config import *
 import sys
 
 # TODO Need to set env variables for server
@@ -76,7 +76,6 @@ databaseCursor_noTime.execute('''CREATE TABLE NodeData (Bihour_Count real, NodeI
 databaseCursor_noTime.execute('''CREATE TABLE linkData (Bihour_Count real, LinkID real, Flow real, Velocity real, Headloss real)''')
 databaseObject_noTime.close()
 
-config()
 batch = 0
 while batch < 2525:
     epanet.epanet('real', databaseCursorReal, databaseObjectReal)
