@@ -78,9 +78,9 @@ databaseObject_noTime.close()
 
 batch = 0
 while batch < 2525:
-    epanet.epanet('real', databaseCursorReal, databaseObjectReal)
-    epanet.epanet('noTemp', databaseCursor_noTemp, databaseObject_noTemp)
-    epanet.epanet('noTime', databaseCursor_noTime, databaseObject_noTime)
+    epanet.epanet(biHour, 'real', databaseCursorReal, databaseObjectReal)
+    epanet.epanet(biHour, 'noTemp', databaseCursor_noTemp, databaseObject_noTemp)
+    epanet.epanet(biHour, 'noTime', databaseCursor_noTime, databaseObject_noTime)
     del epanet
     del sys.modules['epanet']
     import epanet
