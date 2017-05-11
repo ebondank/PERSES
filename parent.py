@@ -3,7 +3,6 @@ import sqlite3 as sql
 import numpy as np
 import epanet
 from config import *
-import sys
 
 # TODO Need to set env variables for server
 os.environ['SIMCOUNT'] = '0'
