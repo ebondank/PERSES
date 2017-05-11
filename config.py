@@ -27,8 +27,9 @@ pumpWeibullList = pumpWeibullFile.read().splitlines()
 pumpWeibullFile.close()
 
 tasFile = open('D:\\Austin_Michne\\1_11_17\\tasMaxBD.txt', 'r')
-tasMaxACTList = {'real': list(tasFile.read().expandtabs().splitlines()), 'noTime': list(tasFile.read().expandtabs().splitlines()), 'noTemp': list(np.repeat([22], 33000))}
+tasList = tasFile.read().expandtabs().splitlines()
 tasFile.close()
+tasMaxACTList = {'real': list(tasList), 'noTime': list(tasList), 'noTemp': list(np.repeat([22], 33000))}
 
 ironPipesFile = open('D:\\Austin_Michne\\1_11_17\\ironPipes.txt', 'r')
 ironPipesList = ironPipesFile.read().expandtabs().splitlines()
