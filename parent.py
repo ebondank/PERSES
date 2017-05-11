@@ -6,7 +6,7 @@ import config
 import sys
 
 # TODO Need to set env variables for server
-
+os.environ['SIMCOUNT'] = 0
 
 pvcPipesFile = open('D:\\Austin_Michne\\1_11_17\\pvcPipes.txt', 'r')
 pvcPipesList = pvcPipesFile.read().expandtabs().splitlines()
