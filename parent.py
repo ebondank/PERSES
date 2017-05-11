@@ -20,42 +20,42 @@ ironPipesFile = open('D:\\Austin_Michne\\1_11_17\\ironPipes.txt', 'r')
 ironPipesList = ironPipesFile.read().expandtabs().splitlines()
 ironPipesFile.close()
 
-config.ironPipeAges['real'] = list(np.random.uniform(0, 85, len(ironPipesList)))
-config.ironPipeAges['noTemp'] = list(config.ironPipeAges['real'])
-config.ironPipeAges['noTime'] = list(config.ironPipeAges['real'])
+ironPipeAges['real'] = list(np.random.uniform(0, 85, len(ironPipesList)))
+ironPipeAges['noTemp'] = list(ironPipeAges['real'])
+ironPipeAges['noTime'] = list(ironPipeAges['real'])
 
-pvcCount = len(config.pvcPipesList)
-config.pvcPipeAges['real'] = np.append(np.random.normal(40, 9, pvcCount - 20), np.random.normal(13, 3, 20))
-config.pvcPipeAges['noTemp'] = list(config.pvcPipeAges['real'])
-config.pvcPipeAges['noTime'] = list(config.pvcPipeAges['real'])
+pvcCount = len(pvcPipesList)
+pvcPipeAges['real'] = np.append(np.random.normal(40, 9, pvcCount - 20), np.random.normal(13, 3, 20))
+pvcPipeAges['noTemp'] = list(pvcPipeAges['real'])
+pvcPipeAges['noTime'] = list(pvcPipeAges['real'])
 
-config.pumpAgeList['real'] = np.array([10, 25])
-config.pumpAgeList['noTemp'] = list(config.pumpAgeList['real'])
-config.pumpAgeList['noTime'] = list(config.pumpAgeList['real'])
+pumpAgeList['real'] = np.array([10, 25])
+pumpAgeList['noTemp'] = list(pumpAgeList['real'])
+pumpAgeList['noTime'] = list(pumpAgeList['real'])
 
-for index, item in enumerate(config.pvcPipesList):
-    config.pvcFailureStatus['real'].append(0)
-    config.pvcPipeThresholdList['real'].append(np.random.uniform(0, 1, 1)[0])
-config.pvcFailureStatus['noTemp'] = list(config.pvcFailureStatus['real'])
-config.pvcFailureStatus['noTime'] = list(config.pvcFailureStatus['real'])
-config.pvcPipeThresholdList['noTemp'] = list(config.pvcPipeThresholdList['real'])
-config.pvcPipeThresholdList['noTime'] = list(config.pvcPipeThresholdList['real'])
+for index, item in enumerate(pvcPipesList):
+    pvcFailureStatus['real'].append(0)
+    pvcPipeThresholdList['real'].append(np.random.uniform(0, 1, 1)[0])
+pvcFailureStatus['noTemp'] = list(pvcFailureStatus['real'])
+pvcFailureStatus['noTime'] = list(pvcFailureStatus['real'])
+pvcPipeThresholdList['noTemp'] = list(pvcPipeThresholdList['real'])
+pvcPipeThresholdList['noTime'] = list(pvcPipeThresholdList['real'])
 
-for index, item in enumerate(config.ironPipesList):
-    config.ironFailureStatus['real'].append(0)
-    config.ironPipeThresholdList['real'].append(np.random.uniform(0, 1, 1)[0])
-config.ironFailureStatus['noTemp'] = list(config.ironFailureStatus['real'])
-config.ironFailureStatus['noTime'] = list(config.ironFailureStatus['real'])
-config.ironPipeThresholdList['noTemp'] = list(config.ironPipeThresholdList['real'])
-config.ironPipeThresholdList['noTime'] = list(config.ironPipeThresholdList['real'])
+for index, item in enumerate(ironPipesList):
+    ironFailureStatus['real'].append(0)
+    ironPipeThresholdList['real'].append(np.random.uniform(0, 1, 1)[0])
+ironFailureStatus['noTemp'] = list(ironFailureStatus['real'])
+ironFailureStatus['noTime'] = list(ironFailureStatus['real'])
+ironPipeThresholdList['noTemp'] = list(ironPipeThresholdList['real'])
+ironPipeThresholdList['noTime'] = list(ironPipeThresholdList['real'])
 
-for index, item in enumerate(config.pumpAgeList):
-    config.pumpFailureStatus['real'].append(0)
-    config.pumpThresholdList['real'].append(np.random.uniform(0, 1, 1)[0])
-config.pumpFailureStatus['noTemp'] = list(config.pumpFailureStatus['real'])
-config.pumpFailureStatus['noTime'] = list(config.pumpFailureStatus['real'])
-config.pumpThresholdList['noTemp'] = list(config.pumpThresholdList['real'])
-config.pumpThresholdList['noTime'] = list(config.pumpThresholdList['real'])
+for index, item in enumerate(pumpAgeList):
+    pumpFailureStatus['real'].append(0)
+    pumpThresholdList['real'].append(np.random.uniform(0, 1, 1)[0])
+pumpFailureStatus['noTemp'] = list(pumpFailureStatus['real'])
+pumpFailureStatus['noTime'] = list(pumpFailureStatus['real'])
+pumpThresholdList['noTemp'] = list(pumpThresholdList['real'])
+pumpThresholdList['noTime'] = list(pumpThresholdList['real'])
 
 # Creating all three databases
 databaseObjectReal = sql.connect(('D:\\Austin_Michne\\tripleSim\\realistic{}.db').format(os.environ['SIMCOUNT']))
