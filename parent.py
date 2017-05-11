@@ -1,12 +1,8 @@
-import math
 import os
 import sqlite3 as sql
-from decimal import Decimal
 import numpy as np
+from epanet import epanet
 
-ironPipesFile = open('D:\\Austin_Michne\\1_11_17\\ironPipes.txt', 'r')
-ironPipesList = ironPipesFile.read().expandtabs().splitlines()
-ironPipesFile.close()
 
 pvcPipesFile = open('D:\\Austin_Michne\\1_11_17\\pvcPipes.txt', 'r')
 pvcPipesList = pvcPipesFile.read().expandtabs().splitlines()
@@ -15,6 +11,10 @@ pvcPipesFile.close()
 pumpFile = open('D:\\Austin_Michne\\1_11_17\\pumps.txt', 'r')
 pumpList = pumpFile.read().expandtabs().splitlines()
 pumpFile.close()
+
+ironPipesFile = open('D:\\Austin_Michne\\1_11_17\\ironPipes.txt', 'r')
+ironPipesList = ironPipesFile.read().expandtabs().splitlines()
+ironPipesFile.close()
 
 ironPipeAges = np.random.uniform(0, 85, len(ironPipesList))
 pvcCount = len(pvcPipesList)
@@ -68,8 +68,7 @@ readCountFile.write('0')
 readCountFile.close()
 
 batch = 0
-
 while batch < 2525:
-    os.system('D:\\Austin_Michne\\1_11_17_source\\epanet_Script_noTemp.py')
+    epanet()
     batch += 1
     print(batch)
