@@ -76,7 +76,7 @@ databaseCursor_noTime.execute('''CREATE TABLE NodeData (Bihour_Count real, NodeI
 databaseCursor_noTime.execute('''CREATE TABLE linkData (Bihour_Count real, LinkID real, Flow real, Velocity real, Headloss real)''')
 databaseObject_noTime.close()
 
-
+config()
 batch = 0
 while batch < 2525:
     epanet.epanet('real', databaseCursorReal, databaseObjectReal)
