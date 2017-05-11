@@ -129,7 +129,7 @@ def epanet(biHour, simType, dbCursor, dbObject):
         # Closes all of the files open during the simulation
         f.close()
         fi.close()
-        fu.close()
+        # fu.close()
 
         parsingRpt('D:\\Austin_Michne\\tripleSim\\output\\%s\\NorthMarin_%s.rpt' % (simType, biHour), dbCursor, dbObject, biHour)
         biHour += 1
