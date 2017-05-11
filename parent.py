@@ -24,7 +24,7 @@ ironPipeAges['noTemp'] = list(ironPipeAges['real'])
 ironPipeAges['noTime'] = list(np.repeat([65], len(ironPipesList)))
 
 pvcCount = len(pvcPipesList)
-pvcPipeAges['real'] = np.append(np.random.normal(40, 9, pvcCount - 20), np.random.normal(13, 3, 20))
+pvcPipeAges['real'] = list(np.append(np.random.normal(40, 9, pvcCount - 20), np.random.normal(13, 3, 20)))
 pvcPipeAges['noTemp'] = list(pvcPipeAges['real'])
 pvcPipeAges['noTime'] = list(np.repeat([33], pvcCount))
 
@@ -32,27 +32,25 @@ pumpAgeList['real'] = np.array([10, 25])
 pumpAgeList['noTemp'] = list(pumpAgeList['real'])
 pumpAgeList['noTime'] = list([12, 12])
 
-for index, item in enumerate(pvcPipesList):
-    pvcFailureStatus['real'].append(0)
-    pvcPipeThresholdList['real'].append(np.random.uniform(0, 1, 1)[0])
-pvcFailureStatus['noTemp'] = list(pvcFailureStatus['real'])
-pvcFailureStatus['noTime'] = list(pvcFailureStatus['real'])
+pvcFailureStatus['real'] = list(np.zeros(len(pvcPipesList)))
+pvcPipeThresholdList['real'] = list(np.random.uniform(0, 1, len(pvcPipesList)))
+pvcFailureStatus['noTemp'] = list(np.zeros(len(pvcPipesList)))
+pvcFailureStatus['noTime'] = list(np.zeros(len(pvcPipesList)))
 pvcPipeThresholdList['noTemp'] = list(pvcPipeThresholdList['real'])
 pvcPipeThresholdList['noTime'] = list(pvcPipeThresholdList['real'])
 
-for index, item in enumerate(ironPipesList):
-    ironFailureStatus['real'].append(0)
-    ironPipeThresholdList['real'].append(np.random.uniform(0, 1, 1)[0])
-ironFailureStatus['noTemp'] = list(ironFailureStatus['real'])
-ironFailureStatus['noTime'] = list(ironFailureStatus['real'])
+ironFailureStatus['real'] = list(np.zeros(len(ironPipesList)))
+ironPipeThresholdList['real'] = list(np.random.uniform(0, 1, len(ironPipesList)))
+ironFailureStatus['noTemp'] = list(np.zeros(len(ironPipesList)))
+ironFailureStatus['noTime'] = list(np.zeros(len(ironPipesList)))
 ironPipeThresholdList['noTemp'] = list(ironPipeThresholdList['real'])
 ironPipeThresholdList['noTime'] = list(ironPipeThresholdList['real'])
 
-for index, item in enumerate(pumpAgeList):
-    pumpFailureStatus['real'].append(0)
-    pumpThresholdList['real'].append(np.random.uniform(0, 1, 1)[0])
-pumpFailureStatus['noTemp'] = list(pumpFailureStatus['real'])
-pumpFailureStatus['noTime'] = list(pumpFailureStatus['real'])
+
+pumpFailureStatus['real'] = [0, 0]
+pumpThresholdList['real'] = list(np.random.uniform(0, 1, len(pumpList)))
+pumpFailureStatus['noTemp'] = [0, 0]
+pumpFailureStatus['noTime'] = [0, 0]
 pumpThresholdList['noTemp'] = list(pumpThresholdList['real'])
 pumpThresholdList['noTime'] = list(pumpThresholdList['real'])
 
