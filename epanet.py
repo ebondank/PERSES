@@ -96,8 +96,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                 indexSelect = (math.trunc(tasMaxACT) - 19)
                 if indexSelect < 0:
                     indexSelect = 0
-                indexSelect = indexSelect + \
-                    (30 * int(math.trunc(float(pumpAgeList[simType][index]))))
+                indexSelect = indexSelect + (30 * int(math.trunc(float(pumpAgeList[simType][index]))))
                 if float(pumpWeibullList[indexSelect]) > float(pumpThresholdList[simType][index]):
                     if (simType != 'noTime'):
                         pumpAgeList[simType][index] = 0
@@ -118,11 +117,11 @@ def epanet(batch, simType, dbCursor, dbObject):
         # Initializes the files for encoding
         a = 'D:\\Austin_Michne\\tripleSim\\input\\%s\\NorthMarin_%s.inp' % (simType, periodCount)
         b = 'D:\\Austin_Michne\\tripleSim\\output\\%s\\NorthMarin_%s.rpt' % (simType, biHour)
-        
+
         # Byte objects
         b_a = a.encode('UTF-8')
         b_b = b.encode('UTF-8')
-        
+
         # Opens the toolkit
         epalib.ENopen(b_a, b_b, "")
         # Does the hydraulic solving
@@ -131,8 +130,8 @@ def epanet(batch, simType, dbCursor, dbObject):
         epalib.ENsaveH()
         # Reports the data from the previous run
         epalib.ENreport()
-        epalib.ENcloseH()
         epalib.ENclose()
+
         # Closes all of the files open during the simulation
         f.close()
         fi.close()

@@ -46,7 +46,6 @@ ironFailureStatus['noTime'] = list(np.zeros(len(ironPipesList)))
 ironPipeThresholdList['noTemp'] = list(ironPipeThresholdList['real'])
 ironPipeThresholdList['noTime'] = list(ironPipeThresholdList['real'])
 
-
 pumpFailureStatus['real'] = [0, 0]
 pumpThresholdList['real'] = list(np.random.uniform(0, 1, len(pumpList)))
 pumpFailureStatus['noTemp'] = [0, 0]
