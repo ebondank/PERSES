@@ -8,7 +8,7 @@ from supporting import pipeDisable, pipeFix, pumpDisable, parsingRpt
 def epanet(batch, simType, dbCursor, dbObject):
     epalib = cdll.LoadLibrary('D:\\Austin_Michne\\1_11_17\\epanet2mingw64.dll')
     epaCount = 0
-    biHour = (batch * 144)
+    biHour = (batch * 30000)
     while epaCount < 30000:
         dayCount = math.floor(biHour / 12)
         tasMaxACT = float(tasMaxACTList[simType][dayCount])
