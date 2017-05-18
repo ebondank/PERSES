@@ -9,8 +9,8 @@ epaCount = 0
 biHour = (batch * 10000)
 batch = int(math.floor(biHour / 10000))
 simType = 'real'
-databaseObjectReal = sql.connect(('D:\\Austin_Michne\\tripleSim\\realistic{}.db').format(os.environ['SIMCOUNT']))
-databaseCursorReal = databaseObjectReal.cursor()
+dbObject = sql.connect(('D:\\Austin_Michne\\tripleSim\\realistic0.db'))
+dbCursor = dbObject.cursor()
 
 while epaCount < 10000:
     dayCount = math.floor(biHour / 12)
