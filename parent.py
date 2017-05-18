@@ -1,7 +1,6 @@
 import os
 import sqlite3 as sql
 import numpy as np
-import epanet
 from config import *
 
 # TODO Environment variables for server aren't persisting for some reason
@@ -73,13 +72,8 @@ databaseCursor_noTime.execute('''CREATE TABLE linkData (Bihour_Count real, LinkI
 
 
 batch = 0
-while batch < 50:
-    epanet.epanet(batch, 'real', databaseCursorReal, databaseObjectReal)
-    print('First instance done')
-    epanet.epanet(batch, 'noTemp', databaseCursor_noTemp, databaseObject_noTemp)
-    print('Second instance done')
-    epanet.epanet(batch, 'noTime', databaseCursor_noTime, databaseObject_noTime)
-    print('Third instance done')
+while batch < 150:
+    os.system('D:\\Austin_Michne\\emily_tripleSim\\instanced.py')
     batch += 1
     print(batch)
 
