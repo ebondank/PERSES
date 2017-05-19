@@ -169,20 +169,7 @@ def epanet(batch, simType, dbCursor, dbObject):
         errorcode = epalib.ENgetnodeindex(nodeid, nodeidx)
         if errorcode != 0:
             print(5, 'ERRORCODE is', errorcode)
-        print('NODEID', nodeid.value.decode('utf-8'),
-              'has NODEIDX', nodeidx.contents.value)
-
-        errorcode = epalib.ENgetnodevalue(
-            nodeidx.contents, ENnodeparam.BASEDEMAND, nodevalue)
-        if errorcode != 0:
-            print(6, 'ERRORCODE is', errorcode)
-        print('EN_BASEDEMAND is', nodevalue.contents.value)
-
-        errorcode = epalib.ENgetnodevalue(
-            nodeidx.contents, ENnodeparam.DEMAND, nodevalue)
-        if errorcode != 0:
-            print(7, 'ERRORCODE is', errorcode)
-        print('EN_DEMAND is', nodevalue.contents.value)
+        print('NODEID', nodeid.value.decode('utf-8'),'has NODEIDX', nodeidx.contents.value)
 
         epalib.ENcloseH()
         epalib.ENclose()
