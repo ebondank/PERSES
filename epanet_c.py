@@ -2,8 +2,7 @@ import math
 from config_c import *
 import numpy as np
 import ctypes as ct
-# import parent_c
-
+from parent_c import *
 
 def epanet(simType, dbCursor, dbObject):
     epaCount = 0
