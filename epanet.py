@@ -162,7 +162,7 @@ def epanet(batch, simType, dbCursor, dbObject):
         errorcode = epalib.ENrunH(time)
         print('errorcode: %s' % errorcode)
         nodeCount = ct.pointer(ct.c_int(0))
-        epalib.ENgetcount(EN_NODECOUNT, nodeCount)
+        epalib.ENgetcount(ct.c_int(0), nodeCount)
         nodeValue = ct.pointer(ct.c_float(0.0))
         nodeID = ct.c_char_p('')
         intCount = ct.c_int(1)
