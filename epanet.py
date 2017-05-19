@@ -131,9 +131,13 @@ def epanet(batch, simType, dbCursor, dbObject):
         epalib.ENinitH(init_flag)
         # Does the hydraulic solving
         while (timestep.contents.value > 0):
-            epalib.ENrunH(time)
+            errorcode = epalib.ENrunH(time)
+            if errorcode != 0:
+                print(4, 'ERRORCODE is', errorcode)
             epalib.ENsavehydfile(('D:\\Austin_Michne\\tripleSim\\output\\{}\\NorthMarin_{}_{}.rpt').format(simType, biHour, timestep.contents.value))
-            epalib.ENnextH(timestep)
+            errorcode = epalib.ENnextH(timestep)
+            if errorcode != 0:
+                print(8, 'ERRORCODE is', errorcode)
         epalib.ENcloseH()
         
         # Saves the hydraulic results file
