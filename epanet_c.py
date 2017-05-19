@@ -1,7 +1,7 @@
+from config_c import *
 import math
 import numpy as np
 import ctypes as ct
-from config_c import *
 
 
 def epanet(batch, simType, dbCursor, dbObject):

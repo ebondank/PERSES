@@ -1,8 +1,7 @@
+from config_c import *
 import os
 import sqlite3 as sql
-import ctypes as ct
-import epanet_c
-from config_c import *
+from epanet_c import epanet
 
 # TODO Environment variables for server aren't persisting for some reason
 os.remove('D:\\Austin_Michne\\tripleSim\\realistic0.db')
@@ -29,10 +28,9 @@ databaseCursor_noTime.execute('''CREATE TABLE linkData (Bihour_Count real, NodeI
 
 
 while batch < 2525:
-    epanet_c.epanet(epalib, batch, 'real', databaseCursorReal, databaseObjectReal)
+    epanet(batch, 'real', databaseCursorReal, databaseObjectReal)
     batch += 1
     print(batch)
-
 epalib.ENcloseH()
 epalib.ENclose()
 os.environ['SIMCOUNT'] = str(int(os.environ['SIMCOUNT']) + 1)
