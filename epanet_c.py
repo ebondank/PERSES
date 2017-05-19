@@ -106,7 +106,7 @@ def epanet(batch, simType, dbCursor, dbObject):
 
         # Does the hydraulic solving
         errorcode = epalib.ENrunH(time)
-        print('errorcode: %s' % errorcode)
+        # print('errorcode: %s' % errorcode)
 
         intCount = ct.c_int(1)
         while (intCount.value < nodeCount.contents.value):
