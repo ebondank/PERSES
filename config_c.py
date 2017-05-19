@@ -1,6 +1,6 @@
 import numpy as np
 import ctypes as ct
-import parent_c
+from parent_c import *
 
 
 biHourToYear = float(.0002283105022831050228310502283105)
@@ -13,12 +13,12 @@ tasFile.close()
 tasMaxACTList = {'real': list(tasList), 'noTime': list(tasList), 'noTemp': list(np.repeat([22], 33000))}
 
 linkList = ct.pointer(ct.c_int(0))
-parent_c.epalib.ENgetcount(ct.c_int(0), linkList)
+epalib.ENgetcount(ct.c_int(0), linkList)
 linkCounter = 0
 currentRough = ct.pointer(ct.c_float(0.0))
 
 while (linkCounter < linkList.contents.value):
-    parent_c.epalib.ENgetlinkvalue(ct.c_int(2), currentRough)
+    epalib.ENgetlinkvalue(ct.c_int(2), currentRough)
     if (currentRough.contents.value > 140):
         randironAge = np.random.uniform(0, 85, 1)
         data['real']['iron']['age'].append(randironAge)

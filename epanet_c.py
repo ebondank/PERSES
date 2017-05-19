@@ -2,7 +2,7 @@ import math
 from config_c import *
 import numpy as np
 import ctypes as ct
-import parent_c
+# import parent_c
 
 
 def epanet(simType, dbCursor, dbObject):
