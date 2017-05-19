@@ -1,6 +1,6 @@
 import numpy as np
 import ctypes as ct
-import parent
+import parent_c
 
 
 biHourToYear = float(.0002283105022831050228310502283105)
