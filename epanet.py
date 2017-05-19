@@ -1,4 +1,3 @@
-from ctypes import cdll
 import math
 from config import *
 import numpy as np
@@ -7,7 +6,7 @@ import ctypes as ct
 
 
 def epanet(batch, simType, dbCursor, dbObject):
-    epalib = cdll.LoadLibrary('D:\\Austin_Michne\\1_11_17\\epanet2mingw64.dll')
+    epalib = ct.cdll.LoadLibrary('D:\\Austin_Michne\\1_11_17\\epanet2mingw64.dll')
     epaCount = 0
     biHour = (batch * 144)
     while epaCount < 144:
@@ -136,7 +135,6 @@ def epanet(batch, simType, dbCursor, dbObject):
             errorcode = epalib.ENrunH(time)
             if errorcode != 0:
                 print(4, 'ERRORCODE is', errorcode)
-            epalib.ENsavehydfile(('D:\\Austin_Michne\\tripleSim\\output\\{}\\NorthMarin_{}_{}.rpt').format(simType, biHour, timestep.contents.value))
             errorcode = epalib.ENnextH(timestep)
             if errorcode != 0:
                 print(8, 'ERRORCODE is', errorcode)
