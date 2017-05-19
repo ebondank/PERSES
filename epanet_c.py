@@ -6,7 +6,7 @@ from parent_c import *
 
 def epanet(simType, dbCursor, dbObject):
     epaCount = 0
-    biHour = (parent_c.batch * 144)
+    biHour = (batch * 144)
     while epaCount < 144:
         dayCount = math.floor(biHour / 12)
         tasMaxACT = float(tasMaxACTList[simType][dayCount])
