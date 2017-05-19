@@ -5,9 +5,9 @@ import numpy as np
 import epanet_c
 
 # TODO Environment variables for server aren't persisting for some reason
-os.remove('D:\\Austin_Michne\\tripleSim\\realistic{}.db')
-os.remove('D:\\Austin_Michne\\tripleSim\\noTemp{}.db')
-os.remove('D:\\Austin_Michne\\tripleSim\\noTime{}.db')
+os.remove('D:\\Austin_Michne\\tripleSim\\realistic0.db')
+os.remove('D:\\Austin_Michne\\tripleSim\\noTemp0.db')
+os.remove('D:\\Austin_Michne\\tripleSim\\noTime0.db')
 # Creating all three databases
 epalib = ct.cdll.LoadLibrary('D:\\Austin_Michne\\1_11_17\\epanet2mingw64.dll')
 databaseObjectReal = sql.connect(('D:\\Austin_Michne\\tripleSim\\realistic{}.db').format(os.environ['SIMCOUNT']))
