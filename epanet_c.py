@@ -34,7 +34,7 @@ def epanet(batch, simType, dbCursor, dbObject):
 
                 if (float(pvcWeibullList[indexSelect]) > float(data[simType]['pvc']['tH'][index])):
                     data[simType]['pvc']['age'][index] = 0
-                    data[simType]['pvc']['tH'][index] = float((np.random.uniform(0, 1, 1))[0])
+                    data[simType]['pvc']['tH'][index] = float((np.random.uniform(0, 1, 1)[0]))
                     epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(0.0))
                     pipeFailureFile = open(('{}_pvcPipeFail.txt').format(simType), 'a')
                     pipeFailureFile.write('%s %s\n' % (index, biHour))
