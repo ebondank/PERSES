@@ -1,7 +1,6 @@
 import os
 import sqlite3 as sql
 import ctypes as ct
-from config_c import *
 import epanet_c
 
 # TODO Environment variables for server aren't persisting for some reason
