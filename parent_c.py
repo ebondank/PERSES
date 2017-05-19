@@ -58,7 +58,7 @@ nodeValue = ct.pointer(ct.c_float(0.0))
 nodeID = ct.c_char_p(('Testing purposes').encode('UTF-8'))
 
 while batch < 2525:
-    epanet_c.epanet(batch, 'real', databaseCursorReal, databaseObjectReal)
+    epanet_c.epanet(epalib, batch, 'real', databaseCursorReal, databaseObjectReal)
     batch += 1
     print(batch)
 
