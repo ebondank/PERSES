@@ -1,8 +1,8 @@
 import math
 import numpy as np
 import ctypes as ct
-import parent_c
 import config_c
+import parent_c
 
 
 def epanet(batch, simType, dbCursor, dbObject):

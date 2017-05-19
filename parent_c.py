@@ -1,8 +1,8 @@
 import os
 import sqlite3 as sql
 import ctypes as ct
-import epanet_c
 import numpy as np
+import epanet_c
 
 # TODO Environment variables for server aren't persisting for some reason
 os.remove('D:\\Austin_Michne\\tripleSim\\realistic{}.db')
