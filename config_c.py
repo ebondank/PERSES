@@ -40,7 +40,7 @@ linkCounter = 0
 currentRough = ct.pointer(ct.c_float(0.0))
 
 while (linkCounter < linkList.contents.value):
-    epalib.ENgetlinkvalue(ct.c_int(2), currentRough)
+    epalib.ENgetlinkvalue(ct.c_int(linkCounter), ct.c_int(2), currentRough)
     if (currentRough.contents.value > 140):
         randironAge = np.random.uniform(0, 85, 1)
         data['real']['iron']['age'].append(randironAge)
@@ -69,7 +69,6 @@ while (linkCounter < linkList.contents.value):
         data['real']['pvc']['age'].append(randpvcAge)
         data['noTemp']['pvc']['age'].append(randpvcAge)
         data['noTime']['pvc']['age'].append(65)
-        linkCounter += 1
 
         data['real']['pvc']['fS'].append(0)
         data['noTemp']['pvc']['fS'].append(0)
@@ -83,6 +82,8 @@ while (linkCounter < linkList.contents.value):
         data['real']['pvc']['index'].append(linkList.contents)
         data['noTemp']['pvc']['index'].append(linkList.contents)
         data['noTime']['pvc']['index'].append(linkList.contents)
+
+    linkCounter += 1
 
 data['real']['pump']['age'] = [10, 25]
 data['noTime']['pump']['age'] = [10, 25]
