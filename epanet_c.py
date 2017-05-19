@@ -2,8 +2,9 @@ import math
 from config_c import *
 import numpy as np
 import ctypes as ct
+from parent_c import *
 
-def epanet(epalib, simType, dbCursor, dbObject):
+def epanet(simType, dbCursor, dbObject):
     epaCount = 0
     biHour = (parent_c.batch * 144)
     while epaCount < 144:
@@ -109,8 +110,8 @@ def epanet(epalib, simType, dbCursor, dbObject):
 
         intCount = ct.c_int(1)
         while (intCount.value < nodeCount.contents.value):
-            parent_c.epalib.ENgetnodevalue(intCount, ct.c_int(11), nodeValue)
-            parent_c.epalib.ENgetnodeid(intCount, nodeID)
+            epalib.ENgetnodevalue(intCount, ct.c_int(11), nodeValue)
+            epalib.ENgetnodeid(intCount, nodeID)
             dbCursor.execute('''INSERT INTO NodeData VALUES (?, ?, ?)''', (biHour, nodeID.value, nodeValue.contents.value))
             intCount.value = intCount.value + 1
 
