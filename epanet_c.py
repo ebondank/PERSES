@@ -21,7 +21,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(1))
                     # no-time simulation config stuff
                     if (simType != 'noTime'):
-                        data[simType]['pvc']['age'] = 0
+                        data[simType]['pvc']['age'][index] = 0
                 # Pipe disable mid run
                 else:
                     epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(0.0))
@@ -30,7 +30,6 @@ def epanet(batch, simType, dbCursor, dbObject):
                 indexSelect = (math.trunc(tasMaxACT) - 19)
                 if indexSelect <= 0:
                     indexSelect = 0
-                print(data[simType]['pvc']['age'])
                 indexSelect = indexSelect + int(30 * int(math.trunc(float(data[simType]['pvc']['age'][index]))))
 
                 if (float(pvcWeibullList[indexSelect]) > float(data[simType]['pvc']['tH'][index])):
