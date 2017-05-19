@@ -152,24 +152,25 @@ def epanet(batch, simType, dbCursor, dbObject):
         b_b = b.encode('UTF-8')
 
         # Opens the toolkit
-        ID = '20'
         epalib.ENopen(b_a, b_b, "")
         epalib.ENopenH()
         init_flag = ct.c_int(1)
-        time = ct.pointer(ct.c_long(3600))
         # timestep = ct.pointer(ct.c_long(1))
+        time = ct.pointer(ct.c_long(3600))
         epalib.ENinitH(init_flag)
         # Does the hydraulic solving
         errorcode = epalib.ENrunH(time)
         print('errorcode: %s' % errorcode)
-        nodeid = ct.c_char_p(str(ID).encode('utf-8'))
-        nodeidx = ct.pointer(ct.c_int(0))
-        nodevalue = ct.pointer(ct.c_float(0.0))
-
-        errorcode = epalib.ENgetnodeindex(nodeid, nodeidx)
-        if errorcode != 0:
-            print(5, 'ERRORCODE is', errorcode)
-        print('NODEID', nodeid.value.decode('utf-8'),'has NODEIDX', nodeidx.contents.value)
+        nodeCount = ct.pointer(ct.c_int(0))
+        epalib.ENgetcount(EN_NODECOUNT, nodeCount)
+        nodeValue = ct.pointer(ct.c_float(0.0))
+        nodeID = ct.c_char_p('')
+        intCount = ct.c_int(1)
+        while (intCount.value < nodeCount):
+            epalib.ENgetnodevalue(intCount, EN_PRESSURE, nodeValue)
+            epalib.ENgetnodeid(intCount, nodeID)
+            dbCursor.execute('''INSERT INTO NodeData VALUES (?, ?, ?, ?, ?)''', (biHour, nodeID.value, nodeValue.contents.value))
+            intCount.value = intCount.value + 1
 
         epalib.ENcloseH()
         epalib.ENclose()
@@ -184,7 +185,7 @@ def epanet(batch, simType, dbCursor, dbObject):
         f.close()
         fi.close()
 
-        parsingRpt('D:\\Austin_Michne\\tripleSim\\output\\%s\\NorthMarin_%s.rpt' % (
-            simType, biHour), dbCursor, dbObject, biHour)
+        # parsingRpt('D:\\Austin_Michne\\tripleSim\\output\\%s\\NorthMarin_%s.rpt' % (
+        #     simType, biHour), dbCursor, dbObject, biHour)
         biHour += 1
         epaCount += 1
