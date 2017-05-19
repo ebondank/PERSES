@@ -1,6 +1,8 @@
 from supporting import triggerListCreation
 import numpy as np
+import ctypes as ct
 
+epalib = ct.cdll.LoadLibrary('epanet.dll')
 pvcPipeAges = {'real': [], 'noTemp': [], 'noTime': []}
 ironPipeAges = {'real': [], 'noTemp': [], 'noTime': []}
 pumpAgeList = {'real': [], 'noTemp': [], 'noTime': []}
