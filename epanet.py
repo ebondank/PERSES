@@ -152,7 +152,7 @@ def epanet(batch, simType, dbCursor, dbObject):
         b_b = b.encode('UTF-8')
 
         # Opens the toolkit
-
+        ID = '20'
         epalib.ENopen(b_a, b_b, "")
         epalib.ENopenH()
         init_flag = ct.c_int(1)
