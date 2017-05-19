@@ -174,7 +174,7 @@ def epanet(batch, simType, dbCursor, dbObject):
 
         epalib.ENcloseH()
         epalib.ENclose()
-
+        dbObject.commit()
         # Saves the hydraulic results file
         # epalib.ENsaveH()
         # Reports the data from the previous run
