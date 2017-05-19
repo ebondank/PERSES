@@ -166,7 +166,7 @@ def epanet(batch, simType, dbCursor, dbObject):
         nodeValue = ct.pointer(ct.c_float(0.0))
         nodeID = ct.c_char_p(('Testing purposes').encode('UTF-8'))
         intCount = ct.c_int(1)
-        while (intCount.value < nodeCount):
+        while (intCount.value < nodeCount.contents.value):
             epalib.ENgetnodevalue(intCount, ct.c_int(11), nodeValue)
             epalib.ENgetnodeid(intCount, nodeID)
             dbCursor.execute('''INSERT INTO NodeData VALUES (?, ?, ?, ?, ?)''', (biHour, nodeID.value, nodeValue.contents.value))
