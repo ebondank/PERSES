@@ -133,6 +133,7 @@ def epanet(batch, simType, dbCursor, dbObject):
         # Does the hydraulic solving
         while (time.contents.value > 0):
             errorcode = epalib.ENrunH(time)
+            print('errorcode: %s' % errorcode)
         epalib.ENcloseH()
         epalib.ENclose()
         
