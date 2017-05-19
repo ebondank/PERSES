@@ -7,11 +7,6 @@ biHourToYear = float(.0002283105022831050228310502283105)
 biHour = 0
 data = {'real':{'iron':{'tH':[], 'age':[], 'fS':[], 'index':[]}, 'pvc':{'tH':[], 'age':[], 'fS':[], 'index':[]}, 'pump':{'tH':[], 'age':[], 'fS':[], 'index':['10', '335']}}, 'noTemp': {'iron':{'tH':[], 'age':[], 'fS':[], 'index':[]}, 'pvc':{'tH':[], 'age':[], 'fS':[], 'index':[]}, 'pump':{'tH':[], 'age':[], 'fS':[], 'index':['10', '335']}}, 'noTime': {'iron':{'tH':[], 'age':[], 'fS':[], 'index':[]}, 'pvc':{'tH':[], 'age':[], 'fS':[], 'index':[]}, 'pump':{'tH':[], 'age':[], 'fS':[], 'index':[10, 335]}}}
 
-tasFile = open('D:\\Austin_Michne\\1_11_17\\tasMaxBD.txt', 'r')
-tasList = tasFile.read().expandtabs().splitlines()
-tasFile.close()
-tasMaxACTList = {'real': list(tasList), 'noTime': list(tasList), 'noTemp': list(np.repeat([22], 33000))}
-
 linkList = ct.pointer(ct.c_int(0))
 parent_c.epalib.ENgetcount(ct.c_int(0), linkList)
 linkCounter = 0

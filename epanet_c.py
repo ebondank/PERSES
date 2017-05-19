@@ -10,7 +10,7 @@ def epanet(batch, simType, dbCursor, dbObject):
     config_c.biHour = (batch * 144)
     while epaCount < 144:
         dayCount = math.floor(config_c.biHour / 12)
-        tasMaxACT = float(config_c.tasMaxACTList[simType][dayCount])
+        tasMaxACT = float(parent_c.tasMaxACTList[simType][dayCount])
 
         for index, item in enumerate(config_c.data[simType]['pvc']['index']):
             # If the pipe is already in the failed state

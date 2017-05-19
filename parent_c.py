@@ -24,6 +24,11 @@ databaseCursor_noTime = databaseObject_noTime.cursor()
 databaseCursor_noTime.execute('''CREATE TABLE NodeData (Bihour_Count real, NodeID real, Pressure real)''')
 databaseCursor_noTime.execute('''CREATE TABLE linkData (Bihour_Count real, NodeID real, Pressure real)''')
 
+tasFile = open('D:\\Austin_Michne\\1_11_17\\tasMaxBD.txt', 'r')
+tasList = tasFile.read().expandtabs().splitlines()
+tasFile.close()
+tasMaxACTList = {'real': list(tasList), 'noTime': list(tasList), 'noTemp': list(np.repeat([22], 33000))}
+
 batch = 0
 
 f = open('north_marin_c.inp', 'r')
