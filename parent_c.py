@@ -1,6 +1,5 @@
 import os
 import sqlite3 as sql
-from config_c import *
 import ctypes as ct
 import epanet_c
 
