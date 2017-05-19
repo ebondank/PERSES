@@ -5,9 +5,9 @@ import ctypes as ct
 import parent_c
 
 
-def epanet(batch, simType, dbCursor, dbObject):
+def epanet(simType, dbCursor, dbObject):
     epaCount = 0
-    biHour = (batch * 144)
+    biHour = (parent_c.batch * 144)
     while epaCount < 144:
         dayCount = math.floor(biHour / 12)
         tasMaxACT = float(tasMaxACTList[simType][dayCount])
@@ -33,7 +33,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     indexSelect = 0
                 indexSelect += 30 * int(math.trunc(float(data[simType]['pvc']['age'][index + 1])))
 
-                if (float(pvcWeibullList[index + 1Select]) > float(data[simType]['pvc']['tH'][index + 1])):
+                if (float(pvcWeibullList[indexSelect]) > float(data[simType]['pvc']['tH'][index + 1])):
                     data[simType]['pvc']['age'][index + 1] = 0
                     data[simType]['pvc']['tH'][index + 1] = float((np.random.uniform(0, 1, 1))[0])
                     epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index + 1], ct.c_int(11), ct.c_float(0.0))
@@ -63,7 +63,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     indexSelect = 0
                 indexSelect = indexSelect + (30 * int(math.trunc(float(data[simType]['iron']['age'][index + 1]))))
 
-                if (float(ironWeibullList[index + 1Select]) > float(data[simType]['iron']['tH'][index + 1])):
+                if (float(ironWeibullList[indexSelect]) > float(data[simType]['iron']['tH'][index + 1])):
                     if (simType != 'noTime'):
                         data[simType]['iron']['age'][index + 1] = 0
                     data[simType]['iron']['tH'][index + 1] = float((np.random.uniform(0, 1, 1))[0])
@@ -91,7 +91,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                 if indexSelect < 0:
                     indexSelect = 0
                 indexSelect = indexSelect + (30 * int(math.trunc(float(data[simType]['pump']['age'][index + 1]))))
-                if float(pumpWeibullList[index + 1Select]) > float(data[simType]['pump']['tH'][index + 1]):
+                if float(pumpWeibullList[indexSelect]) > float(data[simType]['pump']['tH'][index + 1]):
                     if (simType != 'noTime'):
                         data[simType]['pump']['age'][index + 1] = 0
                     data[simType]['pump']['tH'][index + 1] = float((np.random.uniform(0, 1, 1))[0])
