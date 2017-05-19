@@ -30,7 +30,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                 indexSelect = (math.trunc(tasMaxACT) - 19)
                 if indexSelect <= 0:
                     indexSelect = 0
-                indexSelect += 30 * int(math.trunc(float(data[simType]['pvc']['age'][index])))
+                indexSelect = indexSelect + (30 * int(math.trunc(float(data[simType]['pvc']['age'][index]))))
 
                 if (float(pvcWeibullList[indexSelect]) > float(data[simType]['pvc']['tH'][index])):
                     data[simType]['pvc']['age'][index] = 0
