@@ -2,7 +2,7 @@ import os
 import sqlite3 as sql
 from config_c import *
 import ctypes as ct
-import epanet
+import epanet_c
 
 # TODO Environment variables for server aren't persisting for some reason
 
@@ -51,7 +51,7 @@ nodeValue = ct.pointer(ct.c_float(0.0))
 nodeID = ct.c_char_p(('Testing purposes').encode('UTF-8'))
 
 while batch < 2525:
-    epanet.epanet('real', databaseCursorReal, databaseObjectReal)
+    epanet_c.epanet('real', databaseCursorReal, databaseObjectReal)
     batch += 1
     print(batch)
 
