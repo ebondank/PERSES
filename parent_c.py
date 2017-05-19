@@ -27,9 +27,15 @@ databaseCursor_noTime.execute('''CREATE TABLE linkData (Bihour_Count real, NodeI
 # Opens the toolkit
 
 batch = 0
+batch_noTemp = 0
+batch_noTime = 0
 while batch < 2525:
     epanet_c.epanet(batch, 'real', databaseCursorReal, databaseObjectReal)
     batch += 1
+    epanet_c.epanet(batch_noTemp, 'noTemp', databaseCursor_noTemp, databaseObject_noTemp)
+    batch_noTemp += 1
+    epanet_c.epanet(batch, 'noTime', databaseCursorReal, databaseObjectReal)
+    batch_noTime += 1
     print(batch)
 epalib.ENcloseH()
 epalib.ENclose()
