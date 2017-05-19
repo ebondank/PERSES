@@ -131,9 +131,9 @@ def epanet(batch, simType, dbCursor, dbObject):
         # timestep = ct.pointer(ct.c_long(1))
         epalib.ENinitH(init_flag)
         # Does the hydraulic solving
-        while (time.contents.value > 0):
-            errorcode = epalib.ENrunH(time)
-            print('errorcode: %s' % errorcode)
+        
+        errorcode = epalib.ENrunH(time)
+        print('errorcode: %s' % errorcode)
         epalib.ENcloseH()
         epalib.ENclose()
         
