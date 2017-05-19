@@ -66,8 +66,8 @@ while (linkCounter < linkList.contents.value):
         else:
             randpvcAge = np.random.normal(13, 3, 1)
 
-        data['real']['pvc']['age'].append(randpvcAge)
-        data['noTemp']['pvc']['age'].append(randpvcAge)
+        data['real']['pvc']['age'].append(int(randpvcAge))
+        data['noTemp']['pvc']['age'].append(int(randpvcAge))
         data['noTime']['pvc']['age'].append([65])
 
         data['real']['pvc']['fS'].append(0)
