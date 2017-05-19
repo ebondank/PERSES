@@ -11,8 +11,6 @@ tasList = tasFile.read().expandtabs().splitlines()
 tasFile.close()
 tasMaxACTList = {'real': list(tasList), 'noTime': list(tasList), 'noTemp': list(np.repeat([22], 33000))}
 
-batch = 0
-
 f = open('north_marin_c.inp', 'r')
 fi = open('D:\\Austin_Michne\\tripleSim\\zz.rpt', 'w')
 
