@@ -164,7 +164,7 @@ def epanet(batch, simType, dbCursor, dbObject):
         nodeCount = ct.pointer(ct.c_int(0))
         epalib.ENgetcount(ct.c_int(0), nodeCount)
         nodeValue = ct.pointer(ct.c_float(0.0))
-        nodeID = ct.c_char_p('')
+        nodeID = ct.c_char_p('Testing purposes')
         intCount = ct.c_int(1)
         while (intCount.value < nodeCount):
             epalib.ENgetnodevalue(intCount, ct.c_int(11), nodeValue)
