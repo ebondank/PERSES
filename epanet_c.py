@@ -4,105 +4,105 @@ import ctypes as ct
 from config_c import *
 
 
-def epanet(epalib, batch, simType, dbCursor, dbObject):
+def epanet(batch, simType, dbCursor, dbObject):
     epaCount = 0
-    config_c.biHour = (batch * 144)
+    biHour = (batch * 144)
     while epaCount < 144:
-        dayCount = math.floor(config_c.biHour / 12)
+        dayCount = math.floor(biHour / 12)
         tasMaxACT = float(tasMaxACTList[simType][dayCount])
 
-        for index, item in enumerate(config_c.data[simType]['pvc']['index']):
+        for index, item in enumerate(data[simType]['pvc']['index']):
             # If the pipe is already in the failed state
-            if (int(config_c.data[simType]['pvc']['fS'][index + 1]) != 0):
-                config_c.data[simType]['pvc']['fS'][index + 1] = config_c.data[simType]['pvc']['fS'][index + 1] - 1
+            if (int(data[simType]['pvc']['fS'][index + 1]) != 0):
+                data[simType]['pvc']['fS'][index + 1] = data[simType]['pvc']['fS'][index + 1] - 1
 
-                if (int(config_c.data[simType]['pvc']['fS'][index + 1]) <= 0):
+                if (int(data[simType]['pvc']['fS'][index + 1]) <= 0):
                     # pipe enable
-                    epalib.ENsetlinkvalue(config_c.data[simType]['pvc']['index'][index + 1], ct.c_int(11), ct.c_float(1))
+                    epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index + 1], ct.c_int(11), ct.c_float(1))
                     # no-time simulation config stuff
                     if (simType != 'noTime'):
-                        config_c.data[simType]['pvc']['age'] = 0
+                        data[simType]['pvc']['age'] = 0
                 # Pipe disable mid run
                 else:
-                    epalib.ENsetlinkvalue(config_c.data[simType]['pvc']['index'][index + 1], ct.c_int(11), ct.c_float(0.0))
+                    epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index + 1], ct.c_int(11), ct.c_float(0.0))
             else:
                 indexSelect = 0
                 indexSelect = (math.trunc(tasMaxACT) - 19)
                 if indexSelect <= 0:
                     indexSelect = 0
-                indexSelect += 30 * int(math.trunc(float(config_c.data[simType]['pvc']['age'][index + 1])))
+                indexSelect += 30 * int(math.trunc(float(data[simType]['pvc']['age'][index + 1])))
 
-                if (float(config_c.pvcWeibullList[indexSelect]) > float(config_c.data[simType]['pvc']['tH'][index + 1])):
-                    config_c.data[simType]['pvc']['age'][index + 1] = 0
-                    config_c.data[simType]['pvc']['tH'][index + 1] = float((np.random.uniform(0, 1, 1))[0])
-                    epalib.ENsetlinkvalue(config_c.data[simType]['pvc']['index'][index + 1], ct.c_int(11), ct.c_float(0.0))
+                if (float(pvcWeibullList[indexSelect]) > float(data[simType]['pvc']['tH'][index + 1])):
+                    data[simType]['pvc']['age'][index + 1] = 0
+                    data[simType]['pvc']['tH'][index + 1] = float((np.random.uniform(0, 1, 1))[0])
+                    epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index + 1], ct.c_int(11), ct.c_float(0.0))
                     pipeFailureFile = open(('{}_pvcPipeFail.txt').format(simType), 'a')
-                    pipeFailureFile.write('%s %s\n' % (index, config_c.biHour))
+                    pipeFailureFile.write('%s %s\n' % (index, biHour))
                     pipeFailureFile.close()
                     # This is based off of the 88 hr repair time, can be
                     # changed to w/e
-                    config_c.data[simType]['pvc']['fS'][index + 1] = 44
+                    data[simType]['pvc']['fS'][index + 1] = 44
                 if (simType != 'noTime'):
-                    config_c.data[simType]['pvc']['age'][index + 1] = float(config_c.data[simType]['pvc']['age'][index + 1]) + config_c.biHourToYear
+                    data[simType]['pvc']['age'][index + 1] = float(data[simType]['pvc']['age'][index + 1]) + biHourToYear
 
-        for index, item in enumerate(config_c.data[simType]['iron']['index']):
-            if (int(config_c.data[simType]['iron']['fS'][index + 1]) != 0):
-                config_c.data[simType]['iron']['fS'][index + 1] = int(config_c.data[simType]['iron']['fS'][index + 1]) - 1
-                if (int(config_c.data[simType]['iron']['fS'][index + 1]) <= 0):
-                    epalib.ENsetlinkvalue(config_c.data[simType]['iron']['index'][index + 1], ct.c_int(11), ct.c_float(1))
+        for index, item in enumerate(data[simType]['iron']['index']):
+            if (int(data[simType]['iron']['fS'][index + 1]) != 0):
+                data[simType]['iron']['fS'][index + 1] = int(data[simType]['iron']['fS'][index + 1]) - 1
+                if (int(data[simType]['iron']['fS'][index + 1]) <= 0):
+                    epalib.ENsetlinkvalue(data[simType]['iron']['index'][index + 1], ct.c_int(11), ct.c_float(1))
                 else:
-                    epalib.ENsetlinkvalue(config_c.data[simType]['iron']['index'][index + 1], ct.c_int(11), ct.c_float(0.0))
+                    epalib.ENsetlinkvalue(data[simType]['iron']['index'][index + 1], ct.c_int(11), ct.c_float(0.0))
                 if (simType != 'noTime'):
-                    config_c.data[simType]['iron']['age'][index + 1] = 0
+                    data[simType]['iron']['age'][index + 1] = 0
 
             else:
                 indexSelect = 0
                 indexSelect = (math.trunc(tasMaxACT) - 19)
                 if indexSelect < 0:
                     indexSelect = 0
-                indexSelect = indexSelect + (30 * int(math.trunc(float(config_c.data[simType]['iron']['age'][index + 1]))))
+                indexSelect = indexSelect + (30 * int(math.trunc(float(data[simType]['iron']['age'][index + 1]))))
 
-                if (float(config_c.ironWeibullList[indexSelect]) > float(config_c.data[simType]['iron']['tH'][index + 1])):
+                if (float(ironWeibullList[indexSelect]) > float(data[simType]['iron']['tH'][index + 1])):
                     if (simType != 'noTime'):
-                        config_c.data[simType]['iron']['age'][index + 1] = 0
-                    config_c.data[simType]['iron']['tH'][index + 1] = float((np.random.uniform(0, 1, 1))[0])
-                    epalib.ENsetlinkvalue(config_c.data[simType]['iron']['index'][index + 1], ct.c_int(11), ct.c_float(0.0))
+                        data[simType]['iron']['age'][index + 1] = 0
+                    data[simType]['iron']['tH'][index + 1] = float((np.random.uniform(0, 1, 1))[0])
+                    epalib.ENsetlinkvalue(data[simType]['iron']['index'][index + 1], ct.c_int(11), ct.c_float(0.0))
                     # Writing to the seperate failure statistics file
                     pipeFailureFile = open(('{}_ironPipeFail.txt').format(simType), 'a')
-                    pipeFailureFile.write('%s %s\n' % (index, config_c.biHour))
+                    pipeFailureFile.write('%s %s\n' % (index, biHour))
                     pipeFailureFile.close()
                     # This is based off of the 88 hr repair time, can be
                     # changed to w/e
-                    config_c.data[simType]['iron']['fS'][index + 1] = 44
+                    data[simType]['iron']['fS'][index + 1] = 44
                 if (simType != 'noTime'):
-                    config_c.data[simType]['iron']['age'][index + 1] = float(config_c.data[simType]['iron']['age'][index + 1]) + config_c.biHourToYear
-        for index, item in enumerate(config_c.data[simType]['pump']['id']):
-            if (int(config_c.data[simType]['pump']['fS'][index + 1]) != 0):
-                config_c.data[simType]['pump']['fS'][index + 1] = int(config_c.data[simType]['pump']['fS'][index + 1]) - 1
-                epalib.ENsetlinkvalue(config_c.data[simType]['pump']['index'][index + 1], ct.c_int(12), ct.c_float(0.0))
-                if (int(config_c.data[simType]['pump']['fS'][index + 1]) <= 0):
-                    epalib.ENsetlinkvalue(config_c.data[simType]['pump']['index'][index + 1], ct.c_int(12), ct.c_float(1.0))
+                    data[simType]['iron']['age'][index + 1] = float(data[simType]['iron']['age'][index + 1]) + biHourToYear
+        for index, item in enumerate(data[simType]['pump']['id']):
+            if (int(data[simType]['pump']['fS'][index + 1]) != 0):
+                data[simType]['pump']['fS'][index + 1] = int(data[simType]['pump']['fS'][index + 1]) - 1
+                epalib.ENsetlinkvalue(data[simType]['pump']['index'][index + 1], ct.c_int(12), ct.c_float(0.0))
+                if (int(data[simType]['pump']['fS'][index + 1]) <= 0):
+                    epalib.ENsetlinkvalue(data[simType]['pump']['index'][index + 1], ct.c_int(12), ct.c_float(1.0))
                     if (simType != 'noTime'):
-                        config_c.data[simType]['pump']['age'][index + 1] = 0
+                        data[simType]['pump']['age'][index + 1] = 0
 
             else:
                 indexSelect = (math.trunc(tasMaxACT) - 19)
                 if indexSelect < 0:
                     indexSelect = 0
-                indexSelect = indexSelect + (30 * int(math.trunc(float(config_c.data[simType]['pump']['age'][index + 1]))))
-                if float(config_c.pumpWeibullList[indexSelect]) > float(config_c.data[simType]['pump']['tH'][index + 1]):
+                indexSelect = indexSelect + (30 * int(math.trunc(float(data[simType]['pump']['age'][index + 1]))))
+                if float(pumpWeibullList[indexSelect]) > float(data[simType]['pump']['tH'][index + 1]):
                     if (simType != 'noTime'):
-                        config_c.data[simType]['pump']['age'][index + 1] = 0
-                    config_c.data[simType]['pump']['tH'][index + 1] = float((np.random.uniform(0, 1, 1))[0])
+                        data[simType]['pump']['age'][index + 1] = 0
+                    data[simType]['pump']['tH'][index + 1] = float((np.random.uniform(0, 1, 1))[0])
                     pumpFailureFile = open(('{}_pumpFail.txt').format(simType), 'a')
-                    pumpFailureFile.write('%s %s\n' % (index, config_c.biHour))
+                    pumpFailureFile.write('%s %s\n' % (index, biHour))
                     pumpFailureFile.close()
-                    epalib.ENsetlinkvalue(config_c.data[simType]['pump']['index'][index + 1], ct.c_int(12), ct.c_float(0.0))
+                    epalib.ENsetlinkvalue(data[simType]['pump']['index'][index + 1], ct.c_int(12), ct.c_float(0.0))
                     # This is based off of the 16 hr repair time, can be
                     # changed to w/e
-                    config_c.data[simType]['pump']['fS'][index + 1] = 8
+                    data[simType]['pump']['fS'][index + 1] = 8
                 if (simType != 'noTime'):
-                    config_c.data[simType]['pump']['age'][index + 1] = float(config_c.data[simType]['pump']['age'][index + 1]) + config_c.biHourToYear
+                    data[simType]['pump']['age'][index + 1] = float(data[simType]['pump']['age'][index + 1]) + biHourToYear
 
         # Does the hydraulic solving
         errorcode = epalib.ENrunH(time)
@@ -112,7 +112,7 @@ def epanet(epalib, batch, simType, dbCursor, dbObject):
         while (intCount.value < nodeCount.contents.value):
             epalib.ENgetnodevalue(intCount, ct.c_int(11), nodeValue)
             epalib.ENgetnodeid(intCount, nodeID)
-            dbCursor.execute('''INSERT INTO NodeData VALUES (?, ?, ?)''', (config_c.biHour, nodeID.value, nodeValue.contents.value))
+            dbCursor.execute('''INSERT INTO NodeData VALUES (?, ?, ?)''', (biHour, nodeID.value, nodeValue.contents.value))
             intCount.value = intCount.value + 1
 
         dbObject.commit()
@@ -122,10 +122,10 @@ def epanet(epalib, batch, simType, dbCursor, dbObject):
 
         # Saves the hydraulic results file
         # epalib.ENsaveH()
-        # Reports the config_c.data from the previous run
+        # Reports the data from the previous run
         # epalib.ENreport()
         # epalib.ENclose()
 
         # Closes all of the files open during the simulation
-        config_c.biHour += 1
+        biHour += 1
         epaCount += 1

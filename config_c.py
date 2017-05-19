@@ -1,11 +1,40 @@
 import numpy as np
 import ctypes as ct
-from parent_c import epalib
 
-
+epalib = ct.cdll.LoadLibrary('D:\\Austin_Michne\\1_11_17\\epanet2mingw64.dll')
 biHourToYear = float(.0002283105022831050228310502283105)
 biHour = 0
 data = {'real':{'iron':{'tH':[], 'age':[], 'fS':[], 'index':[]}, 'pvc':{'tH':[], 'age':[], 'fS':[], 'index':[]}, 'pump':{'tH':[], 'age':[], 'fS':[], 'index':['10', '335']}}, 'noTemp': {'iron':{'tH':[], 'age':[], 'fS':[], 'index':[]}, 'pvc':{'tH':[], 'age':[], 'fS':[], 'index':[]}, 'pump':{'tH':[], 'age':[], 'fS':[], 'index':['10', '335']}}, 'noTime': {'iron':{'tH':[], 'age':[], 'fS':[], 'index':[]}, 'pvc':{'tH':[], 'age':[], 'fS':[], 'index':[]}, 'pump':{'tH':[], 'age':[], 'fS':[], 'index':[10, 335]}}}
+
+tasFile = open('D:\\Austin_Michne\\1_11_17\\tasMaxBD.txt', 'r')
+tasList = tasFile.read().expandtabs().splitlines()
+tasFile.close()
+tasMaxACTList = {'real': list(tasList), 'noTime': list(tasList), 'noTemp': list(np.repeat([22], 33000))}
+
+batch = 0
+
+f = open('north_marin_c.inp', 'r')
+fi = open('D:\\Austin_Michne\\tripleSim\\zz.rpt', 'w')
+
+# Initializes the files for encoding
+a = 'north_marin_c.inp'
+b = 'D:\\Austin_Michne\\tripleSim\\zz.rpt'
+
+# Byte objects
+b_a = a.encode('UTF-8')
+b_b = b.encode('UTF-8')
+
+epalib.ENopen(b_a, b_b, "")
+epalib.ENopenH()
+timestep = ct.pointer(ct.c_long(7200))
+time = ct.pointer(ct.c_long(0))
+init_flag = ct.c_int(1)
+epalib.ENinitH(init_flag)
+
+nodeCount = ct.pointer(ct.c_int(0))
+epalib.ENgetcount(ct.c_int(0), nodeCount)
+nodeValue = ct.pointer(ct.c_float(0.0))
+nodeID = ct.c_char_p(('Testing purposes').encode('UTF-8'))
 
 linkList = ct.pointer(ct.c_int(0))
 epalib.ENgetcount(ct.c_int(0), linkList)
