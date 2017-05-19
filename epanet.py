@@ -124,7 +124,9 @@ def epanet(batch, simType, dbCursor, dbObject):
         b_b = b.encode('UTF-8')
 
         # Opens the toolkit
-        epalib.ENopenH(b_a, b_b, "")
+
+        epalib.ENopen(b_a, b_b, "")
+        epalib.ENopenH()
         init_flag = ct.c_int(1)
         time = ct.pointer(ct.c_long(7200))
         timestep = ct.pointer(ct.c_long(1))
