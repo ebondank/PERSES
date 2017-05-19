@@ -6,7 +6,7 @@ import ctypes as ct
 # TODO Environment variables for server aren't persisting for some reason
 
 # Creating all three databases
-epalib = ct.cdll.LoadLibrary('epanet2.dll')
+epalib = ct.cdll.LoadLibrary('D:\\Austin_Michne\\1_11_17\\epanet2mingw64.dll')
 databaseObjectReal = sql.connect(('D:\\Austin_Michne\\tripleSim\\realistic{}.db').format(os.environ['SIMCOUNT']))
 databaseCursorReal = databaseObjectReal.cursor()
 databaseCursorReal.execute('''CREATE TABLE NodeData (Bihour_Count real, NodeID real, Pressure real)''')
