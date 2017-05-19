@@ -3,13 +3,14 @@ import math
 from config import *
 import numpy as np
 from supporting import pipeDisable, pipeFix, pumpDisable, parsingRpt
+import ctypes as ct
 
 
 def epanet(batch, simType, dbCursor, dbObject):
     epalib = cdll.LoadLibrary('D:\\Austin_Michne\\1_11_17\\epanet2mingw64.dll')
     epaCount = 0
-    biHour = (batch * 30000)
-    while epaCount < 30000:
+    biHour = (batch * 144)
+    while epaCount < 144:
         dayCount = math.floor(biHour / 12)
         tasMaxACT = float(tasMaxACTList[simType][dayCount])
         periodCount = (biHour % 24)
@@ -123,14 +124,23 @@ def epanet(batch, simType, dbCursor, dbObject):
         b_b = b.encode('UTF-8')
 
         # Opens the toolkit
-        epalib.ENopen(b_a, b_b, "")
+        epalib.ENopenH(b_a, b_b, "")
+        init_flag = ct.c_int(1)
+        time = ct.pointer(ct.c_long(7200))
+        timestep = ct.pointer(ct.c_long(1))
+        epalib.ENinitH(init_flag)
         # Does the hydraulic solving
-        epalib.ENsolveH()
+        while (timestep.contents.value > 0):
+            epalib.ENrunH(time)
+            epalib.ENsavehydfile(('D:\\Austin_Michne\\tripleSim\\output\\{}\\NorthMarin_{}_{}.rpt').format(simType, biHour, timestep.contents.value))
+            epalib.ENnextH(timestep)
+        epalib.ENcloseH()
+        
         # Saves the hydraulic results file
-        epalib.ENsaveH()
+        # epalib.ENsaveH()
         # Reports the data from the previous run
-        epalib.ENreport()
-        epalib.ENclose()
+        # epalib.ENreport()
+        # epalib.ENclose()
 
         # Closes all of the files open during the simulation
         f.close()
