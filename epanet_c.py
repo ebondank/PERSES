@@ -2,9 +2,8 @@ import math
 from config_c import *
 import numpy as np
 import ctypes as ct
-from parent_c import *
 
-def epanet(simType, dbCursor, dbObject):
+def epanet(epalib, simType, dbCursor, dbObject):
     epaCount = 0
     biHour = (parent_c.batch * 144)
     while epaCount < 144:
