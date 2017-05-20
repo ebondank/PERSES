@@ -20,6 +20,7 @@ while (infiniteCount < 20):
 
 yrList = list()
 for row in com.execute('SELECT * FROM NodeData ORDER BY Bihour_Count ASC'):
+    print(row)
     try:
         ouCount = dbOUCount[math.floor((row[0]) / 4380)]
         ou2Count = dbOUCount2[math.floor((row[0]) / 4380)]

@@ -11,10 +11,6 @@ def epanet(batch, simType, dbCursor, dbObject):
     while epaCount < 8760:
         dayCount = math.floor(biHour / 24)
         tasMaxACT = float(tasMaxACTList[simType][dayCount])
-        epalib.ENsetlinkvalue(data[simType]['pvc']['index'][12], ct.c_int(11), ct.c_float(0.0))
-        print(data[simType]['pvc'])
-        print(data[simType]['iron'])
-        print(data[simType]['pump'])
 
         for index, item in enumerate(data[simType]['pvc']['index']):
             # If the pipe is already in the failed state
@@ -82,7 +78,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                 if (simType != 'noTime'):
                     data[simType]['iron']['age'][index] = float(data[simType]['iron']['age'][index]) + biHourToYear
         for index, item in enumerate(data[simType]['pump']['index']):
-            if (int(data[simType]['pump']['fS'][index]) != 0):
+            if (int(data[simType]['pump']['fS'][index]) != 1000):
                 data[simType]['pump']['fS'][index] = int(data[simType]['pump']['fS'][index]) - 1
                 epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(12), ct.c_float(0.0))
                 if (int(data[simType]['pump']['fS'][index]) <= 0):
