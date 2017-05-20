@@ -95,9 +95,9 @@ data['real']['pump']['tH'] = list(tH)
 data['noTemp']['pump']['tH'] = list(tH)
 data['noTime']['pump']['tH'] = list(tH)
 
-data['real']['pump']['fS'] = [0, 0]
-data['noTemp']['pump']['fS'] = [0, 0]
-data['noTime']['pump']['fS'] = [0, 0]
+data['real']['pump']['fS'] = list(0, 0)
+data['noTemp']['pump']['fS'] = list([0, 0])
+data['noTime']['pump']['fS'] = list([0, 0])
 
 pvcWeibullFile = open('D:\\Austin_Michne\\1_11_17\\pvcWeibullFixed.txt', 'r')
 pvcWeibullList = pvcWeibullFile.read().splitlines()
