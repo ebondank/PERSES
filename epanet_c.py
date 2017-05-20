@@ -6,10 +6,15 @@ from config_c import *
 
 def epanet(batch, simType, dbCursor, dbObject):
     epaCount = 0
-    biHour = (batch * 144)
-    while epaCount < 144:
-        dayCount = math.floor(biHour / 12)
+    biHour = (batch * 8760)
+    time.contents = ct.c_int(0)
+    while epaCount < 8760:
+        dayCount = math.floor(biHour / 24)
         tasMaxACT = float(tasMaxACTList[simType][dayCount])
+        epalib.ENsetlinkvalue(data[simType]['pvc']['index'][12], ct.c_int(11), ct.c_float(0.0))
+        print(data[simType]['pvc'])
+        print(data[simType]['iron'])
+        print(data[simType]['pump'])
 
         for index, item in enumerate(data[simType]['pvc']['index']):
             # If the pipe is already in the failed state
@@ -105,9 +110,8 @@ def epanet(batch, simType, dbCursor, dbObject):
                     data[simType]['pump']['age'][index] = float(data[simType]['pump']['age'][index]) + biHourToYear
 
         # Does the hydraulic solving
-        errorcode = epalib.ENrunH(time)
         # print('errorcode: %s' % errorcode)
-
+        epalib.ENrunH(time)
         intCount = ct.c_int(1)
         while (intCount.value < nodeCount.contents.value):
             epalib.ENgetnodevalue(intCount, ct.c_int(11), nodeValue)
