@@ -8,7 +8,7 @@ def epanet(batch, simType, dbCursor, dbObject):
     epaCount = 0
     biHour = (batch * 8760)
     time.contents = ct.c_int(0)
-    while epaCount < 8760:
+    while epaCount < 5:
         dayCount = math.floor(biHour / 24)
         tasMaxACT = float(tasMaxACTList[simType][dayCount])
 
