@@ -21,6 +21,7 @@ b = 'D:\\Austin_Michne\\tripleSim\\zz.rpt'
 # Byte objects
 b_a = a.encode('UTF-8')
 b_b = b.encode('UTF-8')
+printItem = str
 
 epalib.ENopen(b_a, b_b, "")
 epalib.ENopenH()
