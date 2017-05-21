@@ -102,9 +102,9 @@ while (linkCounter < linkList.contents.value):
 
     linkCounter += 1
 
-data['real']['pump']['age'] = list(10, 25)
-data['noTime']['pump']['age'] = list(10, 25)
-data['noTime']['pump']['age'] = list(10, 25)
+data['real']['pump']['age'] = list([10, 25])
+data['noTime']['pump']['age'] = list([10, 25])
+data['noTime']['pump']['age'] = list([10, 25])
 
 tH1 = float(np.random.uniform(0, 1, 1))
 tH2 = float(np.random.uniform(0, 1, 1))
