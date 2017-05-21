@@ -60,7 +60,6 @@ batch_noTime = 0
 while batch < 35:
     epanet_c.epanet(batch, 'real', databaseCursorReal, databaseObjectReal)
     batch += 1
-    print(printItem)
     epanet_c.epanet(batch_noTemp, 'noTemp', databaseCursor_noTemp, databaseObject_noTemp)
     batch_noTemp += 1
     epanet_c.epanet(batch, 'noTime', databaseCursor_noTime, databaseObject_noTime)
