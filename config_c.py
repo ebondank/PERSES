@@ -4,7 +4,7 @@ import ctypes as ct
 epalib = ct.cdll.LoadLibrary('D:\\Austin_Michne\\1_11_17\\epanet2mingw64.dll')
 biHourToYear = float(.0002283105022831050228310502283105)
 biHour = 0
-data = {'real':{'iron':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'tH':list(), 'age':list(), 'fS':list(), 'index':[10, 335]}}, 'noTemp': {'iron':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'tH':list(), 'age':list(), 'fS':list(), 'index':[10, 335]}}, 'noTime': {'iron':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'tH':list(), 'age':list(), 'fS':list(), 'index':[10, 335]}}}
+data = {'real':{'iron':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}}, 'noTemp': {'iron':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}}, 'noTime': {'iron':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}}}
 
 tasFile = open('D:\\Austin_Michne\\1_11_17\\tasMaxBD.txt', 'r')
 tasList = tasFile.read().expandtabs().splitlines()
@@ -39,6 +39,19 @@ linkList = ct.pointer(ct.c_int(0))
 epalib.ENgetcount(ct.c_int(0), linkList)
 linkCounter = 0
 currentRough = ct.pointer(ct.c_float(0.0))
+
+#TODO
+indexReturn = ct.pointer(ct.c_int(0))
+linkID = ct.c_char_p('10')
+epalib.ENgetlinkindex(linkID, indexReturn)
+data['real']['pump']['index'].append(indexReturn)
+data['noTemp']['pump']['index'].append(indexReturn)
+data['noTime']['pump']['index'].append(indexReturn)
+linkID = ct.c_char_p('335')
+epalib.ENgetlinkindex(linkID, indexReturn)
+data['real']['pump']['index'].append(indexReturn)
+data['noTemp']['pump']['index'].append(indexReturn)
+data['noTime']['pump']['index'].append(indexReturn)
 
 while (linkCounter < linkList.contents.value):
     epalib.ENgetlinkvalue(ct.c_int(linkCounter), ct.c_int(2), currentRough)
