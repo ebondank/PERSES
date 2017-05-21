@@ -9,7 +9,7 @@ def epanet(batch, simType, dbCursor, dbObject):
     biHour = (batch * 8760)
     time.contents = ct.c_int(0)
     pumpFailureFile = open(('{}_pumpFail.txt').format(simType), 'a')
-    pumpFailureFile.write('%s %s \n' % (biHour, data[simType]['pump']['fS']))
+    pumpFailureFile.write('%s %s \n' % (biHour, data[simType]['pvc']['fS']))
     pumpFailureFile.close()
     while epaCount < 5:
         dayCount = math.floor(biHour / 24)
