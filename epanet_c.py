@@ -8,11 +8,11 @@ def epanet(batch, simType, dbCursor, dbObject):
     epaCount = 0
     biHour = (batch * 8760)
     time.contents = ct.c_int(0)
-    for index, item in data[simType]['pvc']['index']:
+    for index, item in data[simType]['pvc']['fS']:
         epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(1))
-    for index, item in data[simType]['iron']['index']:
+    for index, item in data[simType]['iron']['fS']:
         epalib.ENsetlinkvalue(data[simType]['iron']['index'][index], ct.c_int(11), ct.c_float(1))
-    for index, item in data[simType]['pump']['index']:
+    for index, item in data[simType]['pump']['fS']:
         epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(12), ct.c_float(1))
     while epaCount < 5:
         dayCount = math.floor(biHour / 24)
