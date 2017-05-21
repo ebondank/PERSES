@@ -42,7 +42,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     indexSelect = 0
                 indexSelect = indexSelect + int(30 * int(math.trunc(float(data[simType]['pvc']['age'][index]))))
 
-                if (3000* float(pvcWeibullList[indexSelect]) > float(data[simType]['pvc']['tH'][index])):
+                if (float(pvcWeibullList[indexSelect]) > float(data[simType]['pvc']['tH'][index])):
                     data[simType]['pvc']['age'][index] = 0
                     data[simType]['pvc']['tH'][index] = float((np.random.uniform(0, 1, 1))[0])
                     epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(0.0))
