@@ -101,7 +101,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                 if indexSelect < 0:
                     indexSelect = 0
                 indexSelect = indexSelect + (30 * int(math.trunc(float(data[simType]['pump']['age'][index]))))
-                if (100*float(pumpWeibullList[indexSelect])) > float(data[simType]['pump']['tH'][index]):
+                if (1000 * float(pumpWeibullList[indexSelect])) > float(data[simType]['pump']['tH'][index]):
                     if (simType != 'noTime'):
                         data[simType]['pump']['age'][index] = 0
                     data[simType]['pump']['tH'][index] = float((np.random.uniform(0, 1, 1))[0])
