@@ -94,6 +94,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                 if (int(data[simType]['pump']['fS'][index]) <= 0):
                     epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(12), ct.c_float(1.0))
                     if (simType != 'noTime'):
+                        print(index)
                         data[simType]['pump']['age'][index] = 0
 
             else:

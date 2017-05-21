@@ -44,11 +44,14 @@ currentRough = ct.pointer(ct.c_float(0.0))
 indexReturn = ct.pointer(ct.c_int(0))
 linkID = ct.c_wchar_p('10')
 epalib.ENgetlinkindex(linkID, indexReturn)
+indexReturn = indexReturn.contents.value
 data['real']['pump']['index'].append(indexReturn)
 data['noTemp']['pump']['index'].append(indexReturn)
 data['noTime']['pump']['index'].append(indexReturn)
 linkID = ct.c_wchar_p('335')
+indexReturn = ct.pointer(ct.c_int(0))
 epalib.ENgetlinkindex(linkID, indexReturn)
+indexReturn = indexReturn.contents.value
 data['real']['pump']['index'].append(indexReturn)
 data['noTemp']['pump']['index'].append(indexReturn)
 data['noTime']['pump']['index'].append(indexReturn)
@@ -99,9 +102,9 @@ while (linkCounter < linkList.contents.value):
 
     linkCounter += 1
 
-data['real']['pump']['age'] = list([10, 25])
-data['noTime']['pump']['age'] = list([10, 25])
-data['noTime']['pump']['age'] = list([10, 25])
+data['real']['pump']['age'] = list(10, 25)
+data['noTime']['pump']['age'] = list(10, 25)
+data['noTime']['pump']['age'] = list(10, 25)
 
 tH1 = float(np.random.uniform(0, 1, 1))
 tH2 = float(np.random.uniform(0, 1, 1))
