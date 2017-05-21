@@ -78,7 +78,9 @@ def epanet(batch, simType, dbCursor, dbObject):
                 if (simType != 'noTime'):
                     data[simType]['iron']['age'][index] = float(data[simType]['iron']['age'][index]) + biHourToYear
         for index, item in enumerate(data[simType]['pump']['index']):
-            printItem = data[simType]['pump']['fS'][index]
+            pumpFailureFile = open(('{}_pumpFail.txt').format(simType), 'a')
+            pumpFailureFile.write('%s %s %s \n' % (index, biHour, data[simType]['pump']['fS'][index]))
+            pumpFailureFile.close()
             if data[simType]['pump']['fS'][index] != 1000:
                 data[simType]['pump']['fS'][index] = int(data[simType]['pump']['fS'][index]) - 1
                 epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(12), ct.c_float(0.0))
