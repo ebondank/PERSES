@@ -4,7 +4,7 @@ import ctypes as ct
 epalib = ct.cdll.LoadLibrary('D:\\Austin_Michne\\1_11_17\\epanet2mingw64.dll')
 biHourToYear = float(.0002283105022831050228310502283105)
 biHour = 0
-data = {'real':{'iron':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}}, 'noTemp': {'iron':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}}, 'noTime': {'iron':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'tH':list(), 'age':list(), 'fS':list(), 'index':[10, 335]}}}
+data = {'real':{'iron':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'tH':list(), 'age':list(), 'fS':list(), 'index':[10, 335]}}, 'noTemp': {'iron':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'tH':list(), 'age':list(), 'fS':list(), 'index':[10, 335]}}, 'noTime': {'iron':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'tH':list(), 'age':list(), 'fS':list(), 'index':[10, 335]}}}
 
 tasFile = open('D:\\Austin_Michne\\1_11_17\\tasMaxBD.txt', 'r')
 tasList = tasFile.read().expandtabs().splitlines()
@@ -96,7 +96,7 @@ data['real']['pump']['tH'] = [tH1, tH2]
 data['noTemp']['pump']['tH'] = [tH1, tH2]
 data['noTime']['pump']['tH'] = [tH1, tH2]
 
-data['real']['pump']['fS'] = [0, 0]
+data['real']['pump']['fS'] = list([0, 0])
 data['noTemp']['pump']['fS'] = list([0, 0])
 data['noTime']['pump']['fS'] = list([0, 0])
 
