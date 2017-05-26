@@ -2,7 +2,7 @@ import sqlite3 as sql
 import math
 
 
-Path = 'noTemp0.db'
+Path = 'realistic0.db'
 db = sql.connect(Path)
 com = db.cursor()
 ouCount = 0
@@ -20,10 +20,9 @@ while (infiniteCount < 20):
 
 yrList = list()
 for row in com.execute('SELECT * FROM NodeData ORDER BY Bihour_Count ASC'):
-    print(row)
     try:
-        ouCount = dbOUCount[math.floor((row[0]) / 4380)]
-        ou2Count = dbOUCount2[math.floor((row[0]) / 4380)]
+        ouCount = dbOUCount[math.floor((row[0]) / 8760)]
+        ou2Count = dbOUCount2[math.floor((row[0]) / 8760)]
     except Exception:
         dbOUCount.append(0)
         dbOUCount2.append(0)
@@ -36,8 +35,8 @@ for row in com.execute('SELECT * FROM NodeData ORDER BY Bihour_Count ASC'):
             ou2Count += 1
     try:
         # print("Boi")
-        dbOUCount[math.floor((row[0]) / 4380)] = ouCount
-        dbOUCount2[math.floor((row[0]) / 4380)] = ou2Count
+        dbOUCount[math.floor((row[0]) / 8760)] = ouCount
+        dbOUCount2[math.floor((row[0]) / 8760)] = ou2Count
 
     except Exception:
         print(row)
