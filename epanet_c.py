@@ -7,8 +7,6 @@ from config_c import *
 def epanet(batch, simType, dbCursor, dbObject):
     epaCount = 0
     biHour = (batch * 8760)
-    if (biHour == 0):
-        print(data[simType]['pvc']['age'])
     # Makes sure time == 0 (start of new 'batch')
     # Also sets all of the components to functional, will eliminate 1/8760 edge case
     # Those that are properly failed will go back into the failed state
@@ -19,7 +17,7 @@ def epanet(batch, simType, dbCursor, dbObject):
         epalib.ENsetlinkvalue(data[simType]['iron']['index'][index], ct.c_int(11), ct.c_float(1))
     for index, item in enumerate(data[simType]['pump']['fS']):
         epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(12), ct.c_float(1))
-    while epaCount < 5:
+    while epaCount < 8760:
         dayCount = math.floor(biHour / 24)
         tasMaxACT = float(tasMaxACTList[simType][dayCount])
 
