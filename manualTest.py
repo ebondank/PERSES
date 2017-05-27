@@ -66,7 +66,7 @@ i = 0
 ID = 15
 time = ct.pointer(ct.c_long(1))
 timestep = ct.pointer(ct.c_long(1))
-epalib.ENsetlinkvalue(ct.c_wchar_p('335'), ct.c_int(12), ct.c_float(0.0))
+epalib.ENsetlinkvalue(ct.c_int(335), ct.c_int(12), ct.c_float(0.0))
 while True:
     i += 1
     print('iter', i)
@@ -77,7 +77,7 @@ while True:
     print('TIME is', time.contents.value)
 
     nodeid = ct.c_char_p(str(ID).encode('utf-8'))
-    nodeidx = ct.pointer(ct.c_int(0))
+    nodeidx = ct.pointer(ct.c_int(335))
     nodevalue = ct.pointer(ct.c_float(0.0))
 
     errorcode = epalib.ENgetnodeindex(nodeid, nodeidx)
