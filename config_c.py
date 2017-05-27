@@ -39,7 +39,6 @@ epalib.ENgetcount(ct.c_int(0), linkList)
 linkCounter = 0
 currentRough = ct.pointer(ct.c_float(0.0))
 
-#TODO
 indexReturn = ct.pointer(ct.c_int(0))
 linkID = ct.c_wchar_p('10')
 epalib.ENgetlinkindex(linkID, indexReturn)
@@ -126,4 +125,3 @@ ironWeibullFile.close()
 pumpWeibullFile = open('D:\\Austin_Michne\\1_11_17\\pumpWeibullFixed.txt', 'r')
 pumpWeibullList = pumpWeibullFile.read().splitlines()
 pumpWeibullFile.close()
-
