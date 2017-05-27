@@ -63,7 +63,7 @@ if errorcode != 0:
 print('\n---------------\n')
 
 i = 0
-ID = 335
+ID = 10
 time = ct.pointer(ct.c_long(1))
 timestep = ct.pointer(ct.c_long(1))
 epalib.ENsetlinkvalue(ct.c_char_p(str(ID).encode('utf-8')), ct.c_int(12), ct.c_float(0.0))
