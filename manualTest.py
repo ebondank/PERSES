@@ -63,10 +63,10 @@ if errorcode != 0:
 print('\n---------------\n')
 
 i = 0
-ID = 10
+ID = 105
 time = ct.pointer(ct.c_long(1))
 timestep = ct.pointer(ct.c_long(1))
-epalib.ENsetlinkvalue(ct.c_char_p(str(ID).encode('utf-8')), ct.c_int(12), ct.c_float(0.0))
+epalib.ENsetlinkvalue(ct.c_char_p('10'.encode('utf-8')), ct.c_int(12), ct.c_float(0.0))
 while True:
     i += 1
     print('iter', i)
@@ -77,7 +77,7 @@ while True:
     print('TIME is', time.contents.value)
 
     nodeid = ct.c_char_p(str(ID).encode('utf-8'))
-    nodeidx = ct.pointer(ct.c_int(335))
+    nodeidx = ct.pointer(ct.c_int(0))
     nodevalue = ct.pointer(ct.c_float(0.0))
 
     errorcode = epalib.ENgetnodeindex(nodeid, nodeidx)
@@ -93,7 +93,7 @@ while True:
     print('EN_BASEDEMAND is', nodevalue.contents.value)
 
     errorcode = epalib.ENgetnodevalue(
-        nodeidx.contents, ENnodeparam.DEMAND, nodevalue)
+        nodeidx.contents, ENnodeparam.PRESSURE, nodevalue)
     if errorcode != 0:
         print(7, 'ERRORCODE is', errorcode)
     print('EN_DEMAND is', nodevalue.contents.value)
