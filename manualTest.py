@@ -105,8 +105,7 @@ if errorcode != 0:
 print('TIMESTEP is', timestep.contents.value)
 print('')
 
-if timestep.contents.value == 0:
-    break
+
 
 # ENcloseH() may belong here
 
