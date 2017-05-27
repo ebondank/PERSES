@@ -66,8 +66,8 @@ i = 0
 ID = 105
 time = ct.pointer(ct.c_long(1))
 timestep = ct.pointer(ct.c_long(1))
-epalib.ENsetlinkvalue(ct.c_char_p('1'.encode('utf-8')), ct.c_int(11), ct.c_float(0.0))
-epalib.ENsetlinkvalue(ct.c_char_p('1'.encode('utf-8')), ct.c_int(12), ct.c_float(0.0))
+print(epalib.ENsetlinkvalue(ct.c_int(1), ct.c_int(11), ct.c_float(0.0)))
+print(epalib.ENsetlinkvalue(ct.c_int(1), ct.c_int(12), ct.c_float(0.0)))
 while True:
     i += 1
     print('iter', i)
