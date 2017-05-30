@@ -53,7 +53,7 @@ for row in com.execute('SELECT * FROM NodeData ORDER BY Bihour_Count ASC'):
             dbOUCount2[math.floor((row[0]) / 8760)] = ou2Count
 
         except Exception:
-            print(row)
+            print(row, "Broken")
 
 for item in dbOUCount:
     print(item)

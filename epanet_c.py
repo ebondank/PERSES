@@ -11,12 +11,12 @@ def epanet(batch, simType, dbCursor, dbObject):
     # Also sets all of the components to functional, will eliminate 1/8760 edge case
     # Those that are properly failed will go back into the failed state
     time.contents = ct.c_int(0)
-    for index, item in enumerate(data[simType]['pvc']['fS']):
-        epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(1.0))
-    for index, item in enumerate(data[simType]['iron']['fS']):
-        epalib.ENsetlinkvalue(data[simType]['iron']['index'][index], ct.c_int(11), ct.c_float(1.0))
-    for index, item in enumerate(data[simType]['pump']['fS']):
-        epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(11), ct.c_float(1.0))
+    # for index, item in enumerate(data[simType]['pvc']['fS']):
+    #     epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(1.0))
+    # for index, item in enumerate(data[simType]['iron']['fS']):
+    #     epalib.ENsetlinkvalue(data[simType]['iron']['index'][index], ct.c_int(11), ct.c_float(1.0))
+    # for index, item in enumerate(data[simType]['pump']['fS']):
+    #     epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(11), ct.c_float(1.0))
     while epaCount < 8760:
         dayCount = math.floor(biHour / 24)
         tasMaxACT = float(tasMaxACTList[simType][dayCount])
