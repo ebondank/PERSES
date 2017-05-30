@@ -3,7 +3,7 @@ import math
 import os
 
 
-Path = 'noTemp0.db'
+Path = 'realistic0.db'
 db = sql.connect(Path)
 com = db.cursor()
 ouCount = 0
@@ -31,9 +31,6 @@ print(demandList)
 yrList = list()
 for row in com.execute('SELECT * FROM NodeData ORDER BY Bihour_Count ASC'):
     newItem = float(row[1])
-    # print(newItem)
-    if (row[0] == 50880 | 50881):
-        print(row)
     if (newItem in demandList):
         try:
             ouCount = dbOUCount[math.floor((row[0]) / 8760)]
@@ -46,8 +43,10 @@ for row in com.execute('SELECT * FROM NodeData ORDER BY Bihour_Count ASC'):
 
         if (float(row[2]) <= 40):
             ouCount += 1
+            print(row)
             if (float(row[2]) <= 20):
                 ou2Count += 1
+                print(row)
         try:
             # print("Boi")
             dbOUCount[math.floor((row[0]) / 8760)] = ouCount
