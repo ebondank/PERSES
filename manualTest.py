@@ -63,10 +63,10 @@ if errorcode != 0:
 print('\n---------------\n')
 
 i = 0
-ID = 105
+ID = 101
 time = ct.pointer(ct.c_long(0))
 timestep = ct.pointer(ct.c_long(7200))
-print(epalib.ENsetlinkvalue(ct.c_int(5), ct.c_int(11), ct.c_float(1.0)))
+# print(epalib.ENsetlinkvalue(ct.c_int(5), ct.c_int(11), ct.c_float(1.0)))
 # print(epalib.ENsetlinkvalue(ct.c_int(1), ct.c_int(12), ct.c_float(0.0)))
 # while True:
 i += 1
@@ -78,7 +78,7 @@ while True:
     print('TIME is', time.contents.value)
 
     if (time.contents.value == 0):
-        print(epalib.ENsetlinkvalue(ct.c_int(5), ct.c_int(11), ct.c_float(0.0)))
+        print(epalib.ENsetlinkvalue(ct.c_int(5), ct.c_int(12), ct.c_float(0.0)))
     
     nodeid = ct.c_char_p(str(ID).encode('utf-8'))
     nodeidx = ct.pointer(ct.c_int(0))
