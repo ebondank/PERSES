@@ -9,7 +9,11 @@ data = {'real':{'iron':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()},
 tasFile = open('D:\\Austin_Michne\\1_11_17\\tasMaxBD.txt', 'r')
 tasList = tasFile.read().expandtabs().splitlines()
 tasFile.close()
-tasMaxACTList = {'real': list(tasList), 'noTime': list(tasList), 'noTemp': list(np.repeat([22], 33000))}
+
+histTasFile = open('histTasMaxBD.txt', 'r')
+histTasList = histTasFile.read().expandtabs().splitlines()
+histTasFile.close()
+tasMaxACTList = {'real': list(tasList), 'noTime': list(tasList), 'noTemp': list(histTasList)}
 
 f = open('north_marin_c.inp', 'r')
 fi = open('D:\\Austin_Michne\\tripleSim\\zz.rpt', 'w')
