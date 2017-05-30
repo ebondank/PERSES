@@ -10,7 +10,7 @@ def epanet(batch, simType, dbCursor, dbObject):
     # Makes sure time == 0 (start of new 'batch')
     # Also sets all of the components to functional, will eliminate 1/8760 edge case
     # Those that are properly failed will go back into the failed state
-    time.contents = ct.c_int(0)
+    time.contents = ct.c_long(0)
     # for index, item in enumerate(data[simType]['pvc']['fS']):
     #     epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(1.0))
     # for index, item in enumerate(data[simType]['iron']['fS']):
@@ -117,16 +117,16 @@ def epanet(batch, simType, dbCursor, dbObject):
         # Does the hydraulic solving
         # print('errorcode: %s' % errorcode)
         epalib.ENrunH(time)
-        intCount = ct.c_int(1)
-        while (intCount.value < nodeCount.contents.value):
-            epalib.ENgetnodevalue(intCount, ct.c_int(11), nodeValue)
-            epalib.ENgetnodeid(intCount, nodeID)
+        intCount = 1
+        while (intCount < nodeCount.contents.value):
+            epalib.ENgetnodevalue(ct.c_int(intCount), ct.c_int(11), nodeValue)
+            epalib.ENgetnodeid(ct.c_int(intCount), nodeID)
             dbCursor.execute('''INSERT INTO NodeData VALUES (?, ?, ?)''', (biHour, (nodeID.value).decode('utf-8'), nodeValue.contents.value))
             # print(('{} {} {} \n').format(biHour, nodeID.value, nodeValue.contents.value))
-            intCount.value = intCount.value + 1
+            intCount += 1
 
         dbObject.commit()
-        if (time.contents.value == 864000):
+        if (time.contents.value == 86400):
             time.contents = ct.c_int(0)
         epalib.ENnextH(timestep)
 

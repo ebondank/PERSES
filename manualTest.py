@@ -64,48 +64,50 @@ print('\n---------------\n')
 
 i = 0
 ID = 105
-time = ct.pointer(ct.c_long(1))
-timestep = ct.pointer(ct.c_long(1))
+time = ct.pointer(ct.c_long(0))
+timestep = ct.pointer(ct.c_long(7200))
 print(epalib.ENsetlinkvalue(ct.c_int(5), ct.c_int(11), ct.c_float(1.0)))
 # print(epalib.ENsetlinkvalue(ct.c_int(1), ct.c_int(12), ct.c_float(0.0)))
 # while True:
 i += 1
 print('iter', i)
+while True:
+    errorcode = epalib.ENrunH(time)
+    if errorcode != 0:
+        print(4, 'ERRORCODE is', errorcode)
+    print('TIME is', time.contents.value)
+    
+    nodeid = ct.c_char_p(str(ID).encode('utf-8'))
+    nodeidx = ct.pointer(ct.c_int(0))
+    nodevalue = ct.pointer(ct.c_float(0.0))
+    
+    errorcode = epalib.ENgetnodeindex(nodeid, nodeidx)
+    if errorcode != 0:
+        print(5, 'ERRORCODE is', errorcode)
+    print('NODEID', nodeid.value.decode('utf-8'),
+          'has NODEIDX', nodeidx.contents.value)
+    
+    errorcode = epalib.ENgetnodevalue(
+        nodeidx.contents, ENnodeparam.BASEDEMAND, nodevalue)
+    if errorcode != 0:
+        print(6, 'ERRORCODE is', errorcode)
+    print('EN_BASEDEMAND is', nodevalue.contents.value)
+    
+    errorcode = epalib.ENgetnodevalue(
+        nodeidx.contents, ENnodeparam.PRESSURE, nodevalue)
+    if errorcode != 0:
+        print(7, 'ERRORCODE is', errorcode)
+    print('EN_DEMAND is', nodevalue.contents.value)
+    
+    errorcode = epalib.ENnextH(timestep)
+    if errorcode != 0:
+        print(8, 'ERRORCODE is', errorcode)
+    print('TIMESTEP is', timestep.contents.value)
+    print('')
 
-errorcode = epalib.ENrunH(time)
-if errorcode != 0:
-    print(4, 'ERRORCODE is', errorcode)
-print('TIME is', time.contents.value)
-
-nodeid = ct.c_char_p(str(ID).encode('utf-8'))
-nodeidx = ct.pointer(ct.c_int(0))
-nodevalue = ct.pointer(ct.c_float(0.0))
-
-errorcode = epalib.ENgetnodeindex(nodeid, nodeidx)
-if errorcode != 0:
-    print(5, 'ERRORCODE is', errorcode)
-print('NODEID', nodeid.value.decode('utf-8'),
-      'has NODEIDX', nodeidx.contents.value)
-
-errorcode = epalib.ENgetnodevalue(
-    nodeidx.contents, ENnodeparam.BASEDEMAND, nodevalue)
-if errorcode != 0:
-    print(6, 'ERRORCODE is', errorcode)
-print('EN_BASEDEMAND is', nodevalue.contents.value)
-
-errorcode = epalib.ENgetnodevalue(
-    nodeidx.contents, ENnodeparam.PRESSURE, nodevalue)
-if errorcode != 0:
-    print(7, 'ERRORCODE is', errorcode)
-print('EN_DEMAND is', nodevalue.contents.value)
-
-errorcode = epalib.ENnextH(timestep)
-if errorcode != 0:
-    print(8, 'ERRORCODE is', errorcode)
-print('TIMESTEP is', timestep.contents.value)
-print('')
-
-
+    if (time.contents.value == 86400):
+        print('Failure method finished')
+        break
 
 # ENcloseH() may belong here
 

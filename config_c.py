@@ -67,7 +67,7 @@ while (linkCounter < linkList.contents.value):
     indexVal = ct.c_int(linkCounter)
     epalib.ENgetlinkvalue(indexVal, ct.c_int(2), currentRough)
     # Filtering the pumps
-    if linkCounter != (indexReturn1.contents.value | indexReturn2.contents.value):
+    if linkCounter != (indexReturn1.contents.value or indexReturn2.contents.value):
         if (int(currentRough.contents.value) > 140):
             randironAge = float(np.random.uniform(0, 75, 1))
             data['real']['iron']['age'].append(randironAge)
