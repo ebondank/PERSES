@@ -78,7 +78,7 @@ while True:
     print('TIME is', time.contents.value)
 
     if (time.contents.value == 0):
-        print(epalib.ENsetlinkvalue(ct.c_int(5), ct.c_int(12), ct.c_float(0.0)))
+        print(epalib.ENsetlinkvalue(ct.c_int(5), ct.c_int(11), ct.c_float(0.0)))
     
     nodeid = ct.c_char_p(str(ID).encode('utf-8'))
     nodeidx = ct.pointer(ct.c_int(0))
