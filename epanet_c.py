@@ -12,11 +12,11 @@ def epanet(batch, simType, dbCursor, dbObject):
     # Those that are properly failed will go back into the failed state
     time.contents = ct.c_int(0)
     for index, item in enumerate(data[simType]['pvc']['fS']):
-        epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(1))
+        epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(1.0))
     for index, item in enumerate(data[simType]['iron']['fS']):
-        epalib.ENsetlinkvalue(data[simType]['iron']['index'][index], ct.c_int(11), ct.c_float(1))
+        epalib.ENsetlinkvalue(data[simType]['iron']['index'][index], ct.c_int(11), ct.c_float(1.0))
     for index, item in enumerate(data[simType]['pump']['fS']):
-        epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(12), ct.c_float(1))
+        epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(11), ct.c_float(1.0))
     while epaCount < 8760:
         dayCount = math.floor(biHour / 24)
         tasMaxACT = float(tasMaxACTList[simType][dayCount])
@@ -28,7 +28,7 @@ def epanet(batch, simType, dbCursor, dbObject):
 
                 if (int(data[simType]['pvc']['fS'][index]) <= 0):
                     # pipe enable
-                    epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(1))
+                    epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(1.0))
                     # no-time simulation config stuff
                     if (simType != 'noTime'):
                         data[simType]['pvc']['age'][index] = 0
@@ -59,7 +59,7 @@ def epanet(batch, simType, dbCursor, dbObject):
             if (int(data[simType]['iron']['fS'][index]) != 0):
                 data[simType]['iron']['fS'][index] = int(data[simType]['iron']['fS'][index]) - 1
                 if (int(data[simType]['iron']['fS'][index]) <= 0):
-                    epalib.ENsetlinkvalue(data[simType]['iron']['index'][index], ct.c_int(11), ct.c_float(1))
+                    epalib.ENsetlinkvalue(data[simType]['iron']['index'][index], ct.c_int(11), ct.c_float(1.0))
                 else:
                     epalib.ENsetlinkvalue(data[simType]['iron']['index'][index], ct.c_int(11), ct.c_float(0.0))
                 if (simType != 'noTime'):
@@ -89,9 +89,9 @@ def epanet(batch, simType, dbCursor, dbObject):
         for index, item in enumerate(data[simType]['pump']['index']):
             if (data[simType]['pump']['fS'][index] != 0):
                 data[simType]['pump']['fS'][index] = int(data[simType]['pump']['fS'][index]) - 1
-                epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(12), ct.c_float(0.0))
+                epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(11), ct.c_float(0.0))
                 if (int(data[simType]['pump']['fS'][index]) <= 0):
-                    epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(12), ct.c_float(1.0))
+                    epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(11), ct.c_float(1.0))
                     if (simType != 'noTime'):
                         data[simType]['pump']['age'][index] = 0
 
@@ -107,7 +107,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     pumpFailureFile = open(('{}_pumpFail.txt').format(simType), 'a')
                     pumpFailureFile.write('%s %s\n' % (index, biHour))
                     pumpFailureFile.close()
-                    epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(12), ct.c_float(0.0))
+                    epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(11), ct.c_float(0.0))
                     # This is based off of the 16 hr repair time, can be
                     # changed to w/e
                     data[simType]['pump']['fS'][index] = 8
@@ -121,7 +121,7 @@ def epanet(batch, simType, dbCursor, dbObject):
         while (intCount.value < nodeCount.contents.value):
             epalib.ENgetnodevalue(intCount, ct.c_int(11), nodeValue)
             epalib.ENgetnodeid(intCount, nodeID)
-            dbCursor.execute('''INSERT INTO NodeData VALUES (?, ?, ?)''', (biHour, nodeID.value, nodeValue.contents.value))
+            dbCursor.execute('''INSERT INTO NodeData VALUES (?, ?, ?)''', (biHour, nodeID.contents.value, nodeValue.contents.value))
             # print(('{} {} {} \n').format(biHour, nodeID.value, nodeValue.contents.value))
             intCount.value = intCount.value + 1
 

@@ -36,67 +36,75 @@ nodeID = ct.c_char_p(('Testing purposes').encode('UTF-8'))
 
 linkList = ct.pointer(ct.c_int(0))
 epalib.ENgetcount(ct.c_int(0), linkList)
-linkCounter = 0
+linkCounter = 1
 currentRough = ct.pointer(ct.c_float(0.0))
 
-indexReturn = ct.pointer(ct.c_int(0))
-linkID = ct.c_wchar_p('10')
-epalib.ENgetlinkindex(linkID, indexReturn)
-indexReturn = indexReturn.contents.value
-data['real']['pump']['index'].append(indexReturn)
-data['noTemp']['pump']['index'].append(indexReturn)
-data['noTime']['pump']['index'].append(indexReturn)
-linkID = ct.c_wchar_p('335')
-indexReturn = ct.pointer(ct.c_int(0))
-epalib.ENgetlinkindex(linkID, indexReturn)
-indexReturn = indexReturn.contents.value
-data['real']['pump']['index'].append(indexReturn)
-data['noTemp']['pump']['index'].append(indexReturn)
-data['noTime']['pump']['index'].append(indexReturn)
 
+# TODO Right now the config for failure is to fail between pump && node, not reservoir && pump
+# int appended to list from int pointer return of 'ENgetlinkindex'
+indexReturn1 = ct.pointer(ct.c_int(0))
+# For the first pipe out of pump 10
+linkID = ct.c_wchar_p('101')
+epalib.ENgetlinkindex(linkID, indexReturn1)
+data['real']['pump']['index'].append(indexReturn1.contents)
+data['noTemp']['pump']['index'].append(indexReturn1.contents)
+data['noTime']['pump']['index'].append(indexReturn1.contents)
+# For the first pipe out of pump 335
+linkID = ct.c_wchar_p('329')
+indexReturn2 = ct.pointer(ct.c_int(0))
+epalib.ENgetlinkindex(linkID, indexReturn2)
+data['real']['pump']['index'].append(indexReturn2.contents)
+data['noTemp']['pump']['index'].append(indexReturn2.contents)
+data['noTime']['pump']['index'].append(indexReturn2.contents)
+
+# Roughness look to determine pipe type
+# Using pure c integers in the lists
 while (linkCounter < linkList.contents.value):
-    epalib.ENgetlinkvalue(ct.c_int(linkCounter), ct.c_int(2), currentRough)
-    if (currentRough.contents.value > 140):
-        randironAge = float(np.random.uniform(0, 85, 1))
-        data['real']['iron']['age'].append(randironAge)
-        data['noTemp']['iron']['age'].append(randironAge)
-        data['noTime']['iron']['age'].append(65)
+    indexVal = ct.c_int(linkCounter)
+    epalib.ENgetlinkvalue(indexVal, ct.c_int(2), currentRough)
+    # Filtering the pumps
+    if linkCounter != (indexReturn1.contents.value | indexReturn2.contents.value):
+        if (int(currentRough.contents.value) > 140):
+            randironAge = float(np.random.uniform(0, 85, 1))
+            data['real']['iron']['age'].append(randironAge)
+            data['noTemp']['iron']['age'].append(randironAge)
+            data['noTime']['iron']['age'].append(65)
 
-        data['real']['iron']['fS'].append(0)
-        data['noTemp']['iron']['fS'].append(0)
-        data['noTime']['iron']['fS'].append(0)
+            data['real']['iron']['fS'].append(0)
+            data['noTemp']['iron']['fS'].append(0)
+            data['noTime']['iron']['fS'].append(0)
 
-        tH = float(np.random.uniform(0, 1, 1))
-        data['real']['iron']['tH'].append(tH)
-        data['noTemp']['iron']['tH'].append(tH)
-        data['noTime']['iron']['tH'].append(tH)
+            tH = float(np.random.uniform(0, 1, 1))
+            data['real']['iron']['tH'].append(tH)
+            data['noTemp']['iron']['tH'].append(tH)
+            data['noTime']['iron']['tH'].append(tH)
 
-        data['real']['iron']['index'].append(linkList.contents)
-        data['noTemp']['iron']['index'].append(linkList.contents)
-        data['noTime']['iron']['index'].append(linkList.contents)
+            data['real']['iron']['index'].append(indexVal)
+            data['noTemp']['iron']['index'].append(indexVal)
+            data['noTime']['iron']['index'].append(indexVal)
 
-    elif (currentRough.contents.value < 140):
-        if (linkCounter > 20):
-            randpvcAge = float(np.random.uniform(40, 9, 1))
-        else:
-            randpvcAge = float(np.random.normal(13, 3, 1))
+        elif (int(currentRough.contents.value) < 140):
+            if (linkCounter > 20):
+                randpvcAge = float(np.random.uniform(40, 9, 1))
+            else:
+                randpvcAge = float(np.random.normal(13, 3, 1))
 
-        data['real']['pvc']['age'].append(randpvcAge)
-        data['noTemp']['pvc']['age'].append(randpvcAge)
-        data['noTime']['pvc']['age'].append(65)
+            data['real']['pvc']['age'].append(randpvcAge)
+            data['noTemp']['pvc']['age'].append(randpvcAge)
+            data['noTime']['pvc']['age'].append(65)
 
-        data['real']['pvc']['fS'].append(0)
-        data['noTemp']['pvc']['fS'].append(0)
-        data['noTime']['pvc']['fS'].append(0)
+            data['real']['pvc']['fS'].append(0)
+            data['noTemp']['pvc']['fS'].append(0)
+            data['noTime']['pvc']['fS'].append(0)
 
-        tH = float(np.random.uniform(0, 1, 1))
-        data['real']['pvc']['tH'].append(tH)
-        data['noTemp']['pvc']['tH'].append(tH)
-        data['noTime']['pvc']['tH'].append(tH)
+            tH = float(np.random.uniform(0, 1, 1))
+            data['real']['pvc']['tH'].append(tH)
+            data['noTemp']['pvc']['tH'].append(tH)
+            data['noTime']['pvc']['tH'].append(tH)
 
-        data['real']['pvc']['index'].append(linkList.contents)
-        data['noTemp']['pvc']['index'].append(linkList.contents)
-        data['noTime']['pvc']['index'].append(linkList.contents)
+            data['real']['pvc']['index'].append(indexVal)
+            data['noTemp']['pvc']['index'].append(indexVal)
+            data['noTime']['pvc']['index'].append(indexVal)
 
     linkCounter += 1
 
