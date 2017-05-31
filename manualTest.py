@@ -78,7 +78,10 @@ while True:
     print('TIME is', time.contents.value)
 
     if (time.contents.value == 0):
-        print(epalib.ENsetlinkvalue(ct.c_int(150), ct.c_int(11), ct.c_float(0.0)))
+        print(epalib.ENsetlinkvalue(ct.c_int(116), ct.c_int(11), ct.c_float(0.0)))
+        testing = ct.c_int(11)
+        print(epalib.ENgetlinktype(ct.c_int(116), testing))
+        print(testing.value)
     else:
         print(epalib.ENsetlinkvalue(ct.c_int(116), ct.c_int(11), ct.c_float(1.0)))
     
