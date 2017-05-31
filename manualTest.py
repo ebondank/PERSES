@@ -78,35 +78,35 @@ while True:
     print('TIME is', time.contents.value)
 
     if (time.contents.value == 0):
-        print(epalib.ENsetlinkvalue(ct.c_int(116), ct.c_int(11), ct.c_float(0.0)))
+        print(epalib.ENsetlinkvalue(ct.c_int(114), ct.c_int(11), ct.c_float(0.0)))
         testing = ct.pointer(ct.c_int(11))
-        print(epalib.ENgetlinktype(ct.c_int(116), testing))
+        print(epalib.ENgetlinktype(ct.c_int(114), testing))
         print(testing.contents.value)
     else:
         print(epalib.ENsetlinkvalue(ct.c_int(116), ct.c_int(11), ct.c_float(1.0)))
-    
+
     nodeid = ct.c_char_p(str(ID).encode('utf-8'))
     nodeidx = ct.pointer(ct.c_int(0))
     nodevalue = ct.pointer(ct.c_float(0.0))
-    
+
     errorcode = epalib.ENgetnodeindex(nodeid, nodeidx)
     if errorcode != 0:
         print(5, 'ERRORCODE is', errorcode)
     print('NODEID', nodeid.value.decode('utf-8'),
           'has NODEIDX', nodeidx.contents.value)
-    
+
     errorcode = epalib.ENgetnodevalue(
         nodeidx.contents, ENnodeparam.BASEDEMAND, nodevalue)
     if errorcode != 0:
         print(6, 'ERRORCODE is', errorcode)
     print('EN_BASEDEMAND is', nodevalue.contents.value)
-    
+
     errorcode = epalib.ENgetnodevalue(
         nodeidx.contents, ENnodeparam.PRESSURE, nodevalue)
     if errorcode != 0:
         print(7, 'ERRORCODE is', errorcode)
     print('EN_DEMAND is', nodevalue.contents.value)
-    
+
     errorcode = epalib.ENnextH(timestep)
     if errorcode != 0:
         print(8, 'ERRORCODE is', errorcode)
