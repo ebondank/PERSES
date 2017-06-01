@@ -76,11 +76,15 @@ while True:
     if errorcode != 0:
         print(4, 'ERRORCODE is', errorcode)
     print('TIME is', time.contents.value)
+    indexReturn1 = ct.pointer(ct.c_int(0))
+    # For the first pipe out of pump 10
+    linkID = ct.c_wchar_p('101')
+    epalib.ENgetlinkindex(linkID, indexReturn1)
 
     if (time.contents.value == 0):
-        print(epalib.ENsetlinkvalue(ct.c_int(114), ct.c_int(11), ct.c_float(0.0)))
+        print(epalib.ENsetlinkvalue(indexReturn1.contents, ct.c_int(11), ct.c_float(0.0)))
         testing = ct.pointer(ct.c_int(11))
-        print(epalib.ENgetlinktype(ct.c_int(114), testing))
+        print(epalib.ENgetlinktype(indexReturn1.contents, testing))
         print(testing.contents.value)
     else:
         print(epalib.ENsetlinkvalue(ct.c_int(116), ct.c_int(11), ct.c_float(1.0)))

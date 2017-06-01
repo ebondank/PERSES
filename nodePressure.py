@@ -41,10 +41,10 @@ for row in com.execute('SELECT * FROM NodeData ORDER BY Bihour_Count ASC'):
             ouCount = 0
             ou2Count = 0
 
-        if (float(row[2]) <= 40):
+        if (float(row[2]) <= 60):
             ouCount += 1
             print(row)
-            if (float(row[2]) <= 20):
+            if (float(row[2]) <= 40):
                 ou2Count += 1
                 print(row)
         try:
