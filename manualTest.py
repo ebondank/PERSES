@@ -89,7 +89,7 @@ while True:
     else:
         print(epalib.ENsetlinkvalue(indexReturn1.contents, ct.c_int(11), ct.c_float(1.0)))
 
-    nodeid = ct.c_char_p(str(ID).encode('utf-8'))
+    nodeid = ct.c_char_p(str(linkID).encode('utf-8'))
     nodeidx = ct.pointer(ct.c_int(0))
     nodevalue = ct.pointer(ct.c_float(0.0))
 
