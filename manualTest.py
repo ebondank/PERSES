@@ -87,7 +87,7 @@ while True:
         print(epalib.ENgetlinktype(indexReturn1.contents, testing))
         print(testing.contents.value)
     else:
-        print(epalib.ENsetlinkvalue(ct.c_int(116), ct.c_int(11), ct.c_float(1.0)))
+        print(epalib.ENsetlinkvalue(indexReturn1.contents, ct.c_int(11), ct.c_float(1.0)))
 
     nodeid = ct.c_char_p(str(ID).encode('utf-8'))
     nodeidx = ct.pointer(ct.c_int(0))

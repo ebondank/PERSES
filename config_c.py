@@ -48,13 +48,13 @@ currentRough = ct.pointer(ct.c_float(0.0))
 # int appended to list from int pointer return of 'ENgetlinkindex'
 indexReturn1 = ct.pointer(ct.c_int(0))
 # For the first pipe out of pump 10
-linkID = ct.c_wchar_p('101')
+linkID = ct.c_char_p(str(10).encode('utf-8'))
 epalib.ENgetlinkindex(linkID, indexReturn1)
 data['real']['pump']['index'].append(indexReturn1.contents)
 data['noTemp']['pump']['index'].append(indexReturn1.contents)
 data['noTime']['pump']['index'].append(indexReturn1.contents)
 # For the first pipe out of pump 335
-linkID = ct.c_wchar_p('329')
+linkID = ct.c_char_p(str(335).encode('utf-8'))
 indexReturn2 = ct.pointer(ct.c_int(0))
 epalib.ENgetlinkindex(linkID, indexReturn2)
 data['real']['pump']['index'].append(indexReturn2.contents)
