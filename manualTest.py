@@ -63,7 +63,7 @@ if errorcode != 0:
 print('\n---------------\n')
 
 i = 0
-ID = 164
+ID = 335
 time = ct.pointer(ct.c_long(0))
 timestep = ct.pointer(ct.c_long(7200))
 # print(epalib.ENsetlinkvalue(ct.c_int(5), ct.c_int(11), ct.c_float(1.0)))
@@ -78,8 +78,8 @@ while True:
     print('TIME is', time.contents.value)
     indexReturn1 = ct.pointer(ct.c_int(0))
     # For the first pipe out of pump 10
-    linkID = ct.c_wchar_p('10')
-    epalib.ENgetlinkindex(linkID, indexReturn1)
+    linkID = ct.c_wchar_p('335')
+    print(epalib.ENgetlinkindex(linkID, indexReturn1))
 
     if (time.contents.value == 0):
         print(epalib.ENsetlinkvalue(indexReturn1.contents, ct.c_int(11), ct.c_float(0.0)))
