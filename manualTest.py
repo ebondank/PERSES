@@ -63,7 +63,7 @@ if errorcode != 0:
 print('\n---------------\n')
 
 i = 0
-ID = 335
+ID = 60
 time = ct.pointer(ct.c_long(0))
 timestep = ct.pointer(ct.c_long(7200))
 # print(epalib.ENsetlinkvalue(ct.c_int(5), ct.c_int(11), ct.c_float(1.0)))
@@ -78,7 +78,7 @@ while True:
     print('TIME is', time.contents.value)
     indexReturn1 = ct.pointer(ct.c_int(0))
     # For the first pipe out of pump 10
-    linkID = ct.c_wchar_p('335')
+    linkID = ct.c_char_p(str(335).encode('utf-8'))
     print(epalib.ENgetlinkindex(linkID, indexReturn1))
 
     if (time.contents.value == 0):
@@ -98,12 +98,6 @@ while True:
         print(5, 'ERRORCODE is', errorcode)
     print('NODEID', nodeid.value.decode('utf-8'),
           'has NODEIDX', nodeidx.contents.value)
-
-    errorcode = epalib.ENgetnodevalue(
-        nodeidx.contents, ENnodeparam.BASEDEMAND, nodevalue)
-    if errorcode != 0:
-        print(6, 'ERRORCODE is', errorcode)
-    print('EN_BASEDEMAND is', nodevalue.contents.value)
 
     errorcode = epalib.ENgetnodevalue(
         nodeidx.contents, ENnodeparam.PRESSURE, nodevalue)
