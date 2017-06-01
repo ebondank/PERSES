@@ -89,7 +89,7 @@ while (linkCounter < linkList.contents.value):
 
         elif (int(currentRough.contents.value) < 140):
             if (linkCounter > 20):
-                randpvcAge = float(np.random.uniform(32, 6, 1))
+                randpvcAge = float(np.random.uniform(27, 6, 1))
             else:
                 randpvcAge = float(np.random.normal(13, 3, 1))
 
