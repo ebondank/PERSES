@@ -1,7 +1,7 @@
 import numpy as np
 import os
 
-file1 = open(os.path.expanduser('noTemp_pumpFail.txt'), 'r')
+file1 = open(os.path.expanduser('real_pumpFail.txt'), 'r')
 list1 = file1.read().splitlines()
 list1.pop()
 
@@ -10,7 +10,7 @@ file1.close()
 yearList = list()
 breakCount = list()
 count = 0
-while count < 20:
+while count < 33:
     yearList.append(count)
     breakCount.append(0)
     count += 1

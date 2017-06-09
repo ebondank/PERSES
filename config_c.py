@@ -72,13 +72,13 @@ while (linkCounter < linkList.contents.value):
             randironAge = float(np.random.uniform(0, 75, 1))
             data['real']['iron']['age'].append(randironAge)
             data['noTemp']['iron']['age'].append(randironAge)
-            data['noTime']['iron']['age'].append(65)
+            data['noTime']['iron']['age'].append(72)
 
             data['real']['iron']['fS'].append(0)
             data['noTemp']['iron']['fS'].append(0)
             data['noTime']['iron']['fS'].append(0)
 
-            tH = float(np.random.uniform(0, 1, 1))
+            tH = float(np.random.uniform(0, 1, 1)[0])
             data['real']['iron']['tH'].append(tH)
             data['noTemp']['iron']['tH'].append(tH)
             data['noTime']['iron']['tH'].append(tH)
@@ -95,7 +95,7 @@ while (linkCounter < linkList.contents.value):
 
             data['real']['pvc']['age'].append(randpvcAge)
             data['noTemp']['pvc']['age'].append(randpvcAge)
-            data['noTime']['pvc']['age'].append(65)
+            data['noTime']['pvc']['age'].append(28)
 
             data['real']['pvc']['fS'].append(0)
             data['noTemp']['pvc']['fS'].append(0)

@@ -1,2 +1,7 @@
 *.db
+*.xlsx
 *.txt
+*.json
+tags
+.vscode
+histTasMaxBD

@@ -3,12 +3,12 @@ import math
 import os
 
 
-Path = 'realistic0.db'
+Path = 'noTemp0.db'
 db = sql.connect(Path)
 com = db.cursor()
 ouCount = 0
 ou2Count = 0
-pipeFile = open(os.path.expanduser('~/Desktop/Untitled1.txt'), 'r')
+pipeFile = open(os.path.expanduser('pipes.txt'), 'r')
 pipeList = pipeFile.read().splitlines()
 pipeFile.close()
 demandList = list()
