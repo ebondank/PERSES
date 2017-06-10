@@ -69,7 +69,7 @@ while (linkCounter < linkList.contents.value):
     # Filtering the pumps
     if linkCounter != (indexReturn1.contents.value or indexReturn2.contents.value):
         if (int(currentRough.contents.value) > 140):
-            randironAge = float(np.random.rand(0,75))
+            randironAge = float(np.random.uniform(0, 75, 1))
             data['real']['iron']['age'].append(randironAge)
             data['noTemp']['iron']['age'].append(randironAge)
             data['noTime']['iron']['age'].append(72)
@@ -78,7 +78,7 @@ while (linkCounter < linkList.contents.value):
             data['noTemp']['iron']['fS'].append(0)
             data['noTime']['iron']['fS'].append(0)
 
-            tH = float(np.random.rand(0,1))
+            tH = float(np.random.uniform(0, 1, 1))
             data['real']['iron']['tH'].append(tH)
             data['noTemp']['iron']['tH'].append(tH)
             data['noTime']['iron']['tH'].append(tH)
@@ -89,9 +89,9 @@ while (linkCounter < linkList.contents.value):
 
         elif (int(currentRough.contents.value) < 140):
             if (linkCounter > 20):
-                randpvcAge = float(np.random.rand(27, 6))
+                randpvcAge = float(np.random.uniform(27, 6, 1))
             else:
-                randpvcAge = float(np.random.normal(13, 3, size=None))
+                randpvcAge = float(np.random.normal(13, 3, 1))
 
             data['real']['pvc']['age'].append(randpvcAge)
             data['noTemp']['pvc']['age'].append(randpvcAge)
@@ -101,7 +101,7 @@ while (linkCounter < linkList.contents.value):
             data['noTemp']['pvc']['fS'].append(0)
             data['noTime']['pvc']['fS'].append(0)
 
-            tH = float(np.random.rand(0, 1))
+            tH = float(np.random.uniform(0, 1, 1))
             data['real']['pvc']['tH'].append(tH)
             data['noTemp']['pvc']['tH'].append(tH)
             data['noTime']['pvc']['tH'].append(tH)
@@ -116,8 +116,8 @@ data['real']['pump']['age'] = list([4, 7])
 data['noTemp']['pump']['age'] = list([4, 7])
 data['noTime']['pump']['age'] = list([4, 7])
 
-tH1 = float(np.random.rand(0, 1))
-tH2 = float(np.random.rand(0, 1))
+tH1 = float(np.random.uniform(0, 1, 1))
+tH2 = float(np.random.uniform(0, 1, 1))
 data['real']['pump']['tH'] = [tH1, tH2]
 data['noTemp']['pump']['tH'] = [tH1, tH2]
 data['noTime']['pump']['tH'] = [tH1, tH2]

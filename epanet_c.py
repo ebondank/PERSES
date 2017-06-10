@@ -49,7 +49,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                 if (float(pvcWeibullList[indexSelect]) > float(data[simType]['pvc']['tH'][index])):
                     if (simType != 'noTime'):
                         data[simType]['pvc']['age'][index] = 0
-                    data[simType]['pvc']['tH'][index] = np.random.rand(0, 1)
+                    data[simType]['pvc']['tH'][index] = np.random.uniform(0, 1)
                     epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(0.0))
                     pipeFailureFile = open(('{}_pvcPipeFail.txt').format(simType), 'a')
                     pipeFailureFile.write('%s %s\n' % (index, biHour))
@@ -86,7 +86,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                 if (float(ironWeibullList[indexSelect]) > float(data[simType]['iron']['tH'][index])):
                     if (simType != 'noTime'):
                         data[simType]['iron']['age'][index] = 0
-                    data[simType]['iron']['tH'][index] = np.random.rand(0, 1)
+                    data[simType]['iron']['tH'][index] = np.random.uniform(0, 1)
                     epalib.ENsetlinkvalue(data[simType]['iron']['index'][index], ct.c_int(11), ct.c_float(0.0))
                     # Writing to the seperate failure statistics file
                     pipeFailureFile = open(('{}_ironPipeFail.txt').format(simType), 'a')
@@ -122,7 +122,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                 if float(pumpWeibullList[indexSelect]) > float(data[simType]['pump']['tH'][index]):
                     if (simType != 'noTime'):
                         data[simType]['pump']['age'][index] = 0
-                    data[simType]['pump']['tH'][index] = np.random.rand(0, 1)
+                    data[simType]['pump']['tH'][index] = np.random.uniform(0, 1)
                     pumpFailureFile = open(('{}_pumpFail.txt').format(simType), 'a')
                     pumpFailureFile.write('%s %s\n' % (index, biHour))
                     pumpFailureFile.close()
