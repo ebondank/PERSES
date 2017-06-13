@@ -5,6 +5,9 @@ from config_c import *
 
 def epanet(batch, simType, dbCursor, dbObject):
     epaCount = 0
+    print(simType)
+    if (simType == 'real'):
+        print("String comparison working")
     biHour = (batch * 8760)
     # Makes sure time == 0 (start of new 'batch')
     # Also sets all of the components to functional, will eliminate 1/8760 edge case
@@ -114,7 +117,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                         data[simType]['pump']['age'][index] = 0
 
             # Not currently failed block
-            elif (simType == 'noTime') or (int(data[simType]['pump']['fS'][index]) == 0):
+            elif ((simType == "noTime") or (data[simType]['pump']['fS'][index] == 0)):
                 indexSelect = (math.trunc(tasMaxACT) - 19)
                 if indexSelect < 0:
                     indexSelect = 0
@@ -132,7 +135,9 @@ def epanet(batch, simType, dbCursor, dbObject):
                     data[simType]['pump']['fS'][index] = 8
                 if (simType != 'noTime'):
                     data[simType]['pump']['age'][index] = float(data[simType]['pump']['age'][index]) + biHourToYear
-
+                fq = open('ages.txt', 'a')
+                fq.write(('{} {} {}\n').format(data[simType]['pump']['age'][index], index, simType))
+                fq.close()
         # Does the hydraulic solving
         # print('errorcode: %s' % errorcode)
         epalib.ENrunH(time)
