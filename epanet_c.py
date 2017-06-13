@@ -6,7 +6,7 @@ from config_c import *
 def epanet(batch, simType, dbCursor, dbObject):
     epaCount = 0
     print(simType)
-    if (simType == 'real'):
+    if (simType == 'noTime'):
         print("String comparison working")
     biHour = (batch * 8760)
     # Makes sure time == 0 (start of new 'batch')
