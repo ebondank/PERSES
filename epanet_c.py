@@ -19,7 +19,7 @@ def epanet(batch, simType, dbCursor, dbObject):
     #     epalib.ENsetlinkvalue(data[simType]['iron']['index'][index], ct.c_int(11), ct.c_float(1.0))
     # for index, item in enumerate(data[simType]['pump']['fS']):
     #     epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(11), ct.c_float(1.0))
-    while epaCount < 8760:
+    while epaCount < 5:
         dayCount = math.floor(biHour / 24)
         tasMaxACT = float(tasMaxACTList[simType][dayCount])
 
