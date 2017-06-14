@@ -44,7 +44,8 @@ def epanet(batch, simType, dbCursor, dbObject):
                 if (float(pvcWeibullList[indexSelect]) > float(data[simType]['pvc']['tH'][index])):
                     if ((simType == 'noTemp') or (simType == 'real')):
                         data[simType]['pvc']['age'][index] = 0
-                    data[simType]['pvc']['tH'][index] = np.random.uniform(0, 1)
+                        data[simType]['pvc']['tH'][index] = np.random.uniform(0, 1)
+
                     epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(0.0))
                     pipeFailureFile = open(('{}_pvcPipeFail.txt').format(simType), 'a')
                     pipeFailureFile.write('%s %s\n' % (index, biHour))
@@ -62,26 +63,31 @@ def epanet(batch, simType, dbCursor, dbObject):
                 data[simType]['iron']['fS'][index] = int(data[simType]['iron']['fS'][index]) - 1
                 if (int(data[simType]['iron']['fS'][index]) <= 0):
                     epalib.ENsetlinkvalue(data[simType]['iron']['index'][index], ct.c_int(11), ct.c_float(1.0))
+
                 else:
                     epalib.ENsetlinkvalue(data[simType]['iron']['index'][index], ct.c_int(11), ct.c_float(0.0))
                     if (simType == 'noTime'):
                         pipeFailureFile = open(('{}_ironPipeFail.txt').format(simType), 'a')
                         pipeFailureFile.write('%s %s STILLFAILED\n' % (index, biHour))
                         pipeFailureFile.close()
+
                 if (simType == ('noTemp' or 'real')):
                     data[simType]['iron']['age'][index] = 0
+
             # Currently functional and testing for failure
             elif (simType == 'noTime') or (int(data[simType]['iron']['fS'][index]) == 0):
                 indexSelect = 0
                 indexSelect = (math.trunc(tasMaxACT) - 19)
                 if indexSelect < 0:
                     indexSelect = 0
+
                 indexSelect = indexSelect + (30 * int(math.trunc(float(data[simType]['iron']['age'][index]))))
 
                 if (float(ironWeibullList[indexSelect]) > float(data[simType]['iron']['tH'][index])):
                     if ((simType == 'noTemp') or (simType == 'real')):
                         data[simType]['iron']['age'][index] = 0
-                    data[simType]['iron']['tH'][index] = np.random.uniform(0, 1)
+                        data[simType]['iron']['tH'][index] = np.random.uniform(0, 1)
+
                     epalib.ENsetlinkvalue(data[simType]['iron']['index'][index], ct.c_int(11), ct.c_float(0.0))
                     # Writing to the seperate failure statistics file
                     pipeFailureFile = open(('{}_ironPipeFail.txt').format(simType), 'a')
@@ -103,6 +109,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     pumpFailureFile = open(('{}_pumpFail.txt').format(simType), 'a')
                     pumpFailureFile.write('%s %s STILLFAILED\n' % (index, biHour))
                     pumpFailureFile.close()
+
                 if (int(data[simType]['pump']['fS'][index]) <= 0):
                     epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(11), ct.c_float(1.0))
                     if (simType == ('noTemp' or 'real')):
@@ -113,11 +120,13 @@ def epanet(batch, simType, dbCursor, dbObject):
                 indexSelect = (math.trunc(tasMaxACT) - 19)
                 if indexSelect < 0:
                     indexSelect = 0
+
                 indexSelect = indexSelect + (30 * int(math.trunc(float(data[simType]['pump']['age'][index]))))
                 if float(pumpWeibullList[indexSelect]) > float(data[simType]['pump']['tH'][index]):
                     if ((simType == 'noTemp') or (simType == 'real')):
                         data[simType]['pump']['age'][index] = 0
-                    data[simType]['pump']['tH'][index] = np.random.uniform(0, 1)
+                        data[simType]['pump']['tH'][index] = np.random.uniform(0, 1)
+
                     pumpFailureFile = open(('{}_pumpFail.txt').format(simType), 'a')
                     pumpFailureFile.write('%s %s\n' % (index, biHour))
                     pumpFailureFile.close()
@@ -127,6 +136,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     data[simType]['pump']['fS'][index] = 8
                 if ((simType == 'noTemp') or (simType == 'real')):
                     data[simType]['pump']['age'][index] = float(data[simType]['pump']['age'][index]) + biHourToYear
+
         # Does the hydraulic solving
         # print('errorcode: %s' % errorcode)
         epalib.ENrunH(time)
