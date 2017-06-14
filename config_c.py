@@ -95,7 +95,7 @@ while (linkCounter < linkList.contents.value):
 
             data['real']['pvc']['age'].append(randpvcAge)
             data['noTemp']['pvc']['age'].append(randpvcAge)
-            data['noTime']['pvc']['age'].append(40)
+            data['noTime']['pvc']['age'].append(55)
 
             data['real']['pvc']['fS'].append(0)
             data['noTemp']['pvc']['fS'].append(0)
