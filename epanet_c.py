@@ -8,8 +8,8 @@ def epanet(batch, simType, dbCursor, dbObject):
     biHour = (batch * 8760)
     
     time.contents = ct.c_long(0)
-    # TODO THIS IS SET TO 5 INSTEAD OF 8760 RIGHT NOW
-    while epaCount < 5:
+
+    while epaCount < 8760:
         dayCount = math.floor(biHour / 24)
         tasMaxACT = float(tasMaxACTList[simType][dayCount])
 
@@ -28,7 +28,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(1.0))
                     # no-time simulation config stuff
                     if (simType == ('noTemp' or 'real')):
-                        data[simType]['pvc']['age'][index] = 0
+                        data[simType]['pvc']
                 # Pipe disable mid run
                 else:
                     epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(0.0))
@@ -125,9 +125,6 @@ def epanet(batch, simType, dbCursor, dbObject):
                     data[simType]['pump']['fS'][index] = 8
                 if (simType != 'noTime'):
                     data[simType]['pump']['age'][index] = float(data[simType]['pump']['age'][index]) + biHourToYear
-                fq = open('ages.txt', 'a')
-                fq.write(('{} {} {}\n').format(data[simType]['pump']['age'][index], index, simType))
-                fq.close()
         # Does the hydraulic solving
         # print('errorcode: %s' % errorcode)
         epalib.ENrunH(time)
