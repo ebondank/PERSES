@@ -5,20 +5,10 @@ from config_c import *
 
 def epanet(batch, simType, dbCursor, dbObject):
     epaCount = 0
-    print(simType)
-    if (simType == 'noTime'):
-        print("String comparison working")
     biHour = (batch * 8760)
-    # Makes sure time == 0 (start of new 'batch')
-    # Also sets all of the components to functional, will eliminate 1/8760 edge case
-    # Those that are properly failed will go back into the failed state
+    
     time.contents = ct.c_long(0)
-    # for index, item in enumerate(data[simType]['pvc']['fS']):
-    #     epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(1.0))
-    # for index, item in enumerate(data[simType]['iron']['fS']):
-    #     epalib.ENsetlinkvalue(data[simType]['iron']['index'][index], ct.c_int(11), ct.c_float(1.0))
-    # for index, item in enumerate(data[simType]['pump']['fS']):
-    #     epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(11), ct.c_float(1.0))
+    # TODO THIS IS SET TO 5 INSTEAD OF 8760 RIGHT NOW
     while epaCount < 5:
         dayCount = math.floor(biHour / 24)
         tasMaxACT = float(tasMaxACTList[simType][dayCount])
@@ -37,7 +27,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     # pipe enable
                     epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(1.0))
                     # no-time simulation config stuff
-                    if (simType != 'noTime'):
+                    if (simType == ('noTemp' or 'real')):
                         data[simType]['pvc']['age'][index] = 0
                 # Pipe disable mid run
                 else:
@@ -50,7 +40,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                 indexSelect = indexSelect + int(30 * int(math.trunc(float(data[simType]['pvc']['age'][index]))))
 
                 if (float(pvcWeibullList[indexSelect]) > float(data[simType]['pvc']['tH'][index])):
-                    if (simType != 'noTime'):
+                    if (simType == ('noTemp' or 'real')):
                         data[simType]['pvc']['age'][index] = 0
                     data[simType]['pvc']['tH'][index] = np.random.uniform(0, 1)
                     epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(0.0))
@@ -60,7 +50,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     # This is based off of the 88 hr repair time, can be
                     # changed to w/e
                     data[simType]['pvc']['fS'][index] = 44
-                if (simType != 'noTime'):
+                if (simType == ('noTemp' or 'real')):
                     data[simType]['pvc']['age'][index] = float(data[simType]['pvc']['age'][index]) + biHourToYear
 
         #################### IRON PIPE ##### IRON PIPE ##### IRON PIPE ####################
@@ -76,7 +66,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                         pipeFailureFile = open(('{}_ironPipeFail.txt').format(simType), 'a')
                         pipeFailureFile.write('%s %s STILLFAILED\n' % (index, biHour))
                         pipeFailureFile.close()
-                if (simType != 'noTime'):
+                if (simType == ('noTemp' or 'real')):
                     data[simType]['iron']['age'][index] = 0
             # Currently functional and testing for failure
             elif (simType == 'noTime') or (int(data[simType]['iron']['fS'][index]) == 0):
@@ -87,7 +77,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                 indexSelect = indexSelect + (30 * int(math.trunc(float(data[simType]['iron']['age'][index]))))
 
                 if (float(ironWeibullList[indexSelect]) > float(data[simType]['iron']['tH'][index])):
-                    if (simType != 'noTime'):
+                    if (simType == ('noTemp' or 'real')):
                         data[simType]['iron']['age'][index] = 0
                     data[simType]['iron']['tH'][index] = np.random.uniform(0, 1)
                     epalib.ENsetlinkvalue(data[simType]['iron']['index'][index], ct.c_int(11), ct.c_float(0.0))
@@ -113,7 +103,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     pumpFailureFile.close()
                 if (int(data[simType]['pump']['fS'][index]) <= 0):
                     epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(11), ct.c_float(1.0))
-                    if (simType != 'noTime'):
+                    if (simType == ('noTemp' or 'real')):
                         data[simType]['pump']['age'][index] = 0
 
             # Not currently failed block
@@ -123,7 +113,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     indexSelect = 0
                 indexSelect = indexSelect + (30 * int(math.trunc(float(data[simType]['pump']['age'][index]))))
                 if float(pumpWeibullList[indexSelect]) > float(data[simType]['pump']['tH'][index]):
-                    if (simType != 'noTime'):
+                    if (simType == ('noTemp' or 'real')):
                         data[simType]['pump']['age'][index] = 0
                     data[simType]['pump']['tH'][index] = np.random.uniform(0, 1)
                     pumpFailureFile = open(('{}_pumpFail.txt').format(simType), 'a')
