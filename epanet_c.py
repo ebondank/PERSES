@@ -17,10 +17,6 @@ def epanet(batch, simType, dbCursor, dbObject):
         for index, item in enumerate(data[simType]['pvc']['index']):
             # If the pipe is already in the failed state
             if (int(data[simType]['pvc']['fS'][index]) != 0):
-                if (simType == 'noTime'):
-                    pipeFailureFile = open(('{}_pvcPipeFail.txt').format(simType), 'a')
-                    pipeFailureFile.write('%s %s STILLFAILED\n' % (index, biHour))
-                    pipeFailureFile.close()
 
                 if (int(data[simType]['pvc']['fS'][index]) <= 0):
                     # pipe enable
@@ -66,10 +62,6 @@ def epanet(batch, simType, dbCursor, dbObject):
 
                 else:
                     epalib.ENsetlinkvalue(data[simType]['iron']['index'][index], ct.c_int(11), ct.c_float(0.0))
-                    if (simType == 'noTime'):
-                        pipeFailureFile = open(('{}_ironPipeFail.txt').format(simType), 'a')
-                        pipeFailureFile.write('%s %s STILLFAILED\n' % (index, biHour))
-                        pipeFailureFile.close()
 
                 if (simType == ('noTemp' or 'real')):
                     data[simType]['iron']['age'][index] = 0
@@ -105,10 +97,6 @@ def epanet(batch, simType, dbCursor, dbObject):
             if (data[simType]['pump']['fS'][index] != 0):
                 data[simType]['pump']['fS'][index] = int(data[simType]['pump']['fS'][index]) - 1
                 epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(11), ct.c_float(0.0))
-                if (simType == 'noTime'):
-                    pumpFailureFile = open(('{}_pumpFail.txt').format(simType), 'a')
-                    pumpFailureFile.write('%s %s STILLFAILED\n' % (index, biHour))
-                    pumpFailureFile.close()
 
                 if (int(data[simType]['pump']['fS'][index]) <= 0):
                     epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(11), ct.c_float(1.0))
