@@ -15,7 +15,6 @@ def epanet(batch, simType, dbCursor, dbObject):
 
         ############### PVC PIPE ##### PVC PIPE ##### PVC PIPE ####################
         for index, item in enumerate(data[simType]['pvc']['index']):
-            print(data[simType]['pvc']['fS'][index])
             # If the pipe is already in the failed state
             if (int(data[simType]['pvc']['fS'][index]) != 0):
                 if (simType == 'noTime'):
@@ -35,6 +34,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     data[simType]['pvc']['fS'][index] = int(data[simType]['pvc']['fS'][index]) - 1
                     epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(0.0))
             elif ((simType == 'noTime') or (int(data[simType]['pvc']['fS'][index]) == 0)):
+                print(data[simType]['pvc']['fS'][index])
                 indexSelect = 0
                 indexSelect = (math.trunc(tasMaxACT) - 19)
                 if indexSelect <= 0:
