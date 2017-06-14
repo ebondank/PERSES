@@ -56,9 +56,8 @@ databaseCursor_noTime.execute('''CREATE TABLE linkData (Bihour_Count real, NodeI
 
 batch = 0
 while batch < 35:
-    epanet_c.epanet(batch, 'noTime', databaseCursor_noTime, databaseObject_noTime)
     epanet_c.epanet(batch, 'real', databaseCursorReal, databaseObjectReal)
-
+    epanet_c.epanet(batch, 'noTime', databaseCursor_noTime, databaseObject_noTime)
     epanet_c.epanet(batch, 'noTemp', databaseCursor_noTemp, databaseObject_noTemp)
 
     batch += 1

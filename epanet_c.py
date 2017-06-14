@@ -30,7 +30,6 @@ def epanet(batch, simType, dbCursor, dbObject):
                     data[simType]['pvc']['fS'][index] = int(data[simType]['pvc']['fS'][index]) - 1
                     epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(0.0))
             elif ((simType == 'noTime') or (int(data[simType]['pvc']['fS'][index]) == 0)):
-                print(data[simType]['pvc']['fS'][index], data[simType]['pvc']['age'][index])
                 indexSelect = 0
                 indexSelect = (math.trunc(tasMaxACT) - 19)
                 if indexSelect <= 0:
