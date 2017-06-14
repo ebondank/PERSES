@@ -28,6 +28,8 @@ def epanet(batch, simType, dbCursor, dbObject):
                     epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(1.0))
                     # no-time simulation config stuff
                     if ((simType == 'noTemp') or (simType == 'real')):
+                        print(simType)
+                        print("whyyyyyy")
                         data[simType]['pvc']['age'][index] = 0
                 # Pipe disable mid run
                 else:
