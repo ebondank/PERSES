@@ -17,7 +17,7 @@ def epanet(batch, simType, dbCursor, dbObject):
         for index, item in enumerate(data[simType]['pvc']['index']):
             # If the pipe is already in the failed state
             if (int(data[simType]['pvc']['fS'][index]) != 0):
-
+                data[simType]['pvc']['fS'][index] = int(data[simType]['pvc']['fS'][index]) - 1
                 if (int(data[simType]['pvc']['fS'][index]) <= 0):
                     # pipe enable
                     data[simType]['pvc']['fS'][index] = 0
@@ -27,7 +27,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                         data[simType]['pvc']['age'][index] = 0
                 # Pipe disable mid run
                 else:
-                    data[simType]['pvc']['fS'][index] = int(data[simType]['pvc']['fS'][index]) - 1
+                    # data[simType]['pvc']['fS'][index] = int(data[simType]['pvc']['fS'][index]) - 1
                     epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(0.0))
             elif ((simType == 'noTime') or (int(data[simType]['pvc']['fS'][index]) == 0)):
                 indexSelect = 0

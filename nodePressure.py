@@ -3,7 +3,7 @@ import math
 import os
 
 
-Path = 'noTemp0.db'
+Path = 'realistic0.db'
 db = sql.connect(Path)
 com = db.cursor()
 ouCount = 0
@@ -43,10 +43,10 @@ for row in com.execute('SELECT * FROM NodeData ORDER BY Bihour_Count ASC'):
 
         if (float(row[2]) <= 60):
             ouCount += 1
-            print(row)
+            # print(row)
             if (float(row[2]) <= 40):
                 ou2Count += 1
-                print(row)
+                # print(row)
         try:
             # print("Boi")
             dbOUCount[math.floor((row[0]) / 8760)] = ouCount
@@ -57,6 +57,6 @@ for row in com.execute('SELECT * FROM NodeData ORDER BY Bihour_Count ASC'):
 
 for item in dbOUCount:
     print(item)
-
+print("\n\n\n")
 for item in dbOUCount2:
     print(item)

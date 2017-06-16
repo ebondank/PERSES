@@ -59,8 +59,8 @@ while batch < 35:
     epanet_c.epanet(batch, 'real', databaseCursorReal, databaseObjectReal)
     epanet_c.epanet(batch, 'noTime', databaseCursor_noTime, databaseObject_noTime)
     epanet_c.epanet(batch, 'noTemp', databaseCursor_noTemp, databaseObject_noTemp)
-
     batch += 1
+
 epalib.ENcloseH()
 epalib.ENclose()
 os.environ['SIMCOUNT'] = str(int(os.environ['SIMCOUNT']) + 1)
