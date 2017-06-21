@@ -59,6 +59,7 @@ while batch < 83:
     epanet_c.epanet(batch, 'real', databaseCursorReal, databaseObjectReal)
     epanet_c.epanet(batch, 'noTime', databaseCursor_noTime, databaseObject_noTime)
     epanet_c.epanet(batch, 'noTemp', databaseCursor_noTemp, databaseObject_noTemp)
+    print(batch)
     batch += 1
 
 epalib.ENcloseH()
