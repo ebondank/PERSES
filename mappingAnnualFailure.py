@@ -1,9 +1,9 @@
 import numpy as np
 import os
 
-file1 = open(os.path.expanduser('6-17-17/noTime_pvcPipeFail.txt'), 'r')
+file1 = open(os.path.expanduser('6-20-17/noTemp_ironPipeFail.txt'), 'r')
 list1 = file1.read().splitlines()
-list1.pop()
+
 
 file1.close()
 
