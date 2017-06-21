@@ -69,7 +69,7 @@ while (linkCounter < linkList.contents.value):
     # Filtering the pumps
     if linkCounter != (indexReturn1.contents.value or indexReturn2.contents.value):
         if (int(currentRough.contents.value) > 140):
-            randironAge = float(np.random.uniform(0, 75, 1)[0])
+            randironAge = float(np.random.uniform(0, 72, 1)[0])
             data['real']['iron']['age'].append(randironAge)
             data['noTemp']['iron']['age'].append(randironAge)
             data['noTime']['iron']['age'].append(72)
@@ -112,9 +112,9 @@ while (linkCounter < linkList.contents.value):
 
     linkCounter += 1
 
-data['real']['pump']['age'] = list([4, 7])
-data['noTemp']['pump']['age'] = list([4, 7])
-data['noTime']['pump']['age'] = list([4, 7])
+data['real']['pump']['age'] = list([4, 6])
+data['noTemp']['pump']['age'] = list([4, 6])
+data['noTime']['pump']['age'] = list([6, 6])
 
 tH1 = float(np.random.uniform(0, 1, 1)[0])
 tH2 = float(np.random.uniform(0, 1, 1)[0])
