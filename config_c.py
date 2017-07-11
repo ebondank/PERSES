@@ -39,7 +39,7 @@ nodeValue = ct.pointer(ct.c_float(0.0))
 nodeID = ct.c_char_p(('Testing purposes').encode('UTF-8'))
 
 linkList = ct.pointer(ct.c_int(0))
-epalib.ENgetcount(ct.c_int(0), linkList)
+epalib.ENgetcount(ct.c_int(2), linkList)
 linkCounter = 1
 currentRough = ct.pointer(ct.c_float(0.0))
 
