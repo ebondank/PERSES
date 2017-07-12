@@ -4,10 +4,10 @@ from config_c import *
 import epanet_c
 
 # TODO Environment variables for server aren't persisting for some reason
-os.remove('D:\\Austin_Michne\\tripleSim\\realistic0.db')
+# os.remove('D:\\Austin_Michne\\tripleSim\\realistic0.db')
 # os.remove('D:\\Austin_Michne\\tripleSim\\noTime_yesCC0.db')
 # os.remove('D:\\Austin_Michne\\tripleSim\\noTime_noCC0.db')
-os.remove('D:\\Austin_Michne\\tripleSim\\noTemp0.db')
+# os.remove('D:\\Austin_Michne\\tripleSim\\noTemp0.db')
 
 failureFile = open('real_ironPipeFail.txt', 'w')
 failureFile.write('\n\n\n')
