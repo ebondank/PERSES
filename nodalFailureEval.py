@@ -10,8 +10,6 @@ dbCursor = db.cursor()
 dbCursor.execute('''CREATE TABLE NodeData (NodeID real, Pressure real)''')
 
 
-
-
 while (i < (linkList.contents.value ** 2)):
     failureDec = list(('{0:b}').format(i))
     for index, item in enumerate(failureDec):
@@ -21,7 +19,8 @@ while (i < (linkList.contents.value ** 2)):
     while (intCount < nodeCount.contents.value):
         epalib.ENgetnodevalue(ct.c_int(intCount), ct.c_int(11), nodeValue)
         epalib.ENgetnodeid(ct.c_int(intCount), nodeID)
-        dbCursor.execute('''INSERT INTO NodeData VALUES (?, ?)''', ((nodeID.value).decode('utf-8'), nodeValue.contents.value))
+        dbCursor.execute('''INSERT INTO NodeData VALUES (?, ?)''', ((
+            nodeID.value).decode('utf-8'), nodeValue.contents.value))
         # print(('{} {} {} \n').format(biHour, nodeID.value, nodeValue.contents.value))
         intCount += 1
 

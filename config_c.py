@@ -4,7 +4,7 @@ import ctypes as ct
 epalib = ct.cdll.LoadLibrary('D:\\Austin_Michne\\1_11_17\\epanet2mingw64.dll')
 biHourToYear = float(.0002283105022831050228310502283105)
 biHour = 0
-data = {'real':{'iron':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}}, 'noTemp': {'iron':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}}, 'noTime': {'iron':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}}}
+data = {'real':{'iron':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}}, 'noTemp': {'iron':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}}, 'noTime_yesCC': {'iron':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}}, 'noTime_noCC': {'iron':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}}}
 
 tasFile = open('D:\\Austin_Michne\\1_11_17\\tasMaxBD.txt', 'r')
 tasList = tasFile.read().expandtabs().splitlines()
@@ -13,7 +13,7 @@ tasFile.close()
 histTasFile = open('histTasMaxBD.txt', 'r')
 histTasList = histTasFile.read().expandtabs().splitlines()
 histTasFile.close()
-tasMaxACTList = {'real': list(tasList), 'noTime': list(tasList), 'noTemp': list(histTasList)}
+tasMaxACTList = {'real': list(tasList), 'noTime_yesCC': list(tasList), 'noTime_noCC': list(histTasList), 'noTemp': list(histTasList)}
 
 f = open('north_marin_c.inp', 'r')
 fi = open('D:\\Austin_Michne\\tripleSim\\zz.rpt', 'w')
@@ -52,14 +52,16 @@ linkID = ct.c_char_p(str(10).encode('utf-8'))
 epalib.ENgetlinkindex(linkID, indexReturn1)
 data['real']['pump']['index'].append(indexReturn1.contents)
 data['noTemp']['pump']['index'].append(indexReturn1.contents)
-data['noTime']['pump']['index'].append(indexReturn1.contents)
+data['noTime_yesCC']['pump']['index'].append(indexReturn1.contents)
+data['noTime_noCC']['pump']['index'].append(indexReturn1.contents)
 # For the first pipe out of pump 335
 linkID = ct.c_char_p(str(335).encode('utf-8'))
 indexReturn2 = ct.pointer(ct.c_int(0))
 epalib.ENgetlinkindex(linkID, indexReturn2)
 data['real']['pump']['index'].append(indexReturn2.contents)
 data['noTemp']['pump']['index'].append(indexReturn2.contents)
-data['noTime']['pump']['index'].append(indexReturn2.contents)
+data['noTime_yesCC']['pump']['index'].append(indexReturn2.contents)
+data['noTime_noCC']['pump']['index'].append(indexReturn2.contents)
 
 # Roughness look to determine pipe type
 # Using pure c integers in the lists
@@ -72,20 +74,24 @@ while (linkCounter < linkList.contents.value):
             randironAge = float(np.random.uniform(0, 72, 1)[0])
             data['real']['iron']['age'].append(randironAge)
             data['noTemp']['iron']['age'].append(randironAge)
-            data['noTime']['iron']['age'].append(72)
+            data['noTime_yesCC']['iron']['age'].append(72)
+            data['noTime_noCC']['iron']['age'].append(72)
 
             data['real']['iron']['fS'].append(0)
             data['noTemp']['iron']['fS'].append(0)
-            data['noTime']['iron']['fS'].append(0)
+            data['noTime_yesCC']['iron']['fS'].append(0)
+            data['noTime_noCC']['iron']['fS'].append(0)
 
             tH = float(np.random.uniform(0, 1, 1)[0])
             data['real']['iron']['tH'].append(tH)
             data['noTemp']['iron']['tH'].append(tH)
-            data['noTime']['iron']['tH'].append(tH)
+            data['noTime_yesCC']['iron']['tH'].append(tH)
+            data['noTime_noCC']['iron']['tH'].append(tH)
 
             data['real']['iron']['index'].append(indexVal)
             data['noTemp']['iron']['index'].append(indexVal)
-            data['noTime']['iron']['index'].append(indexVal)
+            data['noTime_yesCC']['iron']['index'].append(indexVal)
+            data['noTime_noCC']['iron']['index'].append(indexVal)
 
         elif (int(currentRough.contents.value) < 140):
             if (linkCounter > 20):
@@ -95,36 +101,43 @@ while (linkCounter < linkList.contents.value):
 
             data['real']['pvc']['age'].append(randpvcAge)
             data['noTemp']['pvc']['age'].append(randpvcAge)
-            data['noTime']['pvc']['age'].append(55)
+            data['noTime_yesCC']['pvc']['age'].append(55)
+            data['noTime_noCC']['pvc']['age'].append(55)
 
             data['real']['pvc']['fS'].append(0)
             data['noTemp']['pvc']['fS'].append(0)
-            data['noTime']['pvc']['fS'].append(0)
+            data['noTime_yesCC']['pvc']['fS'].append(0)
+            data['noTime_noCC']['pvc']['fS'].append(0)
 
             tH = float(np.random.uniform(0, 1, 1)[0])
             data['real']['pvc']['tH'].append(tH)
             data['noTemp']['pvc']['tH'].append(tH)
-            data['noTime']['pvc']['tH'].append(tH)
+            data['noTime_yesCC']['pvc']['tH'].append(tH)
+            data['noTime_noCC']['pvc']['tH'].append(tH)
 
             data['real']['pvc']['index'].append(indexVal)
             data['noTemp']['pvc']['index'].append(indexVal)
-            data['noTime']['pvc']['index'].append(indexVal)
+            data['noTime_yesCC']['pvc']['index'].append(indexVal)
+            data['noTime_noCC']['pvc']['index'].append(indexVal)
 
     linkCounter += 1
 
 data['real']['pump']['age'] = list([4, 6])
 data['noTemp']['pump']['age'] = list([4, 6])
-data['noTime']['pump']['age'] = list([6, 6])
+data['noTime_yesCC']['pump']['age'] = list([6, 6])
+data['noTime_noCC']['pump']['age'] = list([6, 6])
 
 tH1 = float(np.random.uniform(0, 1, 1)[0])
 tH2 = float(np.random.uniform(0, 1, 1)[0])
 data['real']['pump']['tH'] = [tH1, tH2]
 data['noTemp']['pump']['tH'] = [tH1, tH2]
-data['noTime']['pump']['tH'] = [tH1, tH2]
+data['noTime_yesCC']['pump']['tH'] = [tH1, tH2]
+data['noTime_noCC']['pump']['tH'] = [tH1, tH2]
 
 data['real']['pump']['fS'] = list([0, 0])
 data['noTemp']['pump']['fS'] = list([0, 0])
-data['noTime']['pump']['fS'] = list([0, 0])
+data['noTime_yesCC']['pump']['fS'] = list([0, 0])
+data['noTime_noCC']['pump']['fS'] = list([0, 0])
 
 pvcWeibullFile = open('D:\\Austin_Michne\\1_11_17\\pvcWeibullFixed.txt', 'r')
 pvcWeibullList = pvcWeibullFile.read().splitlines()
