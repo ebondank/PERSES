@@ -4,7 +4,7 @@ import ctypes as ct
 epalib = ct.cdll.LoadLibrary('D:\\Austin_Michne\\1_11_17\\epanet2mingw64.dll')
 biHourToYear = float(.0002283105022831050228310502283105)
 biHour = 0
-data = {'real':{'iron':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}}, 'noTemp': {'iron':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}}, 'noTime_yesCC': {'iron':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}}, 'noTime_noCC': {'iron':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'tH':list(), 'age':list(), 'fS':list(), 'index':list()}}}
+data = {'real':{'iron':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}}, 'noTemp': {'iron':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}}, 'noTime_yesCC': {'iron':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}}, 'noTime_noCC': {'iron':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}}}
 
 tasFile = open('D:\\Austin_Michne\\1_11_17\\tasMaxBD.txt', 'r')
 tasList = tasFile.read().expandtabs().splitlines()
@@ -82,11 +82,16 @@ while (linkCounter < linkList.contents.value):
             data['noTime_yesCC']['iron']['fS'].append(0)
             data['noTime_noCC']['iron']['fS'].append(0)
 
-            tH = float(np.random.uniform(0, 1, 1)[0])
-            data['real']['iron']['tH'].append(tH)
-            data['noTemp']['iron']['tH'].append(tH)
-            data['noTime_yesCC']['iron']['tH'].append(tH)
-            data['noTime_noCC']['iron']['tH'].append(tH)
+            ltH = list(np.random.uniform(0, 1, 50))
+            ctH = float(ltH[0])
+            data['real']['iron']['ltH'].append(ltH)
+            data['real']['iron']['ctH'].append(ctH)
+            data['noTemp']['iron']['ltH'].append(ltH)
+            data['noTemp']['iron']['ctH'].append(ctH)
+            data['noTime_yesCC']['iron']['ltH'].append(ltH)
+            data['noTime_yesCC']['iron']['ctH'].append(ctH)
+            data['noTime_noCC']['iron']['ltH'].append(ltH)
+            data['noTime_noCC']['iron']['ctH'].append(ctH)
 
             data['real']['iron']['index'].append(indexVal)
             data['noTemp']['iron']['index'].append(indexVal)
@@ -109,11 +114,16 @@ while (linkCounter < linkList.contents.value):
             data['noTime_yesCC']['pvc']['fS'].append(0)
             data['noTime_noCC']['pvc']['fS'].append(0)
 
-            tH = float(np.random.uniform(0, 1, 1)[0])
-            data['real']['pvc']['tH'].append(tH)
-            data['noTemp']['pvc']['tH'].append(tH)
-            data['noTime_yesCC']['pvc']['tH'].append(tH)
-            data['noTime_noCC']['pvc']['tH'].append(tH)
+            ltH = list(np.random.uniform(0, 1, 50))
+            ctH = float(ltH[0])
+            data['real']['pvc']['ltH'].append(ltH)
+            data['real']['pvc']['ctH'].append(ctH)
+            data['noTemp']['pvc']['ltH'].append(ltH)
+            data['noTemp']['pvc']['ctH'].append(ctH)
+            data['noTime_yesCC']['pvc']['ltH'].append(ltH)
+            data['noTime_yesCC']['pvc']['ctH'].append(ctH)
+            data['noTime_noCC']['pvc']['ltH'].append(ltH)
+            data['noTime_noCC']['pvc']['ctH'].append(ctH)
 
             data['real']['pvc']['index'].append(indexVal)
             data['noTemp']['pvc']['index'].append(indexVal)
@@ -127,12 +137,18 @@ data['noTemp']['pump']['age'] = list([4, 6])
 data['noTime_yesCC']['pump']['age'] = list([6, 6])
 data['noTime_noCC']['pump']['age'] = list([6, 6])
 
-tH1 = float(np.random.uniform(0, 1, 1)[0])
-tH2 = float(np.random.uniform(0, 1, 1)[0])
-data['real']['pump']['tH'] = [tH1, tH2]
-data['noTemp']['pump']['tH'] = [tH1, tH2]
-data['noTime_yesCC']['pump']['tH'] = [tH1, tH2]
-data['noTime_noCC']['pump']['tH'] = [tH1, tH2]
+ltH1 = list(np.random.uniform(0, 1, 50))
+ctH1 = float(ltH1[0])
+ltH2 = list(np.random.uniform(0, 1, 50))
+ctH2 = float(ltH2[0])
+data['real']['pump']['ltH'] = [ltH1, ltH2]
+data['real']['pump']['ctH'] = [ctH1, ctH2]
+data['noTemp']['pump']['ltH'] = [ltH1, ltH2]
+data['noTemp']['pump']['ctH'] = [ctH1, ctH2]
+data['noTime_yesCC']['pump']['ltH'] = [ltH1, ltH2]
+data['noTime_yesCC']['pump']['ctH'] = [ctH1, ctH2]
+data['noTime_noCC']['pump']['ltH'] = [ltH1, ltH2]
+data['noTime_noCC']['pump']['ctH'] = [ctH1, ctH2]
 
 data['real']['pump']['fS'] = list([0, 0])
 data['noTemp']['pump']['fS'] = list([0, 0])

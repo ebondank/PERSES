@@ -35,10 +35,12 @@ def epanet(batch, simType, dbCursor, dbObject):
                     indexSelect = 0
                 indexSelect = indexSelect + int(30 * int(math.trunc(float(data[simType]['pvc']['age'][index]))))
 
-                if (float(pvcWeibullList[indexSelect]) > float(data[simType]['pvc']['tH'][index])):
+                if (float(pvcWeibullList[indexSelect]) > float(data[simType]['pvc']['ctH'][index])):
                     if ((simType == 'noTemp') or (simType == 'real')):
                         data[simType]['pvc']['age'][index] = 0
-                        data[simType]['pvc']['tH'][index] = (np.random.uniform(0, 1, 1)[0])
+                        # data[simType]['pvc']['tH'][index] = (np.random.uniform(0, 1, 1)[0])
+                        indexOfctH = data[simType]['pvc']['ltH'][index].index(data[simType]['pvc']['ctH'][index]) + 1
+                        data[simType]['pvc']['ctH'][index] = data[simType]['pvc']['ltH'][index][indexOfctH]
 
                     epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(0.0))
                     pipeFailureFile = open(('{}_pvcPipeFail.txt').format(simType), 'a')
@@ -77,10 +79,12 @@ def epanet(batch, simType, dbCursor, dbObject):
 
                 indexSelect = indexSelect + (30 * int(math.trunc(float(data[simType]['iron']['age'][index]))))
 
-                if (float(ironWeibullList[indexSelect]) > float(data[simType]['iron']['tH'][index])):
+                if (float(ironWeibullList[indexSelect]) > float(data[simType]['iron']['ctH'][index])):
                     if ((simType == 'noTemp') or (simType == 'real')):
                         data[simType]['iron']['age'][index] = 0
-                        data[simType]['iron']['tH'][index] = (np.random.uniform(0, 1, 1)[0])
+                        # data[simType]['iron']['tH'][index] = (np.random.uniform(0, 1, 1)[0])
+                        indexOfctH = data[simType]['iron']['ltH'][index].index(data[simType]['iron']['ctH'][index]) + 1
+                        data[simType]['iron']['ctH'][index] = data[simType]['iron']['ltH'][index][indexOfctH]
 
                     epalib.ENsetlinkvalue(data[simType]['iron']['index'][index], ct.c_int(11), ct.c_float(0.0))
                     # Writing to the seperate failure statistics file
@@ -115,10 +119,12 @@ def epanet(batch, simType, dbCursor, dbObject):
                     indexSelect = 0
 
                 indexSelect = indexSelect + (30 * int(math.trunc(float(data[simType]['pump']['age'][index]))))
-                if float(pumpWeibullList[indexSelect]) > float(data[simType]['pump']['tH'][index]):
+                if float(pumpWeibullList[indexSelect]) > float(data[simType]['pump']['ctH'][index]):
                     if ((simType == 'noTemp') or (simType == 'real')):
                         data[simType]['pump']['age'][index] = 0
-                        data[simType]['pump']['tH'][index] = (np.random.uniform(0, 1, 1)[0])
+                        # data[simType]['pump']['tH'][index] = (np.random.uniform(0, 1, 1)[0])
+                        indexOfctH = data[simType]['pump']['ltH'][index].index(data[simType]['pump']['ctH'][index]) + 1
+                        data[simType]['pump']['ctH'][index] = data[simType]['pump']['ltH'][index][indexOfctH]
 
                     pumpFailureFile = open(('{}_pumpFail.txt').format(simType), 'a')
                     pumpFailureFile.write('%s %s\n' % (index, biHour))
