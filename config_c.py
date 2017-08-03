@@ -74,8 +74,8 @@ while (linkCounter < linkList.contents.value):
             randironAge = float(np.random.uniform(0, 72, 1)[0])
             data['real']['iron']['age'].append(randironAge)
             data['noTemp']['iron']['age'].append(randironAge)
-            data['noTime_yesCC']['iron']['age'].append(72)
-            data['noTime_noCC']['iron']['age'].append(72)
+            data['noTime_yesCC']['iron']['age'].append(55)
+            data['noTime_noCC']['iron']['age'].append(55)
 
             data['real']['iron']['fS'].append(0)
             data['noTemp']['iron']['fS'].append(0)
@@ -106,8 +106,8 @@ while (linkCounter < linkList.contents.value):
 
             data['real']['pvc']['age'].append(randpvcAge)
             data['noTemp']['pvc']['age'].append(randpvcAge)
-            data['noTime_yesCC']['pvc']['age'].append(55)
-            data['noTime_noCC']['pvc']['age'].append(55)
+            data['noTime_yesCC']['pvc']['age'].append(47)
+            data['noTime_noCC']['pvc']['age'].append(47)
 
             data['real']['pvc']['fS'].append(0)
             data['noTemp']['pvc']['fS'].append(0)
@@ -134,8 +134,8 @@ while (linkCounter < linkList.contents.value):
 
 data['real']['pump']['age'] = list([4, 6])
 data['noTemp']['pump']['age'] = list([4, 6])
-data['noTime_yesCC']['pump']['age'] = list([6, 6])
-data['noTime_noCC']['pump']['age'] = list([6, 6])
+data['noTime_yesCC']['pump']['age'] = list([5.5, 5.25])
+data['noTime_noCC']['pump']['age'] = list([5.5, 5.25])
 
 ltH1 = list(np.random.uniform(0, 1, 50))
 ctH1 = float(ltH1[0])

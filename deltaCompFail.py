@@ -9,9 +9,9 @@ def fileReading(arrayOfString):
     for index, item in enumerate(arrayOfString):
         simDict = {}
 
-        file = open(("{}").format(arrayOfString[index]), 'r')
-        fileText = file.read().splitlines()
-        file.close()
+        file1 = open(("{}").format(arrayOfString[index]), 'r')
+        fileText = file1.read().splitlines()
+        file1.close()
 
         for idx, itm in enumerate(fileText):
             try:
@@ -27,7 +27,7 @@ def fileReading(arrayOfString):
 
     return returnArray
 
-dataSet = fileReading(['7-4-17/real_pvcPipeFail.txt', '7-4-17/noTemp_pvcPipeFail.txt'])
+dataSet = fileReading(['7-20-17/noTime_yesCC_pvcPipeFail.txt', '7-20-17/noTime_noCC_pvcPipeFail.txt'])
 d1 = list(dataSet[1].keys())
 f = open('testing.txt', 'w')
 for index, item in enumerate(dataSet[0].keys()):

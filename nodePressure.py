@@ -3,7 +3,7 @@ import math
 import os
 
 
-Path = '7-4-17/noTime0.db'
+Path = '7-20-17/noTemp0.db'
 db = sql.connect(Path)
 com = db.cursor()
 ouCount = 0
