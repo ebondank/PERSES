@@ -1,7 +1,7 @@
 import numpy as np
 import os
 
-file1 = open(os.path.expanduser('8-6-17/noTime_yesCC_ironPipeFail.txt'), 'r')
+file1 = open(os.path.expanduser('8-08-17/noTime_yesCC_ironPipeFail.txt'), 'r')
 list1 = file1.read().splitlines()
 
 
