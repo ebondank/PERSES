@@ -161,6 +161,7 @@ def epanet(batch, simType, dbCursor, dbObject):
         else:
             for item in normal_run_list[int(biHour % 24)]:
                 dbCursor.execute('''INSERT INTO NodeData VALUES (?, ?, ?)''', (biHour, item[0], item[1]))
+                print(item)
         dbObject.commit()
         if (time.contents.value == 86400):
             time.contents = ct.c_int(0)
