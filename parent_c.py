@@ -61,22 +61,22 @@ failureFile.close()
 databaseObjectReal = sql.connect(('realistic{}.db').format(os.environ['SIMCOUNT']))
 databaseCursorReal = databaseObjectReal.cursor()
 databaseCursorReal.execute('''CREATE TABLE NodeData (Bihour_Count real, NodeID real, Pressure real)''')
-databaseCursorReal.execute('''CREATE TABLE linkData (Bihour_Count real, NodeID real, Pressure real)''')
+databaseCursorReal.execute('''CREATE TABLE failureData (Bihour_Count real, NodeID real, componentType real)''')
 
 databaseObject_noTime_yesCC = sql.connect(('noTime_yesCC{}.db').format(os.environ['SIMCOUNT']))
 databaseCursor_noTime_yesCC = databaseObject_noTime_yesCC.cursor()
 databaseCursor_noTime_yesCC.execute('''CREATE TABLE NodeData (Bihour_Count real, NodeID real, Pressure real)''')
-databaseCursor_noTime_yesCC.execute('''CREATE TABLE linkData (Bihour_Count real, NodeID real, Pressure real)''')
+databaseCursor_noTime_yesCC.execute('''CREATE TABLE failureData (Bihour_Count real, NodeID real, componentType real)''')
 
 databaseObject_noTime_noCC = sql.connect(('noTime_noCC{}.db').format(os.environ['SIMCOUNT']))
 databaseCursor_noTime_noCC = databaseObject_noTime_noCC.cursor()
 databaseCursor_noTime_noCC.execute('''CREATE TABLE NodeData (Bihour_Count real, NodeID real, Pressure real)''')
-databaseCursor_noTime_noCC.execute('''CREATE TABLE linkData (Bihour_Count real, NodeID real, Pressure real)''')
+databaseCursor_noTime_noCC.execute('''CREATE TABLE failureData (Bihour_Count real, NodeID real, componentType real)''')
 
 databaseObject_noTime = sql.connect(('noTemp{}.db').format(os.environ['SIMCOUNT']))
 databaseCursor_noTime = databaseObject_noTime.cursor()
 databaseCursor_noTime.execute('''CREATE TABLE NodeData (Bihour_Count real, NodeID real, Pressure real)''')
-databaseCursor_noTime.execute('''CREATE TABLE linkData (Bihour_Count real, NodeID real, Pressure real)''')
+databaseCursor_noTime.execute('''CREATE TABLE failureData (Bihour_Count real, NodeID real, componentType real)''')
 
 # Opens the toolkit
 
