@@ -1,12 +1,14 @@
 import numpy as np
 import ctypes as ct
 
-epalib = ct.cdll.LoadLibrary('D:\\Austin_Michne\\1_11_17\\epanet2mingw64.dll')
+epalib = ct.cdll.LoadLibrary('epanet2mingw64.dll')
 biHourToYear = float(.0002283105022831050228310502283105)
 biHour = 0
 data = {'real':{'iron':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}}, 'noTemp': {'iron':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}}, 'noTime_yesCC': {'iron':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}}, 'noTime_noCC': {'iron':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}}}
 
-tasFile = open('D:\\Austin_Michne\\1_11_17\\tasMaxBD.txt', 'r')
+normal_run_list = [list()]*24
+
+tasFile = open('tasMaxBD.txt', 'r')
 tasList = tasFile.read().expandtabs().splitlines()
 tasFile.close()
 
@@ -16,11 +18,11 @@ histTasFile.close()
 tasMaxACTList = {'real': list(tasList), 'noTime_yesCC': list(tasList), 'noTime_noCC': list(histTasList), 'noTemp': list(histTasList)}
 
 f = open('north_marin_c.inp', 'r')
-fi = open('D:\\Austin_Michne\\tripleSim\\zz.rpt', 'w')
+fi = open('placeholder.rpt', 'w')
 
 # Initializes the files for encoding
 a = 'north_marin_c.inp'
-b = 'D:\\Austin_Michne\\tripleSim\\zz.rpt'
+b = 'placeholder.rpt'
 
 # Byte objects
 b_a = a.encode('UTF-8')
@@ -155,14 +157,14 @@ data['noTemp']['pump']['fS'] = list([0, 0])
 data['noTime_yesCC']['pump']['fS'] = list([0, 0])
 data['noTime_noCC']['pump']['fS'] = list([0, 0])
 
-pvcWeibullFile = open('D:\\Austin_Michne\\1_11_17\\pvcWeibullFixed.txt', 'r')
+pvcWeibullFile = open('pvcWeibullFixed.txt', 'r')
 pvcWeibullList = pvcWeibullFile.read().splitlines()
 pvcWeibullFile.close()
 
-ironWeibullFile = open('D:\\Austin_Michne\\1_11_17\\ironWeibullFixed.txt', 'r')
+ironWeibullFile = open('ironWeibullFixed.txt', 'r')
 ironWeibullList = ironWeibullFile.read().splitlines()
 ironWeibullFile.close()
 
-pumpWeibullFile = open('D:\\Austin_Michne\\1_11_17\\pumpWeibullFixed.txt', 'r')
+pumpWeibullFile = open('pumpWeibullFixed.txt', 'r')
 pumpWeibullList = pumpWeibullFile.read().splitlines()
 pumpWeibullFile.close()

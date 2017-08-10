@@ -4,10 +4,10 @@ from config_c import *
 import epanet_c
 
 # TODO Environment variables for server aren't persisting for some reason
-os.remove('D:\\Austin_Michne\\tripleSim\\realistic0.db')
-os.remove('D:\\Austin_Michne\\tripleSim\\noTime_yesCC0.db')
-os.remove('D:\\Austin_Michne\\tripleSim\\noTime_noCC0.db')
-os.remove('D:\\Austin_Michne\\tripleSim\\noTemp0.db')
+os.remove('realistic0.db')
+os.remove('noTime_yesCC0.db')
+os.remove('noTime_noCC0.db')
+os.remove('noTemp0.db')
 
 failureFile = open('real_ironPipeFail.txt', 'w')
 failureFile.write('\n\n\n')
@@ -46,22 +46,22 @@ failureFile = open('noTime_yesCC_pumpFail.txt', 'w')
 failureFile.write('\n\n\n')
 failureFile.close()
 # Creating all three database
-databaseObjectReal = sql.connect(('D:\\Austin_Michne\\tripleSim\\realistic{}.db').format(os.environ['SIMCOUNT']))
+databaseObjectReal = sql.connect(('realistic{}.db').format(os.environ['SIMCOUNT']))
 databaseCursorReal = databaseObjectReal.cursor()
 databaseCursorReal.execute('''CREATE TABLE NodeData (Bihour_Count real, NodeID real, Pressure real)''')
 databaseCursorReal.execute('''CREATE TABLE linkData (Bihour_Count real, NodeID real, Pressure real)''')
 
-databaseObject_noTime_yesCC = sql.connect(('D:\\Austin_Michne\\tripleSim\\noTime_yesCC{}.db').format(os.environ['SIMCOUNT']))
+databaseObject_noTime_yesCC = sql.connect(('noTime_yesCC{}.db').format(os.environ['SIMCOUNT']))
 databaseCursor_noTime_yesCC = databaseObject_noTime_yesCC.cursor()
 databaseCursor_noTime_yesCC.execute('''CREATE TABLE NodeData (Bihour_Count real, NodeID real, Pressure real)''')
 databaseCursor_noTime_yesCC.execute('''CREATE TABLE linkData (Bihour_Count real, NodeID real, Pressure real)''')
 
-databaseObject_noTime_noCC = sql.connect(('D:\\Austin_Michne\\tripleSim\\noTime_noCC{}.db').format(os.environ['SIMCOUNT']))
+databaseObject_noTime_noCC = sql.connect(('noTime_noCC{}.db').format(os.environ['SIMCOUNT']))
 databaseCursor_noTime_noCC = databaseObject_noTime_noCC.cursor()
 databaseCursor_noTime_noCC.execute('''CREATE TABLE NodeData (Bihour_Count real, NodeID real, Pressure real)''')
 databaseCursor_noTime_noCC.execute('''CREATE TABLE linkData (Bihour_Count real, NodeID real, Pressure real)''')
 
-databaseObject_noTime = sql.connect(('D:\\Austin_Michne\\tripleSim\\noTemp{}.db').format(os.environ['SIMCOUNT']))
+databaseObject_noTime = sql.connect(('noTemp{}.db').format(os.environ['SIMCOUNT']))
 databaseCursor_noTime = databaseObject_noTime.cursor()
 databaseCursor_noTime.execute('''CREATE TABLE NodeData (Bihour_Count real, NodeID real, Pressure real)''')
 databaseCursor_noTime.execute('''CREATE TABLE linkData (Bihour_Count real, NodeID real, Pressure real)''')

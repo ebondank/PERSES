@@ -12,7 +12,7 @@ def epanet(batch, simType, dbCursor, dbObject):
     while epaCount < 8760:
         dayCount = math.floor(biHour / 24)
         tasMaxACT = float(tasMaxACTList[simType][dayCount])
-
+        normal_run = 1
         ############### PVC PIPE ##### PVC PIPE ##### PVC PIPE ####################
         for index, item in enumerate(data[simType]['pvc']['index']):
             # If the pipe is already in the failed state
@@ -20,14 +20,15 @@ def epanet(batch, simType, dbCursor, dbObject):
                 data[simType]['pvc']['fS'][index] = int(data[simType]['pvc']['fS'][index]) - 1
                 if (int(data[simType]['pvc']['fS'][index]) <= 0):
                     # pipe enable
-                    data[simType]['pvc']['fS'][index] = 0
                     epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(1.0))
                     # no-time simulation config stuff
                     if ((simType == 'noTemp') or (simType == 'real')):
                         data[simType]['pvc']['age'][index] = 0
                 # Pipe disable mid run
                 else:
+                    normal_run = 0
                     epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(0.0))
+                    normal_run = 0
             elif ((simType == 'noTime') or (int(data[simType]['pvc']['fS'][index]) == 0)):
                 indexSelect = 0
                 indexSelect = (math.trunc(tasMaxACT) - 19)
@@ -36,6 +37,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                 indexSelect = indexSelect + int(30 * int(math.trunc(float(data[simType]['pvc']['age'][index]))))
 
                 if (float(pvcWeibullList[indexSelect]) > float(data[simType]['pvc']['ctH'][index])):
+                    normal_run = 0
                     if ((simType == 'noTemp') or (simType == 'real')):
                         data[simType]['pvc']['age'][index] = 0
                         # data[simType]['pvc']['tH'][index] = (np.random.uniform(0, 1, 1)[0])
@@ -65,6 +67,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     epalib.ENsetlinkvalue(data[simType]['iron']['index'][index], ct.c_int(11), ct.c_float(1.0))
 
                 else:
+                    normal_run = 0
                     epalib.ENsetlinkvalue(data[simType]['iron']['index'][index], ct.c_int(11), ct.c_float(0.0))
 
                 if (simType == ('noTemp' or 'real')):
@@ -80,6 +83,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                 indexSelect = indexSelect + (30 * int(math.trunc(float(data[simType]['iron']['age'][index]))))
 
                 if (float(ironWeibullList[indexSelect]) > float(data[simType]['iron']['ctH'][index])):
+                    normal_run = 0
                     if ((simType == 'noTemp') or (simType == 'real')):
                         data[simType]['iron']['age'][index] = 0
                         # data[simType]['iron']['tH'][index] = (np.random.uniform(0, 1, 1)[0])
@@ -106,6 +110,7 @@ def epanet(batch, simType, dbCursor, dbObject):
             if (data[simType]['pump']['fS'][index] != 0):
                 data[simType]['pump']['fS'][index] = int(data[simType]['pump']['fS'][index]) - 1
                 epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(11), ct.c_float(0.0))
+                normal_run = 0
 
                 if (int(data[simType]['pump']['fS'][index]) <= 0):
                     epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(11), ct.c_float(1.0))
@@ -120,6 +125,7 @@ def epanet(batch, simType, dbCursor, dbObject):
 
                 indexSelect = indexSelect + (30 * int(math.trunc(float(data[simType]['pump']['age'][index]))))
                 if float(pumpWeibullList[indexSelect]) > float(data[simType]['pump']['ctH'][index]):
+                    normal_run = 0
                     if ((simType == 'noTemp') or (simType == 'real')):
                         data[simType]['pump']['age'][index] = 0
                         # data[simType]['pump']['tH'][index] = (np.random.uniform(0, 1, 1)[0])
@@ -140,15 +146,21 @@ def epanet(batch, simType, dbCursor, dbObject):
 
         # Does the hydraulic solving
         # print('errorcode: %s' % errorcode)
-        epalib.ENrunH(time)
-        intCount = 1
-        while (intCount < nodeCount.contents.value):
-            epalib.ENgetnodevalue(ct.c_int(intCount), ct.c_int(11), nodeValue)
-            epalib.ENgetnodeid(ct.c_int(intCount), nodeID)
-            dbCursor.execute('''INSERT INTO NodeData VALUES (?, ?, ?)''', (biHour, (nodeID.value).decode('utf-8'), nodeValue.contents.value))
-            # print(('{} {} {} \n').format(biHour, nodeID.value, nodeValue.contents.value))
-            intCount += 1
+        if ((normal_run == 0) and (len(normal_run_list[int(biHour % 24)]) == 0)):
+            epalib.ENrunH(time)
+            intCount = 1
+            while (intCount < nodeCount.contents.value):
+                epalib.ENgetnodevalue(ct.c_int(intCount), ct.c_int(11), nodeValue)
+                epalib.ENgetnodeid(ct.c_int(intCount), nodeID)
+                dbCursor.execute('''INSERT INTO NodeData VALUES (?, ?, ?)''', (biHour, (nodeID.value).decode('utf-8'), nodeValue.contents.value))
+                normal_run_list[int(biHour % 24)].append([(nodeID.value).decode('utf-8'), nodeValue.contents.value])
 
+                # print(('{} {} {} \n').format(biHour, nodeID.value, nodeValue.contents.value))
+                intCount += 1
+
+        else:
+            for item in normal_run_list[int(biHour % 24)]:
+                dbCursor.execute('''INSERT INTO NodeData VALUES (?, ?, ?)''', (biHour, item[0], item[1]))
         dbObject.commit()
         if (time.contents.value == 86400):
             time.contents = ct.c_int(0)
