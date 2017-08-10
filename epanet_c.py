@@ -28,7 +28,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                 else:
                     normal_run = 0
                     epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(0.0))
-                    normal_run = 0
+                    
             elif ((simType == 'noTime') or (int(data[simType]['pvc']['fS'][index]) == 0)):
                 indexSelect = 0
                 indexSelect = (math.trunc(tasMaxACT) - 19)
@@ -109,13 +109,14 @@ def epanet(batch, simType, dbCursor, dbObject):
             # If component in failed state
             if (data[simType]['pump']['fS'][index] != 0):
                 data[simType]['pump']['fS'][index] = int(data[simType]['pump']['fS'][index]) - 1
-                epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(11), ct.c_float(0.0))
-                normal_run = 0
 
                 if (int(data[simType]['pump']['fS'][index]) <= 0):
                     epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(11), ct.c_float(1.0))
                     if ((simType == 'noTemp') or (simType == 'real')):
                         data[simType]['pump']['age'][index] = 0
+                else:
+                    epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(11), ct.c_float(0.0))
+                    normal_run = 0
 
             # Not currently failed block
             elif ((simType == "noTime") or (data[simType]['pump']['fS'][index] == 0)):
@@ -161,7 +162,6 @@ def epanet(batch, simType, dbCursor, dbObject):
         else:
             for item in normal_run_list[int(biHour % 24)]:
                 dbCursor.execute('''INSERT INTO NodeData VALUES (?, ?, ?)''', (biHour, item[0], item[1]))
-        dbObject.commit()
         if (time.contents.value == 86400):
             time.contents = ct.c_int(0)
         epalib.ENnextH(timestep)
@@ -175,3 +175,4 @@ def epanet(batch, simType, dbCursor, dbObject):
         # Closes all of the files open during the simulation
         biHour += 1
         epaCount += 1
+    dbObject.commit()
