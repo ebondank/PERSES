@@ -4,46 +4,58 @@ from config_c import *
 import epanet_c
 
 # TODO Environment variables for server aren't persisting for some reason
-os.remove('realistic0.db')
-os.remove('noTime_yesCC0.db')
-os.remove('noTime_noCC0.db')
-os.remove('noTemp0.db')
+try:
+    os.remove('realistic0.db')
+except Exception as exp:
+    print('No database here')
+try:
+    os.remove('noTime_yesCC0.db')
+except Exception as exp:
+    print('No database here')
+try:
+    os.remove('noTime_noCC0.db')
+except Exception as exp:
+    print('No database here')
+try:
+    os.remove('noTemp0.db')
+except Exception as exp:
+    print('No database here')
 
 failureFile = open('real_ironPipeFail.txt', 'w')
-failureFile.write('\n\n\n')
+
 failureFile.close()
 failureFile = open('real_pvcPipeFail.txt', 'w')
-failureFile.write('\n\n\n')
+
 failureFile.close()
 failureFile = open('real_pumpFail.txt', 'w')
-failureFile.write('\n\n\n')
+
 failureFile.close()
 failureFile = open('noTime_ironPipeFail.txt', 'w')
-failureFile.write('\n\n\n')
+
 failureFile.close()
 failureFile = open('noTime_pvcPipeFail.txt', 'w')
-failureFile.write('\n\n\n')
+
 failureFile.close()
 failureFile = open('noTime_pumpFail.txt', 'w')
-failureFile.write('\n\n\n')
+
 failureFile.close()
 failureFile = open('noTime_noCC_ironPipeFail.txt', 'w')
-failureFile.write('\n\n\n')
+
 failureFile.close()
 failureFile = open('noTime_noCC_pvcPipeFail.txt', 'w')
-failureFile.write('\n\n\n')
+
 failureFile.close()
 failureFile = open('noTime_noCC_pumpFail.txt', 'w')
-failureFile.write('\n\n\n')
+
 failureFile.close()
 failureFile = open('noTime_yesCC_ironPipeFail.txt', 'w')
-failureFile.write('\n\n\n')
+
 failureFile.close()
 failureFile = open('noTime_yesCC_pvcPipeFail.txt', 'w')
-failureFile.write('\n\n\n')
+
 failureFile.close()
 failureFile = open('noTime_yesCC_pumpFail.txt', 'w')
-failureFile.write('\n\n\n')
+
 failureFile.close()
 # Creating all three database
 databaseObjectReal = sql.connect(('realistic{}.db').format(os.environ['SIMCOUNT']))
