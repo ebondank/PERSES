@@ -151,21 +151,28 @@ def epanet(batch, simType, dbCursor, dbObject):
 
         # Does the hydraulic solving
         # print('errorcode: %s' % errorcode)
-        if ((normal_run == 0) and (len(normal_run_list[int(biHour % 24)]) == 0)):
+        if (normal_run == 0):
             epalib.ENrunH(time)
             intCount = 1
             while (intCount < nodeCount.contents.value):
                 epalib.ENgetnodevalue(ct.c_int(intCount), ct.c_int(11), nodeValue)
                 epalib.ENgetnodeid(ct.c_int(intCount), nodeID)
                 dbCursor.execute('''INSERT INTO NodeData VALUES (?, ?, ?)''', (biHour, (nodeID.value).decode('utf-8'), nodeValue.contents.value))
-                normal_run_list[int(biHour % 24)].append([(nodeID.value).decode('utf-8'), nodeValue.contents.value])
 
                 # print(('{} {} {} \n').format(biHour, nodeID.value, nodeValue.contents.value))
                 intCount += 1
-
         else:
-            for item in normal_run_list[int(biHour % 24)]:
-                dbCursor.execute('''INSERT INTO NodeData VALUES (?, ?, ?)''', (biHour, item[0], item[1]))
+            if (len(normal_run_list[int(biHour % 24)]) == 0):
+                epalib.ENrunH(time)
+                intCount = 1
+                while (intCount < nodeCount.contents.value):
+                    epalib.ENgetnodevalue(ct.c_int(intCount), ct.c_int(11), nodeValue)
+                    epalib.ENgetnodeid(ct.c_int(intCount), nodeID)
+                    dbCursor.execute('''INSERT INTO NodeData VALUES (?, ?, ?)''', (biHour, (nodeID.value).decode('utf-8'), nodeValue.contents.value))
+                    normal_run_list[int(biHour % 24)].append([(nodeID.value).decode('utf-8'), nodeValue.contents.value])
+            else:
+                for item in normal_run_list[int(biHour % 24)]:
+                    dbCursor.execute('''INSERT INTO NodeData VALUES (?, ?, ?)''', (biHour, item[0], item[1]))
         if (time.contents.value == 86400):
             time.contents = ct.c_int(0)
         epalib.ENnextH(timestep)
