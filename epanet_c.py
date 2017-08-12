@@ -170,7 +170,6 @@ def epanet(batch, simType, dbCursor, dbObject):
                     epalib.ENgetnodeid(ct.c_int(intCount), nodeID)
                     dbCursor.execute('''INSERT INTO NodeData VALUES (?, ?, ?)''', (biHour, (nodeID.value).decode('utf-8'), nodeValue.contents.value))
                     normal_run_list[int(biHour % 24)].append([(nodeID.value).decode('utf-8'), nodeValue.contents.value])
-                    print(('Caching works {}').format(nodeValue.contents.value))
                     intCount += 1
             else:
                 for item in normal_run_list[int(biHour % 24)]:
@@ -188,5 +187,4 @@ def epanet(batch, simType, dbCursor, dbObject):
         # Closes all of the files open during the simulation
         biHour += 1
         epaCount += 1
-        print(epaCount)
     dbObject.commit()
