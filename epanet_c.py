@@ -187,4 +187,5 @@ def epanet(batch, simType, dbCursor, dbObject):
         # Closes all of the files open during the simulation
         biHour += 1
         epaCount += 1
+        print(epaCount)
     dbObject.commit()
