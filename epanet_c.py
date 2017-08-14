@@ -31,7 +31,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     
             elif ((simType == 'noTime') or (int(data[simType]['pvc']['fS'][index]) == 0)):
                 indexSelect = 0
-                indexSelect = (math.trunc(tasMaxACT) - 19)
+                indexSelect = (round(tasMaxACT) - 19)
                 if indexSelect <= 0:
                     indexSelect = 0
                 indexSelect = indexSelect + int(30 * int(math.trunc(float(data[simType]['pvc']['age'][index]))))
@@ -45,9 +45,9 @@ def epanet(batch, simType, dbCursor, dbObject):
                         data[simType]['pvc']['ctH'][index] = data[simType]['pvc']['ltH'][index][indexOfctH]
 
                     epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(0.0))
-                    # pipeFailureFile = open(('{}_pvcPipeFail.txt').format(simType), 'a')
-                    # pipeFailureFile.write('%s %s\n' % (index, biHour))
-                    # pipeFailureFile.close()
+                    pipeFailureFile = open(('{}_pvcPipeFail.txt').format(simType), 'a')
+                    pipeFailureFile.write('%s %s\n' % (index, biHour))
+                    pipeFailureFile.close()
                     dbCursor.execute('''INSERT INTO failureData VALUES (?, ?, ?)''', (biHour, index, 'pvc'))
                     data[simType]['pvc']['fS'][index] = 44
                     # This is based off of the 88 hr repair time, can be
@@ -93,9 +93,9 @@ def epanet(batch, simType, dbCursor, dbObject):
 
                     epalib.ENsetlinkvalue(data[simType]['iron']['index'][index], ct.c_int(11), ct.c_float(0.0))
                     # Writing to the seperate failure statistics file
-                    # pipeFailureFile = open(('{}_ironPipeFail.txt').format(simType), 'a')
-                    # pipeFailureFile.write('%s %s\n' % (index, biHour))
-                    # pipeFailureFile.close()
+                    pipeFailureFile = open(('{}_ironPipeFail.txt').format(simType), 'a')
+                    pipeFailureFile.write('%s %s\n' % (index, biHour))
+                    pipeFailureFile.close()
                     dbCursor.execute('''INSERT INTO failureData VALUES (?, ?, ?)''', (biHour, index, 'iron'))
                     # This is based off of the 88 hr repair time, can be
                     # changed to w/e
@@ -135,9 +135,9 @@ def epanet(batch, simType, dbCursor, dbObject):
                         indexOfctH = data[simType]['pump']['ltH'][index].index(data[simType]['pump']['ctH'][index]) + 1
                         data[simType]['pump']['ctH'][index] = data[simType]['pump']['ltH'][index][indexOfctH]
 
-                    # pumpFailureFile = open(('{}_pumpFail.txt').format(simType), 'a')
-                    # pumpFailureFile.write('%s %s\n' % (index, biHour))
-                    # pumpFailureFile.close()
+                    pumpFailureFile = open(('{}_pumpFail.txt').format(simType), 'a')
+                    pumpFailureFile.write('%s %s\n' % (index, biHour))
+                    pumpFailureFile.close()
                     dbCursor.execute('''INSERT INTO failureData VALUES (?, ?, ?)''', (biHour, index, 'pump'))
                     
                     epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(11), ct.c_float(0.0))
@@ -158,7 +158,6 @@ def epanet(batch, simType, dbCursor, dbObject):
                 epalib.ENgetnodevalue(ct.c_int(intCount), ct.c_int(11), nodeValue)
                 epalib.ENgetnodeid(ct.c_int(intCount), nodeID)
                 dbCursor.execute('''INSERT INTO NodeData VALUES (?, ?, ?)''', (biHour, (nodeID.value).decode('utf-8'), nodeValue.contents.value))
-
                 # print(('{} {} {} \n').format(biHour, nodeID.value, nodeValue.contents.value))
                 intCount += 1
         else:

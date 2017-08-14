@@ -1,6 +1,7 @@
 import os
 import numpy as np
 import copy
+import sqlite3 as sql
 
 def fileReading(arrayOfString):
 
@@ -27,9 +28,18 @@ def fileReading(arrayOfString):
 
     return returnArray
 
-dataSet = fileReading(['7-20-17/noTime_yesCC_pvcPipeFail.txt', '7-20-17/noTime_noCC_pvcPipeFail.txt'])
-d1 = list(dataSet[1].keys())
 f = open('testing.txt', 'w')
+# Path = '8-10-17/realistic0.db'
+# db = sql.connect(Path)
+# com = db.cursor()
+# f1 = open('8-10-17/realfailure.txt', 'w')
+# f2 = open('8-10-17/noTempfailure.txt', 'w')
+# for item in com.execute('SELECT * FROM failureData ORDER BY Bihour_Count ASC'):
+#     if item[2] == 'pvc':
+#         f1.write(('{} {}\n').format(int(item[1]), int(item[0])))
+dataSet = fileReading(['8-10-17/realfailure.txt', '8-10-17/noTempFailure.txt'])
+d1 = list(dataSet[1].keys())
+
 for index, item in enumerate(dataSet[0].keys()):
     try:
         compArray = dataSet[0][item]

@@ -1,24 +1,42 @@
 import numpy as np
 import os
+import sqlite3 as sql
 
-file1 = open(os.path.expanduser('8-08-17/noTime_yesCC_ironPipeFail.txt'), 'r')
-list1 = file1.read().splitlines()
+# file1 = open(os.path.expanduser('8-08-17/noTime_yesCC_ironPipeFail.txt'), 'r')
+# list1 = file1.read().splitlines()
+Path = '8-10-17/realistic0.db'
+db = sql.connect(Path)
+com = db.cursor()
 
 
-file1.close()
 
 yearList = list()
-breakCount = list()
+breakCountpvc = list()
+breakCountiron = list()
+breakCountpump = list()
 count = 0
 while count < 83:
     yearList.append(count)
-    breakCount.append(0)
+    breakCountpvc.append(0)
+    breakCountiron.append(0)
+    breakCountpump.append(0)
     count += 1
 
-for index, item in enumerate(list1):
-    item = item.strip().split(' ')
-    thisIndex = int(np.floor((int(item[1]) / 8760)))
-    breakCount[thisIndex] = breakCount[thisIndex] + 1
+for item in com.execute('SELECT * FROM failureData ORDER BY Bihour_Count ASC'):
+    thisIndex = int(np.floor((int(item[0]) / 8760)))
+    if item[2] == "pvc":
+        breakCountpvc[thisIndex] = breakCountpvc[thisIndex] + 1
+    if item[2] == "iron":
+        breakCountiron[thisIndex] = breakCountiron[thisIndex] + 1
+    if item[2] == "pump":
+        breakCountpump[thisIndex] = breakCountpump[thisIndex] + 1
 
-for index, iteam in enumerate(breakCount):
-    print(('{}').format(breakCount[index]))
+for index, iteam in enumerate(breakCountpvc):
+    print(('{}').format(breakCountpvc[index]))
+
+print('\n\n\n')
+for index, iteam in enumerate(breakCountpump):
+    print(('{}').format(breakCountpump[index]))
+print('\n\n\n')
+for index, iteam in enumerate(breakCountiron):
+    print(('{}').format(breakCountiron[index]))
