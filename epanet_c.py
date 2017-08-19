@@ -36,7 +36,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     indexSelect = 0
                 indexSelect = indexSelect + int(30 * int(math.trunc(float(data[simType]['pvc']['age'][index]))))
 
-                weibullApprox = float(pvcWeibullList[indexSelect]) + (tasMaxACT - (math.trunc(tasMaxACT))) * float(pvcWeibullList[indexSelect])
+                weibullApprox = float(pvcWeibullList[indexSelect]) + ((tasMaxACT - (math.trunc(tasMaxACT))) / tasMaxACT) * float(pvcWeibullList[indexSelect])
                 if (weibullApprox > float(data[simType]['pvc']['ctH'][index])):
                     normal_run = 0
                     if ((simType == 'noTemp') or (simType == 'real')):
@@ -83,7 +83,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     indexSelect = 0
 
                 indexSelect = indexSelect + (30 * int(math.trunc(float(data[simType]['iron']['age'][index]))))
-                weibullApprox = float(ironWeibullList[indexSelect]) + (tasMaxACT - (math.trunc(tasMaxACT))) * float(ironWeibullList[indexSelect])
+                weibullApprox = float(ironWeibullList[indexSelect]) + ((tasMaxACT - (math.trunc(tasMaxACT))) / tasMaxACT) * float(ironWeibullList[indexSelect])
                 if (weibullApprox > float(data[simType]['iron']['ctH'][index])):
                     normal_run = 0
                     if ((simType == 'noTemp') or (simType == 'real')):
@@ -128,7 +128,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     indexSelect = 0
 
                 indexSelect = indexSelect + (30 * int(math.trunc(float(data[simType]['pump']['age'][index]))))
-                weibullApprox = float(pumpWeibullList[indexSelect]) + (tasMaxACT - (math.trunc(tasMaxACT))) * float(pumpWeibullList[indexSelect])
+                weibullApprox = float(pumpWeibullList[indexSelect]) + ((tasMaxACT - (math.trunc(tasMaxACT))) / tasMaxACT) * float(pumpWeibullList[indexSelect])
                 if (weibullApprox > float(data[simType]['pump']['ctH'][index])):
                     normal_run = 0
                     if ((simType == 'noTemp') or (simType == 'real')):
