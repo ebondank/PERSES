@@ -139,9 +139,9 @@ data['noTemp']['pump']['age'] = list([4, 6])
 data['noTime_yesCC']['pump']['age'] = list([5.5, 5.25])
 data['noTime_noCC']['pump']['age'] = list([5.5, 5.25])
 
-ltH1 = list(np.random.uniform(0, 1, 50))
+ltH1 = list(np.random.uniform(0, 1, 5000))
 ctH1 = float(ltH1[0])
-ltH2 = list(np.random.uniform(0, 1, 50))
+ltH2 = list(np.random.uniform(0, 1, 5000))
 ctH2 = float(ltH2[0])
 data['real']['pump']['ltH'] = [ltH1, ltH2]
 data['real']['pump']['ctH'] = [ctH1, ctH2]

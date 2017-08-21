@@ -3,7 +3,7 @@ import math
 import os
 
 
-Path = '8-15-17/realistic0.db'
+Path = '8-20-17/noTemp0.db'
 print(Path)
 db = sql.connect(Path)
 com = db.cursor()

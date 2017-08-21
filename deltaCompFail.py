@@ -37,7 +37,7 @@ f = open('testing.txt', 'w')
 # for item in com.execute('SELECT * FROM failureData ORDER BY Bihour_Count ASC'):
 #     if item[2] == 'pvc':
 #         f1.write(('{} {}\n').format(int(item[1]), int(item[0])))
-dataSet = fileReading(['8-10-17/realfailure.txt', '8-10-17/noTempFailure.txt'])
+dataSet = fileReading(['8-20-17/real_pumpFail.txt', '8-20-17/noTemp_pumpFail.txt'])
 d1 = list(dataSet[1].keys())
 
 for index, item in enumerate(dataSet[0].keys()):
