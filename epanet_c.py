@@ -36,7 +36,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     indexSelect = 0
                 indexSelect = indexSelect + int(30 * int(math.trunc(float(data[simType]['pvc']['age'][index]))))
 
-                weibullApprox = math.trunc(float(ironWeibullList[indexSelect]))
+                weibullApprox = (float(ironWeibullList[indexSelect])
                 if (weibullApprox > float(data[simType]['pvc']['ctH'][index])):
                     normal_run = 0
                     if ((simType == 'noTemp') or (simType == 'real')):
@@ -83,7 +83,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     indexSelect = 0
 
                 indexSelect = indexSelect + (30 * int(math.trunc(float(data[simType]['iron']['age'][index]))))
-                weibullApprox = math.trunc(float(ironWeibullList[indexSelect]))
+                weibullApprox = (float(ironWeibullList[indexSelect])
                 if (weibullApprox > float(data[simType]['iron']['ctH'][index])):
                     normal_run = 0
                     if ((simType == 'noTemp') or (simType == 'real')):
@@ -128,7 +128,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     indexSelect = 0
 
                 indexSelect = indexSelect + (30 * int(math.trunc(float(data[simType]['pump']['age'][index]))))
-                weibullApprox = math.trunc(float(ironWeibullList[indexSelect]))
+                weibullApprox = float(ironWeibullList[indexSelect])
                 if (weibullApprox > float(data[simType]['pump']['ctH'][index])):
                     normal_run = 0
                     if ((simType == 'noTemp') or (simType == 'real')):
