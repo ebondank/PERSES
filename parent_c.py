@@ -84,8 +84,8 @@ batch = 0
 while batch < 83:
     epanet_c.epanet(batch, 'real', databaseCursorReal, databaseObjectReal)
     epanet_c.epanet(batch, 'noTemp', databaseCursor_noTime, databaseObject_noTime)
-    epanet_c.epanet(batch, 'noTime_yesCC', databaseCursor_noTime_yesCC, databaseObject_noTime_yesCC)
-    epanet_c.epanet(batch, 'noTime_noCC', databaseCursor_noTime_noCC, databaseObject_noTime_noCC)
+    # epanet_c.epanet(batch, 'noTime_yesCC', databaseCursor_noTime_yesCC, databaseObject_noTime_yesCC)
+    # epanet_c.epanet(batch, 'noTime_noCC', databaseCursor_noTime_noCC, databaseObject_noTime_noCC)
     print(batch)
     batch += 1
 
