@@ -30,13 +30,13 @@ failureFile.close()
 failureFile = open('real_pumpFail.txt', 'w')
 
 failureFile.close()
-failureFile = open('noTime_ironPipeFail.txt', 'w')
+failureFile = open('noTemp_ironPipeFail.txt', 'w')
 
 failureFile.close()
-failureFile = open('noTime_pvcPipeFail.txt', 'w')
+failureFile = open('noTemp_pvcPipeFail.txt', 'w')
 
 failureFile.close()
-failureFile = open('noTime_pumpFail.txt', 'w')
+failureFile = open('noTemp_pumpFail.txt', 'w')
 
 failureFile.close()
 failureFile = open('noTime_noCC_ironPipeFail.txt', 'w')
