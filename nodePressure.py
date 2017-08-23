@@ -3,7 +3,7 @@ import math
 import os
 
 
-Path = '8-20-17/noTemp0.db'
+Path = '8-21-17/realistic0.db'
 print(Path)
 db = sql.connect(Path)
 com = db.cursor()
@@ -30,7 +30,8 @@ while (infiniteCount < 20):
     infiniteCount += 1
 print(demandList)
 yrList = list()
-for row in com.execute('SELECT * FROM NodeData ORDER BY Bihour_Count ASC'):
+list1 = com.execute('SELECT * FROM NodeData ORDER BY Bihour_Count ASC')
+for row in list1:
     newItem = float(row[1])
     if (newItem in demandList):
         try:

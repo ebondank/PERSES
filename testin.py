@@ -35,10 +35,12 @@ import math
 #     fOut.write(str(item / 365) + "\n")
 # fOut.close()
 
-m = .0002
-b = 29.793
+# m = .0002
+# b = 29.793
+m = .00003
+b = 29.324
 count = 0
-formTas = open("generatedTasMaxBD85.txt", "w")
+formTas = open("generatedTasMaxHist.txt", "w")
 
 while count < 31025:
     tempToWrite = m * count + b
