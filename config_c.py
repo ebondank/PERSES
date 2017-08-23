@@ -8,7 +8,7 @@ data = {'real':{'iron':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 
 
 normal_run_list = [list()]*24
 
-tasFile = open('tasMaxBD.txt', 'r')
+tasFile = open('generatedTasMaxBD85.txt', 'r')
 tasList = tasFile.read().expandtabs().splitlines()
 tasFile.close()
 
