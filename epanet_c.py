@@ -31,12 +31,14 @@ def epanet(batch, simType, dbCursor, dbObject):
                     
             elif ((simType == 'noTime') or (int(data[simType]['pvc']['fS'][index]) == 0)):
                 indexSelect = 0
-                indexSelect = (math.trunc(tasMaxACT) - 19)
+                indexSelect = (math.trunc(tasMaxACT) - 20)
                 if indexSelect <= 0:
                     indexSelect = 0
                 indexSelect = indexSelect + int(30 * int(math.trunc(float(data[simType]['pvc']['age'][index]))))
-
-                weibullApprox = float(pvcWeibullList[indexSelect]) + (tasMaxACT - math.trunc(tasMaxACT)) * (float(pvcWeibullList[indexSelect]) / tasMaxACT)
+                weibullApprox = float(pvcWeibullList[indexSelect])
+                tempDecimal = (((tasMaxACT - math.trunc(tasMaxACT)) / tasMaxACT) * float(pvcWeibullList[indexSelect]))
+                ageDecimal = (((data[simType]['pvc']['age'][index] - math.trunc(data[simType]['pvc']['age'][index])) / data[simType]['pvc']['age'][index]) * float(pvcWeibullList[indexSelect]))
+                weibullApprox = weibullApprox + tempDecimal + ageDecimal
                 if (weibullApprox > float(data[simType]['pvc']['ctH'][index])):
                     normal_run = 0
                     if ((simType == 'noTemp') or (simType == 'real')):
@@ -78,13 +80,15 @@ def epanet(batch, simType, dbCursor, dbObject):
             # Currently functional and testing for failure
             elif (simType == 'noTime') or (int(data[simType]['iron']['fS'][index]) == 0):
                 indexSelect = 0
-                indexSelect = (math.trunc(tasMaxACT) - 19)
+                indexSelect = (math.trunc(tasMaxACT) - 20)
                 if indexSelect < 0:
                     indexSelect = 0
 
                 indexSelect = indexSelect + (30 * int(math.trunc(float(data[simType]['iron']['age'][index]))))
                 weibullApprox = float(ironWeibullList[indexSelect])
-                weibullApprox = float(ironWeibullList[indexSelect]) + (tasMaxACT - math.trunc(tasMaxACT)) * (float(ironWeibullList[indexSelect]) / tasMaxACT)
+                tempDecimal = (((tasMaxACT - math.trunc(tasMaxACT)) / tasMaxACT) * float(ironWeibullList[indexSelect]))
+                ageDecimal = (((data[simType]['iron']['age'][index] - math.trunc(data[simType]['iron']['age'][index])) / data[simType]['iron']['age'][index]) * float(ironWeibullList[indexSelect]))
+                weibullApprox = weibullApprox + tempDecimal + ageDecimal
                 if (weibullApprox > float(data[simType]['iron']['ctH'][index])):
                     normal_run = 0
                     if ((simType == 'noTemp') or (simType == 'real')):
@@ -124,12 +128,14 @@ def epanet(batch, simType, dbCursor, dbObject):
 
             # Not currently failed block
             elif ((simType == "noTime") or (data[simType]['pump']['fS'][index] == 0)):
-                indexSelect = (math.trunc(tasMaxACT) - 19)
+                indexSelect = (math.trunc(tasMaxACT) - 20)
                 if indexSelect < 0:
                     indexSelect = 0
 
                 indexSelect = indexSelect + (30 * int(math.trunc(float(data[simType]['pump']['age'][index]))))
-                weibullApprox = float(pumpWeibullList[indexSelect]) + (tasMaxACT - math.trunc(tasMaxACT)) * (float(pumpWeibullList[indexSelect]) / tasMaxACT)
+                tempDecimal = (((tasMaxACT - math.trunc(tasMaxACT)) / tasMaxACT) * float(pumpWeibullList[indexSelect]))
+                ageDecimal = (((data[simType]['pump']['age'][index] - math.trunc(data[simType]['pump']['age'][index])) / data[simType]['pump']['age'][index]) * float(pumpWeibullList[indexSelect]))
+                weibullApprox = float(pumpWeibullList[indexSelect]) + tempDecimal + ageDecimal
                 if (weibullApprox > float(data[simType]['pump']['ctH'][index])):
                     normal_run = 0
                     if ((simType == 'noTemp') or (simType == 'real')):
