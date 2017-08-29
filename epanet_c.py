@@ -29,7 +29,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     normal_run = 0
                     epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(0.0))
                     
-            elif ((simType == 'noTime') or (int(data[simType]['pvc']['fS'][index]) == 0)):
+            if ((simType == 'noTime') or (int(data[simType]['pvc']['fS'][index]) == 0)):
                 indexSelect = 0
                 indexSelect = (math.trunc(tasMaxACT) - 20)
                 if indexSelect <= 0:
@@ -78,7 +78,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     data[simType]['iron']['age'][index] = biHourToYear
 
             # Currently functional and testing for failure
-            elif (simType == 'noTime') or (int(data[simType]['iron']['fS'][index]) == 0):
+            if (simType == 'noTime') or (int(data[simType]['iron']['fS'][index]) == 0):
                 indexSelect = 0
                 indexSelect = (math.trunc(tasMaxACT) - 20)
                 if indexSelect < 0:
@@ -127,7 +127,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     normal_run = 0
 
             # Not currently failed block
-            elif ((simType == "noTime") or (data[simType]['pump']['fS'][index] == 0)):
+            if ((simType == "noTime") or (data[simType]['pump']['fS'][index] == 0)):
                 indexSelect = (math.trunc(tasMaxACT) - 20)
                 if indexSelect < 0:
                     indexSelect = 0
@@ -139,7 +139,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                 if (weibullApprox > float(data[simType]['pump']['ctH'][index])):
                     normal_run = 0
                     if ((simType == 'noTemp') or (simType == 'real')):
-                        data[simType]['pump']['age'][index] = 0
+                        data[simType]['pump']['age'][index] = biHourToYear
                         # data[simType]['pump']['tH'][index] = (np.random.uniform(0, 1, 1)[0])
                         indexOfctH = data[simType]['pump']['ltH'][index].index(data[simType]['pump']['ctH'][index]) + 1
                         data[simType]['pump']['ctH'][index] = data[simType]['pump']['ltH'][index][indexOfctH]

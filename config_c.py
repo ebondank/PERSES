@@ -8,11 +8,11 @@ data = {'real':{'iron':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 
 
 normal_run_list = [list()]*24
 
-tasFile = open('generatedTasMaxBD85.txt', 'r')
+tasFile = open('tasMaxBD85.txt', 'r')
 tasList = tasFile.read().expandtabs().splitlines()
 tasFile.close()
 
-histTasFile = open('generatedTasMaxHist.txt', 'r')
+histTasFile = open('histTasMaxBD.txt', 'r')
 histTasList = histTasFile.read().expandtabs().splitlines()
 histTasFile.close()
 tasMaxACTList = {'real': list(tasList), 'noTime_yesCC': list(tasList), 'noTime_noCC': list(histTasList), 'noTemp': list(histTasList)}
@@ -84,7 +84,7 @@ while (linkCounter < linkList.contents.value):
             data['noTime_yesCC']['iron']['fS'].append(0)
             data['noTime_noCC']['iron']['fS'].append(0)
 
-            ltH = list(np.random.uniform(0, 1, 50))
+            ltH = list(np.random.uniform(0, 1, 5000))
             ctH = float(ltH[0])
             data['real']['iron']['ltH'].append(ltH)
             data['real']['iron']['ctH'].append(ctH)
@@ -116,7 +116,7 @@ while (linkCounter < linkList.contents.value):
             data['noTime_yesCC']['pvc']['fS'].append(0)
             data['noTime_noCC']['pvc']['fS'].append(0)
 
-            ltH = list(np.random.uniform(0, 1, 50))
+            ltH = list(np.random.uniform(0, 1, 5000))
             ctH = float(ltH[0])
             data['real']['pvc']['ltH'].append(ltH)
             data['real']['pvc']['ctH'].append(ctH)
