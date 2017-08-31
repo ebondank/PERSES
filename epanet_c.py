@@ -33,7 +33,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     
             if ((simType == 'noTime') or (int(data[simType]['pvc']['fS'][index]) == 0)):
                 indexSelect = 0
-                if ((biHour / 12).is_integer()):
+                if isinstance((biHour / 12), int):
                     data[simType]['pvc']['prob']['count'] += 1
                     data[simType]['pvc']['prob'][index]['averageTemp'] = (data[simType]['pvc']['prob'][index]['averageTemp'] * data[simType]['pvc']['prob'][index]['count'] + tasMaxACT) / (data[simType]['pvc']['prob'][index]['count'])
 
@@ -89,7 +89,7 @@ def epanet(batch, simType, dbCursor, dbObject):
 
             # Currently functional and testing for failure
             if (simType == 'noTime') or (int(data[simType]['iron']['fS'][index]) == 0):
-                if ((biHour / 12).is_integer()):
+                if isinstance((biHour / 12), int):
                     data[simType]['iron']['prob']['count'] += 1
                     data[simType]['iron']['prob'][index]['averageTemp'] = (data[simType]['iron']['prob'][index]['averageTemp'] * data[simType]['iron']['prob'][index]['count'] + tasMaxACT) / (data[simType]['iron']['prob'][index]['count'])
                 tasMaxACTAvg = data[simType]['iron']['prob'][index]['averageTemp']
@@ -145,7 +145,7 @@ def epanet(batch, simType, dbCursor, dbObject):
 
             # Not currently failed block
             if ((simType == "noTime") or (data[simType]['pump']['fS'][index] == 0)):
-                if ((biHour / 12).is_integer()):
+                if isinstance((biHour / 12), int):
                     data[simType]['pump']['prob']['count'] += 1
                     data[simType]['pump']['prob'][index]['averageTemp'] = (data[simType]['pump']['prob'][index]['averageTemp'] * data[simType]['pump']['prob'][index]['count'] + tasMaxACT) / (data[simType]['pump']['prob'][index]['count'])
                     
