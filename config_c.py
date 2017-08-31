@@ -178,22 +178,25 @@ weibList = {'pump': pumpWeibullList, 'pvc': pvcWeibullList, 'iron': ironWeibullL
 for simI in simList:
     for compType in compList:
         for index, item in enumerate(data[simI][compType]['age']):
-            data[simI][compType]['prob'].append(0)
+            data[simI][compType]['prob'].append({'averageTemp': float, 'count': int})
             ageLeft = data[simI][compType]['age'][index]
             while (ageLeft > 0):
                 ageToUse = int(math.floor(ageLeft * 365 * 12))
                 tasMaxACT = float(histTasList[len(histTasList) - ageToUse - 1])
-                indexSelect = (math.trunc(tasMaxACT) - 20)
-                if indexSelect < 0:
-                    indexSelect = 0
-                indexSelect = indexSelect + (30 * int(math.trunc(float(ageLeft))))
-                tempDecimal = (((tasMaxACT - math.trunc(tasMaxACT)) / tasMaxACT) * float(weibList[compType][indexSelect]))
-                ageDecimal = (((data[simI][compType]['age'][index] - math.trunc(data[simI][compType]['age'][index])) / data[simI][compType]['age'][index]) * float(weibList[compType][indexSelect]))
+                # indexSelect = (math.trunc(tasMaxACT) - 20)
+                # if indexSelect < 0:
+                #     indexSelect = 0
+                # indexSelect = indexSelect + (30 * int(math.trunc(float(ageLeft))))
+                # tempDecimal = (((tasMaxACT - math.trunc(tasMaxACT)) / tasMaxACT) * float(weibList[compType][indexSelect]))
+                # ageDecimal = (((data[simI][compType]['age'][index] - math.trunc(data[simI][compType]['age'][index])) / data[simI][compType]['age'][index]) * float(weibList[compType][indexSelect]))
 
-                weibullApprox = float(weibList[compType][indexSelect]) + tempDecimal + ageDecimal
-                data[simI][compType]['prob'][index] = data[simI][compType]['prob'][index] + (weibullApprox / 4380)
+                # weibullApprox = float(weibList[compType][indexSelect]) + tempDecimal + ageDecimal
+                if ((ageLeft * 365).is_integer()):
+                    data[simI][compType]['prob'][index]['averageTemp'] = (data[simI][compType]['prob'][index]['averageTemp'] * data[simI][compType]['prob'][index]['count'] + tasMaxACT) / (data[simI][compType]['prob'][index]['count'] + 1)
+
+                    data[simI][compType]['prob'][index]['count'] += 1
                 ageLeft = ageLeft - biHourToYear
-            if (data[simI][compType]['prob'][index] > data[simI][compType]['ctH'][index]):
-                data[simI][compType]['prob'][index] = 0
-                newctHindex = data[simI][compType]['ltH'][index].index(data[simI][compType]['ctH'][index]) + 1
-                data[simI][compType]['ctH'][index] = data[simI][compType]['ltH'][index][newctHindex]
+            # if (data[simI][compType]['prob'][index] > data[simI][compType]['ctH'][index]):
+            #     data[simI][compType]['prob'][index] = 0
+            #     newctHindex = data[simI][compType]['ltH'][index].index(data[simI][compType]['ctH'][index]) + 1
+            #     data[simI][compType]['ctH'][index] = data[simI][compType]['ltH'][index][newctHindex]
