@@ -178,7 +178,7 @@ weibList = {'pump': pumpWeibullList, 'pvc': pvcWeibullList, 'iron': ironWeibullL
 for simI in simList:
     for compType in compList:
         for index, item in enumerate(data[simI][compType]['age']):
-            data[simI][compType]['prob'].append({'averageTemp': float, 'count': int})
+            data[simI][compType]['prob'].append({'averageTemp': 0.0, 'count': 0})
             ageLeft = data[simI][compType]['age'][index]
             while (ageLeft > 0):
                 ageToUse = int(math.floor(ageLeft * 365 * 12))
