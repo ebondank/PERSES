@@ -1,10 +1,12 @@
 import numpy as np
 import ctypes as ct
+import math
 
 epalib = ct.cdll.LoadLibrary('epanet2mingw64.dll')
 biHourToYear = float(.0002283105022831050228310502283105)
 biHour = 0
-data = {'real':{'iron':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}}, 'noTemp': {'iron':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}}, 'noTime_yesCC': {'iron':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}}, 'noTime_noCC': {'iron':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}, 'pvc':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}, 'pump':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list()}}}
+
+data = {'real':{'iron':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list(), 'prob': list()}, 'pvc':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list(), 'prob': list()}, 'pump':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list(), 'prob': list()}}, 'noTemp': {'iron':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list(), 'prob': list()}, 'pvc':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list(), 'prob': list()}, 'pump':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list(), 'prob': list()}}, 'noTime_yesCC': {'iron':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list(), 'prob': list()}, 'pvc':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list(), 'prob': list()}, 'pump':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list(), 'prob': list()}}, 'noTime_noCC': {'iron':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list(), 'prob': list()}, 'pvc':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list(), 'prob': list()}, 'pump':{'ctH':list(), 'ltH': list(), 'age':list(), 'fS':list(), 'index':list(), 'prob': list()}}}
 
 normal_run_list = [list()]*24
 
@@ -84,7 +86,7 @@ while (linkCounter < linkList.contents.value):
             data['noTime_yesCC']['iron']['fS'].append(0)
             data['noTime_noCC']['iron']['fS'].append(0)
 
-            ltH = list(np.random.uniform(0, 1, 5000))
+            ltH = list(np.random.uniform(0, 1, 50000))
             ctH = float(ltH[0])
             data['real']['iron']['ltH'].append(ltH)
             data['real']['iron']['ctH'].append(ctH)
@@ -116,7 +118,7 @@ while (linkCounter < linkList.contents.value):
             data['noTime_yesCC']['pvc']['fS'].append(0)
             data['noTime_noCC']['pvc']['fS'].append(0)
 
-            ltH = list(np.random.uniform(0, 1, 5000))
+            ltH = list(np.random.uniform(0, 1, 50000))
             ctH = float(ltH[0])
             data['real']['pvc']['ltH'].append(ltH)
             data['real']['pvc']['ctH'].append(ctH)
@@ -139,9 +141,9 @@ data['noTemp']['pump']['age'] = list([4, 6])
 data['noTime_yesCC']['pump']['age'] = list([5.5, 5.25])
 data['noTime_noCC']['pump']['age'] = list([5.5, 5.25])
 
-ltH1 = list(np.random.uniform(0, 1, 5000))
+ltH1 = list(np.random.uniform(0, 1, 50000))
 ctH1 = float(ltH1[0])
-ltH2 = list(np.random.uniform(0, 1, 5000))
+ltH2 = list(np.random.uniform(0, 1, 50000))
 ctH2 = float(ltH2[0])
 data['real']['pump']['ltH'] = [ltH1, ltH2]
 data['real']['pump']['ctH'] = [ctH1, ctH2]
@@ -168,3 +170,29 @@ ironWeibullFile.close()
 pumpWeibullFile = open('pumpWeibullFixed.txt', 'r')
 pumpWeibullList = pumpWeibullFile.read().splitlines()
 pumpWeibullFile.close()
+
+simList = ['real', 'noTemp', 'noTime_yesCC', 'noTime_noCC']
+compList = ['pump', 'pvc', 'iron']
+weibList = {'pump': pumpWeibullList, 'pvc': pvcWeibullList, 'iron': ironWeibullList}
+
+for simI in simList:
+    for compType in compList:
+        for item, index in enumerate(data[simI][compType]['age']):
+            data[simI][compType]['prob'].append(0)
+            ageLeft = data[simI][compType]['age'][index]
+            while (ageLeft > 0):
+                tasMaxACT = histTasList[len(histTasList) - ageLeft - 1]
+                indexSelect = (math.trunc(tasMaxACT) - 20)
+                if indexSelect < 0:
+                    indexSelect = 0
+                indexSelect = indexSelect + (30 * int(math.trunc(float(ageLeft))))
+                tempDecimal = (((tasMaxACT - math.trunc(tasMaxACT)) / tasMaxACT) * float(weibList[compType][indexSelect]))
+                ageDecimal = (((data[simI][compType]['age'][index] - math.trunc(data[simI][compType]['age'][index])) / data[simI][compType]['age'][index]) * float(weibList[compType][indexSelect]))
+
+                weibullApprox = float(weibList[compType][indexSelect]) + tempDecimal + ageDecimal
+                data[simI][compType]['prob'][index] = data[simI][compType]['prob'][index] + (weibullApprox / 4380)
+                ageLeft = ageLeft - biHourToYear
+            if (data[simI][compType]['prob'][index] > data[simI][compType]['ctH'][index]):
+                data[simI][compType]['prob'][index] = 0
+                newctHindex = data[simI][compType]['ltH'][index].index(data[simI][compType]['ctH'][index]) + 1
+                data[simI][compType]['ctH'][index] = data[simI][compType]['ltH'][index][newctHindex]

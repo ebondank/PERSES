@@ -3,6 +3,7 @@ import ctypes as ct
 from config_c import *
 
 
+
 def epanet(batch, simType, dbCursor, dbObject):
     epaCount = 0
     biHour = (batch * 8760)
@@ -39,8 +40,10 @@ def epanet(batch, simType, dbCursor, dbObject):
                 tempDecimal = (((tasMaxACT - math.trunc(tasMaxACT)) / tasMaxACT) * float(pvcWeibullList[indexSelect]))
                 ageDecimal = (((data[simType]['pvc']['age'][index] - math.trunc(data[simType]['pvc']['age'][index])) / data[simType]['pvc']['age'][index]) * float(pvcWeibullList[indexSelect]))
                 weibullApprox = weibullApprox + tempDecimal + ageDecimal
-                if (weibullApprox > float(data[simType]['pvc']['ctH'][index])):
+                data[simType]['pvc']['prob'][index] = data[simType]['pvc']['prob'][index] + (float(weibullApprox) / 4380)
+                if (data[simType]['pvc']['prob'][index] > float(data[simType]['pvc']['ctH'][index])):
                     normal_run = 0
+                    data[simType]['pvc']['prob'][index] = 0
                     if ((simType == 'noTemp') or (simType == 'real')):
                         data[simType]['pvc']['age'][index] = biHourToYear
                         # data[simType]['pvc']['tH'][index] = (np.random.uniform(0, 1, 1)[0])
@@ -89,8 +92,10 @@ def epanet(batch, simType, dbCursor, dbObject):
                 tempDecimal = (((tasMaxACT - math.trunc(tasMaxACT)) / tasMaxACT) * float(ironWeibullList[indexSelect]))
                 ageDecimal = (((data[simType]['iron']['age'][index] - math.trunc(data[simType]['iron']['age'][index])) / data[simType]['iron']['age'][index]) * float(ironWeibullList[indexSelect]))
                 weibullApprox = weibullApprox + tempDecimal + ageDecimal
-                if (weibullApprox > float(data[simType]['iron']['ctH'][index])):
+                data[simType]['iron']['prob'][index] = data[simType]['iron']['prob'][index] + (float(weibullApprox) / 4380)
+                if (data[simType]['iron']['prob'][index] > float(data[simType]['iron']['ctH'][index])):
                     normal_run = 0
+                    data[simType]['iron']['prob'][index] = 0
                     if ((simType == 'noTemp') or (simType == 'real')):
                         data[simType]['iron']['age'][index] = biHourToYear
                         # data[simType]['iron']['tH'][index] = (np.random.uniform(0, 1, 1)[0])
@@ -136,8 +141,10 @@ def epanet(batch, simType, dbCursor, dbObject):
                 tempDecimal = (((tasMaxACT - math.trunc(tasMaxACT)) / tasMaxACT) * float(pumpWeibullList[indexSelect]))
                 ageDecimal = (((data[simType]['pump']['age'][index] - math.trunc(data[simType]['pump']['age'][index])) / data[simType]['pump']['age'][index]) * float(pumpWeibullList[indexSelect]))
                 weibullApprox = float(pumpWeibullList[indexSelect]) + tempDecimal + ageDecimal
-                if (weibullApprox > float(data[simType]['pump']['ctH'][index])):
+                data[simType]['pump']['prob'][index] = data[simType]['pump']['prob'][index] + (float(weibullApprox) / 4380)
+                if (data[simType]['pump']['prob'][index] > float(data[simType]['pump']['ctH'][index])):
                     normal_run = 0
+                    data[simType]['pump']['prob'][index] = 0
                     if ((simType == 'noTemp') or (simType == 'real')):
                         data[simType]['pump']['age'][index] = biHourToYear
                         # data[simType]['pump']['tH'][index] = (np.random.uniform(0, 1, 1)[0])
