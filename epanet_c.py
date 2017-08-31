@@ -104,7 +104,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                 ageDecimal = (((data[simType]['iron']['age'][index] - math.trunc(data[simType]['iron']['age'][index])) / data[simType]['iron']['age'][index]) * float(ironWeibullList[indexSelect]))
                 weibullApprox = weibullApprox + tempDecimal + ageDecimal
                 # data[simType]['iron']['prob'][index] = data[simType]['iron']['prob'][index] + (float(weibullApprox) / 4380)
-                if (data[simType]['iron']['prob'][index] > float(data[simType]['iron']['ctH'][index])):
+                if (weibullApprox > float(data[simType]['iron']['ctH'][index])):
                     normal_run = 0
                     data[simType]['iron']['prob'][index]['averageTemp'] = tasMaxACT
                     data[simType]['iron']['prob'][index]['count'] = 1
@@ -159,7 +159,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                 ageDecimal = (((data[simType]['pump']['age'][index] - math.trunc(data[simType]['pump']['age'][index])) / data[simType]['pump']['age'][index]) * float(pumpWeibullList[indexSelect]))
                 weibullApprox = float(pumpWeibullList[indexSelect]) + tempDecimal + ageDecimal
                 # data[simType]['pump']['prob'][index] = data[simType]['pump']['prob'][index] + (float(weibullApprox) / 4380)
-                if (data[simType]['pump']['prob'][index] > float(data[simType]['pump']['ctH'][index])):
+                if (weibullApprox > float(data[simType]['pump']['ctH'][index])):
                     normal_run = 0
                     data[simType]['pump']['prob'][index]['averageTemp'] = tasMaxACT
                     data[simType]['pump']['prob'][index]['count'] = 1
