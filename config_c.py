@@ -183,7 +183,7 @@ for simI in simList:
             while (ageLeft > 0):
                 print(ageLeft)
                 ageToUse = int(math.floor(ageLeft * 365 * 12))
-                tasMaxACT = float(histTasList[len(histTasList) - ageLeft - 1])
+                tasMaxACT = float(histTasList[len(histTasList) - ageToUse - 1])
                 indexSelect = (math.trunc(tasMaxACT) - 20)
                 if indexSelect < 0:
                     indexSelect = 0
