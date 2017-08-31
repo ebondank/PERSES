@@ -6,11 +6,11 @@ from config_c import *
 
 def epanet(batch, simType, dbCursor, dbObject):
     epaCount = 0
-    biHour = (batch * 8760)
+    biHour = (batch * 4380)
     
     time.contents = ct.c_long(0)
 
-    while epaCount < 8760:
+    while epaCount < 4380:
         # using 1 hour timesteps? Make sure to fucking fix
         dayCount = math.floor(biHour / 24)
         tasMaxACT = float(tasMaxACTList[simType][dayCount])
