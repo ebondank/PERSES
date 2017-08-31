@@ -11,6 +11,7 @@ def epanet(batch, simType, dbCursor, dbObject):
     time.contents = ct.c_long(0)
 
     while epaCount < 8760:
+        # using 1 hour timesteps? Make sure to fucking fix
         dayCount = math.floor(biHour / 24)
         tasMaxACT = float(tasMaxACTList[simType][dayCount])
         normal_run = 1

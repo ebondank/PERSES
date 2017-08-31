@@ -181,6 +181,7 @@ for simI in simList:
             data[simI][compType]['prob'].append(0)
             ageLeft = data[simI][compType]['age'][index]
             while (ageLeft > 0):
+                ageToUse = math.floor(ageLeft * 365)
                 tasMaxACT = float(histTasList[len(histTasList) - ageLeft - 1])
                 indexSelect = (math.trunc(tasMaxACT) - 20)
                 if indexSelect < 0:
