@@ -191,7 +191,7 @@ for simI in simList:
                 # ageDecimal = (((data[simI][compType]['age'][index] - math.trunc(data[simI][compType]['age'][index])) / data[simI][compType]['age'][index]) * float(weibList[compType][indexSelect]))
 
                 # weibullApprox = float(weibList[compType][indexSelect]) + tempDecimal + ageDecimal
-                if ((ageLeft * 365).is_integer()):
+                if isinstance((ageLeft * 365), int):
                     data[simI][compType]['prob'][index]['averageTemp'] = (data[simI][compType]['prob'][index]['averageTemp'] * data[simI][compType]['prob'][index]['count'] + tasMaxACT) / (data[simI][compType]['prob'][index]['count'] + 1)
 
                     data[simI][compType]['prob'][index]['count'] += 1
