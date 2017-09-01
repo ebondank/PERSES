@@ -76,10 +76,11 @@ while (linkCounter < linkList.contents.value):
     if linkCounter != (indexReturn1.contents.value or indexReturn2.contents.value):
         if (int(currentRough.contents.value) > 140):
             randironAge = float(np.random.uniform(0, 72, 1)[0])
+            randironAge2 = float(np.random.uniform(0, 125, 1)[0])
             data['real']['iron']['age'].append(randironAge)
             data['noTemp']['iron']['age'].append(randironAge)
-            data['noTime_yesCC']['iron']['age'].append(55)
-            data['noTime_noCC']['iron']['age'].append(55)
+            data['noTime_yesCC']['iron']['age'].append(randironAge2)
+            data['noTime_noCC']['iron']['age'].append(randironAge2)
 
             data['real']['iron']['fS'].append(0)
             data['noTemp']['iron']['fS'].append(0)
@@ -104,14 +105,15 @@ while (linkCounter < linkList.contents.value):
 
         elif (int(currentRough.contents.value) < 140):
             if (linkCounter > 20):
-                randpvcAge = float(np.random.uniform(27, 6, 1)[0])
+                randpvcAge = float(np.random.normal(27, 6, 1)[0])
             else:
                 randpvcAge = float(np.random.normal(13, 3, 1)[0])
 
+            randNonAgingPVC = float(np.random.uniform(0, 60, 1)[0])
             data['real']['pvc']['age'].append(randpvcAge)
             data['noTemp']['pvc']['age'].append(randpvcAge)
-            data['noTime_yesCC']['pvc']['age'].append(47)
-            data['noTime_noCC']['pvc']['age'].append(47)
+            data['noTime_yesCC']['pvc']['age'].append(randNonAgingPVC)
+            data['noTime_noCC']['pvc']['age'].append(randNonAgingPVC)
 
             data['real']['pvc']['fS'].append(0)
             data['noTemp']['pvc']['fS'].append(0)
