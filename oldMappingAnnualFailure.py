@@ -1,7 +1,7 @@
 import numpy as np
 import os
 
-file1 = open(os.path.expanduser('8-23-17/generated_hist_and_rcp85/real_pumpFail.txt'), 'r')
+file1 = open(os.path.expanduser('8-31-17/noTime_yesCC_pvcPipeFail.txt'), 'r')
 list1 = file1.read().splitlines()
 
 
@@ -17,7 +17,7 @@ while count < 83:
 
 for index, item in enumerate(list1):
     item = item.strip().split(' ')
-    thisIndex = int(np.floor((int(item[1]) / 8760)))
+    thisIndex = int(np.floor((int(item[1]) / 4380)))
     breakCount[thisIndex] = breakCount[thisIndex] + 1
 
 for index, iteam in enumerate(breakCount):

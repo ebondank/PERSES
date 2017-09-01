@@ -4,7 +4,7 @@ import sqlite3 as sql
 
 # file1 = open(os.path.expanduser('8-08-17/noTime_yesCC_ironPipeFail.txt'), 'r')
 # list1 = file1.read().splitlines()
-Path = '8-30-17/noTime_yesCC0.db'
+Path = '8-31-17/realistic0.db'
 db = sql.connect(Path)
 com = db.cursor()
 
