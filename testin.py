@@ -48,8 +48,8 @@ formTas = open("generatedTasMaxHist.txt", "w")
 
 newTempList = list()
 for item in histTempList:
-    if ((float(item) * 1.25) < 50):
-        formTas.write(('{}\n').format(float(item) * 1.25))    
+    if ((float(item) * 1.75) < 50):
+        formTas.write(('{}\n').format(float(item) * 1.75))
     else:
         formTas.write('50\n')
 

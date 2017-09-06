@@ -3,7 +3,7 @@ import math
 import os
 
 
-Path = '8-23-17/real_rcp45/noTime_yesCC0.db'
+Path = '9-6-17/realistic0.db'
 print(Path)
 db = sql.connect(Path)
 com = db.cursor()
@@ -35,8 +35,8 @@ for row in list1:
     newItem = float(row[1])
     if (newItem in demandList):
         try:
-            ouCount = dbOUCount[math.floor((row[0]) / 8760)]
-            ou2Count = dbOUCount2[math.floor((row[0]) / 8760)]
+            ouCount = dbOUCount[math.floor((row[0]) / 4380)]
+            ou2Count = dbOUCount2[math.floor((row[0]) / 4380)]
         except Exception:
             dbOUCount.append(0)
             dbOUCount2.append(0)
@@ -51,8 +51,8 @@ for row in list1:
                 ouCount += 1
         try:
             # print("Boi")
-            dbOUCount[math.floor((row[0]) / 8760)] = ouCount
-            dbOUCount2[math.floor((row[0]) / 8760)] = ou2Count
+            dbOUCount[math.floor((row[0]) / 4380)] = ouCount
+            dbOUCount2[math.floor((row[0]) / 4380)] = ou2Count
 
         except Exception:
             print(row, "Broken")
