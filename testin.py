@@ -48,8 +48,10 @@ formTas = open("generatedTasMaxHist.txt", "w")
 
 newTempList = list()
 for item in histTempList:
-    newTempList.append(float(item) * 1.25)
-    formTas.write(('{}\n').format(float(item) * 1.25))
+    if ((float(item) * 1.25) < 50):
+        formTas.write(('{}\n').format(float(item) * 1.25))    
+    else:
+        formTas.write('50\n')
 
 
 # while count < 31025:
