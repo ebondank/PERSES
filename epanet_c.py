@@ -32,28 +32,11 @@ def epanet(batch, simType, dbCursor, dbObject):
                     epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(0.0))
                     
             if ((simType == 'noTime') or (int(data[simType]['pvc']['fS'][index]) == 0)):
-                indexSelect = 0
-                # if isinstance((biHour / 12), int):
-                    # data[simType]['pvc']['prob']['count'] += 1
-                    # data[simType]['pvc']['prob'][index]['averageTemp'] = (data[simType]['pvc']['prob'][index]['averageTemp'] * data[simType]['pvc']['prob'][index]['count'] + tasMaxACT) / (data[simType]['pvc']['prob'][index]['count'])
-
-                # tasMaxACTAvg = data[simType]['pvc']['prob'][index]['averageTemp']
-                # indexSelect = (math.trunc(tasMaxACTAvg) - 19)
-                if indexSelect <= 0:
-                    indexSelect = 0
-                # indexSelect = indexSelect + int(30 * int(math.trunc(float(data[simType]['pvc']['exp'][index]))))
-                # weibullApprox = float(pvcWeibullList[indexSelect])
-                # tempDecimal = (((tasMaxACTAvg - math.trunc(tasMaxACTAvg)) / tasMaxACTAvg) * float(pvcWeibullList[indexSelect]))
-                # ageDecimal = (((data[simType]['pvc']['exp'][index] - math.trunc(data[simType]['pvc']['exp'][index])) / data[simType]['pvc']['exp'][index]) * float(pvcWeibullList[indexSelect]))
-                # weibullApprox = weibullApprox + tempDecimal + ageDecimal
-                # data[simType]['pvc']['prob'][index] = data[simType]['pvc']['prob'][index] + (float(weibullApprox) / 4380)
+                
                 per_failed1 = distList['pvc'][math.floor(data[simType]['pvc']['exp'][index])]
                 per_failed2 = distList['pvc'][math.ceil(data[simType]['pvc']['exp'][index])]
                 per_failed = (float(per_failed2) - float(per_failed1)) * (data[simType]['pvc']['exp'][index] - math.floor(data[simType]['pvc']['exp'][index]) + float(per_failed1))
                 if (per_failed > float(data[simType]['pvc']['ctH'][index])):
-                    normal_run = 0
-                    data[simType]['pvc']['prob'][index]['averageTemp'] = tasMaxACT
-                    data[simType]['pvc']['prob'][index]['count'] = 1
                     if ((simType == 'noTemp') or (simType == 'real')):
                         data[simType]['pvc']['exp'][index] = 0
                         # data[simType]['pvc']['tH'][index] = (np.random.uniform(0, 1, 1)[0])
@@ -92,31 +75,16 @@ def epanet(batch, simType, dbCursor, dbObject):
 
             # Currently functional and testing for failure
             if (simType == 'noTime') or (int(data[simType]['iron']['fS'][index]) == 0):
-                # if isinstance((biHour / 12), int):
-                #     data[simType]['iron']['prob']['count'] += 1
-                #     data[simType]['iron']['prob'][index]['averageTemp'] = (data[simType]['iron']['prob'][index]['averageTemp'] * data[simType]['iron']['prob'][index]['count'] + tasMaxACT) / (data[simType]['iron']['prob'][index]['count'])
-                # tasMaxACTAvg = data[simType]['iron']['prob'][index]['averageTemp']
-                # indexSelect = 0
-                # indexSelect = (math.trunc(tasMaxACTAvg) - 19)
-                # if indexSelect < 0:
-                #     indexSelect = 0
                 
-                # indexSelect = indexSelect + (30 * int(math.trunc(float(data[simType]['iron']['exp'][index]))))
-                # weibullApprox = float(ironWeibullList[indexSelect])
-                # tempDecimal = (((tasMaxACTAvg - math.trunc(tasMaxACTAvg)) / tasMaxACTAvg) * float(ironWeibullList[indexSelect]))
-                # ageDecimal = (((data[simType]['iron']['exp'][index] - math.trunc(data[simType]['iron']['exp'][index])) / data[simType]['iron']['exp'][index]) * float(ironWeibullList[indexSelect]))
-                # weibullApprox = weibullApprox + tempDecimal + ageDecimal
-                # data[simType]['iron']['prob'][index] = data[simType]['iron']['prob'][index] + (float(weibullApprox) / 4380)
                 per_failed1 = distList['iron'][math.floor(data[simType]['iron']['exp'][index])]
                 per_failed2 = distList['iron'][math.ceil(data[simType]['iron']['exp'][index])]
                 per_failed = (float(per_failed2) - float(per_failed1)) * (data[simType]['iron']['exp'][index] - math.floor(data[simType]['iron']['exp'][index]) + float(per_failed1))
                 if (per_failed > float(data[simType]['iron']['ctH'][index])):
                     normal_run = 0
-                    # data[simType]['iron']['prob'][index]['averageTemp'] = tasMaxACT
-                    # data[simType]['iron']['prob'][index]['count'] = 1
+                    
                     if ((simType == 'noTemp') or (simType == 'real')):
                         data[simType]['iron']['exp'][index] = 0
-                        # data[simType]['iron']['tH'][index] = (np.random.uniform(0, 1, 1)[0])
+
                         indexOfctH = data[simType]['iron']['ltH'][index].index(data[simType]['iron']['ctH'][index]) + 1
                         data[simType]['iron']['ctH'][index] = data[simType]['iron']['ltH'][index][indexOfctH]
 
@@ -151,30 +119,16 @@ def epanet(batch, simType, dbCursor, dbObject):
 
             # Not currently failed block
             if ((simType == "noTime") or (data[simType]['pump']['fS'][index] == 0)):
-            #     if isinstance((biHour / 12), int):
-            #         data[simType]['pump']['prob']['count'] += 1
-            #         data[simType]['pump']['prob'][index]['averageTemp'] = (data[simType]['pump']['prob'][index]['averageTemp'] * data[simType]['pump']['prob'][index]['count'] + tasMaxACT) / (data[simType]['pump']['prob'][index]['count'])
-                    
-            #     tasMaxACTAvg = data[simType]['pump']['prob'][index]['averageTemp']
-            #     indexSelect = (math.trunc(tasMaxACTAvg) - 19)
-            #     if indexSelect < 0:
-            #         indexSelect = 0
 
-            #     indexSelect = indexSelect + (30 * int(math.trunc(float(data[simType]['pump']['exp'][index]))))
-            #     tempDecimal = (((tasMaxACTAvg - math.trunc(tasMaxACTAvg)) / tasMaxACTAvg) * float(pumpWeibullList[indexSelect]))
-            #     ageDecimal = (((data[simType]['pump']['exp'][index] - math.trunc(data[simType]['pump']['exp'][index])) / data[simType]['pump']['exp'][index]) * float(pumpWeibullList[indexSelect]))
-            #     weibullApprox = float(pumpWeibullList[indexSelect]) + tempDecimal + ageDecimal
-                # data[simType]['pump']['prob'][index] = data[simType]['pump']['prob'][index] + (float(weibullApprox) / 4380)
                 per_failed1 = distList['pump'][math.floor(data[simType]['pump']['exp'][index])]
                 per_failed2 = distList['pump'][math.ceil(data[simType]['pump']['exp'][index])]
                 per_failed = (float(per_failed2) - float(per_failed1)) * (data[simType]['pump']['exp'][index] - math.floor(data[simType]['pump']['exp'][index]) + float(per_failed1))
                 if (per_failed > float(data[simType]['pump']['ctH'][index])):
                     normal_run = 0
-                    # data[simType]['pump']['prob'][index]['averageTemp'] = tasMaxACT
-                    # data[simType]['pump']['prob'][index]['count'] = 1
+                    
                     if ((simType == 'noTemp') or (simType == 'real')):
                         data[simType]['pump']['exp'][index] = 0
-                        # data[simType]['pump']['tH'][index] = (np.random.uniform(0, 1, 1)[0])
+
                         indexOfctH = data[simType]['pump']['ltH'][index].index(data[simType]['pump']['ctH'][index]) + 1
                         data[simType]['pump']['ctH'][index] = data[simType]['pump']['ltH'][index][indexOfctH]
 
@@ -184,11 +138,12 @@ def epanet(batch, simType, dbCursor, dbObject):
                     dbCursor.execute('''INSERT INTO failureData VALUES (?, ?, ?)''', (biHour, index, 'pump'))
                     
                     epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(11), ct.c_float(0.0))
-                    # This is based off of the 16 hr repair time, can be
-                    # changed to w/e
+                    
                     data[simType]['pump']['fS'][index] = 8
                 if ((simType == 'noTemp') or (simType == 'real')):
                     data[simType]['pump']['exp'][index] = float(data[simType]['pump']['exp'][index]) + biHourToYear * tasMaxACT
+                    if (index == 0):
+                        print(data[simType]['pump']['exp'][index])
                 if (data[simType]['pump']['fS'][index] == 0):
                     epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(11), ct.c_float(1.0))
 
