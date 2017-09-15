@@ -49,7 +49,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                 # data[simType]['pvc']['prob'][index] = data[simType]['pvc']['prob'][index] + (float(weibullApprox) / 4380)
                 per_failed1 = distList['pvc'][math.floor(data[simType]['pvc']['exp'][index])]
                 per_failed2 = distList['pvc'][math.ceil(data[simType]['pvc']['exp'][index])]
-                per_failed = (float(per_failed2) - float(per_failed1)) * (data[simType]['pvc']['exp'][index] - math.floor(data[simType]['pvc']['exp'][index]) + per_failed1)
+                per_failed = (float(per_failed2) - float(per_failed1)) * (data[simType]['pvc']['exp'][index] - math.floor(data[simType]['pvc']['exp'][index]) + float(per_failed1))
                 if (per_failed > float(data[simType]['pvc']['ctH'][index])):
                     normal_run = 0
                     data[simType]['pvc']['prob'][index]['averageTemp'] = tasMaxACT
@@ -109,7 +109,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                 # data[simType]['iron']['prob'][index] = data[simType]['iron']['prob'][index] + (float(weibullApprox) / 4380)
                 per_failed1 = distList['iron'][math.floor(data[simType]['iron']['exp'][index])]
                 per_failed2 = distList['iron'][math.ceil(data[simType]['iron']['exp'][index])]
-                per_failed = (float(per_failed2) - float(per_failed1)) * (data[simType]['iron']['exp'][index] - math.floor(data[simType]['iron']['exp'][index]) + per_failed1)
+                per_failed = (float(per_failed2) - float(per_failed1)) * (data[simType]['iron']['exp'][index] - math.floor(data[simType]['iron']['exp'][index]) + float(per_failed1))
                 if (per_failed > float(data[simType]['iron']['ctH'][index])):
                     normal_run = 0
                     # data[simType]['iron']['prob'][index]['averageTemp'] = tasMaxACT
@@ -167,7 +167,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                 # data[simType]['pump']['prob'][index] = data[simType]['pump']['prob'][index] + (float(weibullApprox) / 4380)
                 per_failed1 = distList['pump'][math.floor(data[simType]['pump']['exp'][index])]
                 per_failed2 = distList['pump'][math.ceil(data[simType]['pump']['exp'][index])]
-                per_failed = (float(per_failed2) - float(per_failed1)) * (data[simType]['pump']['exp'][index] - math.floor(data[simType]['pump']['exp'][index]) + per_failed1)
+                per_failed = (float(per_failed2) - float(per_failed1)) * (data[simType]['pump']['exp'][index] - math.floor(data[simType]['pump']['exp'][index]) + float(per_failed1))
                 if (per_failed > float(data[simType]['pump']['ctH'][index])):
                     normal_run = 0
                     # data[simType]['pump']['prob'][index]['averageTemp'] = tasMaxACT
