@@ -144,7 +144,6 @@ def epanet(batch, simType, dbCursor, dbObject):
                     data[simType]['pump']['fS'][index] = 8
                 if ((simType == 'noTemp') or (simType == 'real')):
                     data[simType]['pump']['exp'][index] = float(data[simType]['pump']['exp'][index]) + float(biHourToYear * tasMaxACT)
-                    if (index == 0):
                         
                 if (data[simType]['pump']['fS'][index] == 0):
                     epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(11), ct.c_float(1.0))
