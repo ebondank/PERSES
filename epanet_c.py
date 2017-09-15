@@ -33,9 +33,9 @@ def epanet(batch, simType, dbCursor, dbObject):
                     
             if ((simType == 'noTime') or (int(data[simType]['pvc']['fS'][index]) == 0)):
                 
-                per_failed1 = distList['pvc'][math.floor(data[simType]['pvc']['exp'][index])]
-                per_failed2 = distList['pvc'][math.ceil(data[simType]['pvc']['exp'][index])]
-                per_failed = (float(per_failed2) - float(per_failed1)) * (data[simType]['pvc']['exp'][index] - math.floor(data[simType]['pvc']['exp'][index]) + float(per_failed1))
+                per_failed1 = distList['pvc'][math.floor(float(data[simType]['pvc']['exp'][index]))]
+                per_failed2 = distList['pvc'][math.ceil(float(data[simType]['pvc']['exp'][index]))]
+                per_failed = (float(per_failed2) - float(per_failed1)) * (float(data[simType]['pvc']['exp'][index]) - math.floor(float(data[simType]['pvc']['exp'][index])) + float(per_failed1))
                 if (per_failed > float(data[simType]['pvc']['ctH'][index])):
                     if ((simType == 'noTemp') or (simType == 'real')):
                         data[simType]['pvc']['exp'][index] = 0
@@ -129,10 +129,8 @@ def epanet(batch, simType, dbCursor, dbObject):
                 
                 if (per_failed > float(data[simType]['pump']['ctH'][index])):
                     normal_run = 0
-                    
                     if ((simType == 'noTemp') or (simType == 'real')):
                         data[simType]['pump']['exp'][index] = 0
-
                         indexOfctH = data[simType]['pump']['ltH'][index].index(data[simType]['pump']['ctH'][index]) + 1
                         data[simType]['pump']['ctH'][index] = data[simType]['pump']['ltH'][index][indexOfctH]
 
