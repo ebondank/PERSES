@@ -35,7 +35,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                 
                 per_failed1 = distList['pvc'][math.floor(float(data[simType]['pvc']['exp'][index]))]
                 per_failed2 = distList['pvc'][math.ceil(float(data[simType]['pvc']['exp'][index]))]
-                per_failed = (float(per_failed2) - float(per_failed1)) * (float(data[simType]['pvc']['exp'][index]) - math.floor(float(data[simType]['pvc']['exp'][index])) + float(per_failed1))
+                per_failed = (float(per_failed2) - float(per_failed1)) * (float(data[simType]['pvc']['exp'][index]) - math.floor(float(data[simType]['pvc']['exp'][index]))) + float(per_failed1)
                 if (per_failed > float(data[simType]['pvc']['ctH'][index])):
                     if ((simType == 'noTemp') or (simType == 'real')):
                         data[simType]['pvc']['exp'][index] = 0
@@ -78,7 +78,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                 
                 per_failed1 = distList['iron'][math.floor(float(data[simType]['iron']['exp'][index]))]
                 per_failed2 = distList['iron'][math.ceil(float(data[simType]['iron']['exp'][index]))]
-                per_failed = (float(per_failed2) - float(per_failed1)) * (float(data[simType]['iron']['exp'][index]) - math.floor(float(data[simType]['iron']['exp'][index])) + float(per_failed1))
+                per_failed = (float(per_failed2) - float(per_failed1)) * (float(data[simType]['iron']['exp'][index]) - math.floor(float(data[simType]['iron']['exp'][index]))) + float(per_failed1)
 
                 if (per_failed > float(data[simType]['iron']['ctH'][index])):
                     normal_run = 0
@@ -125,7 +125,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                 
                 per_failed2 = distList['pump'][math.ceil(float(data[simType]['pump']['exp'][index]))]
                 
-                per_failed = (float(per_failed2) - float(per_failed1)) * (float(data[simType]['pump']['exp'][index]) - math.floor(float(data[simType]['pump']['exp'][index])) + float(per_failed1))
+                per_failed = (float(per_failed2) - float(per_failed1)) * (float(data[simType]['pump']['exp'][index]) - math.floor(float(data[simType]['pump']['exp'][index]))) + float(per_failed1)
                 
                 if (per_failed > float(data[simType]['pump']['ctH'][index])):
                     normal_run = 0
