@@ -1,9 +1,14 @@
 import os
 import math
 import numpy as np
+import scipy.stats as ss
+from scipy.stats import invgauss
+from scipy.stats import gamma
+from scipy.stats import lognorm
+import matplotlib.pyplot as plt
 
 file_list = ['pump_cdf.txt', 'pvc_cdf.txt', 'iron_cdf.txt']
-dict_list = {'pump': {}, 'pvc': {}, 'iron': {}}
+dict_list = {'pump': {}, 'iron': {}, 'pvc': {}}
 
 for f_ in file_list:
     line_f = open(f_, 'r')
@@ -24,8 +29,13 @@ for f_ in file_list:
                 dict_list[comp_type][bucket] = cdf_val
 
 for t_ in dict_list.keys():
+    d_c = 0
     f_o = open(('{}_exposure_from_pdf.txt').format(t_), 'w')
+    f_i = open(('{}_made_cdf.txt').format(t_), 'w')
     for b_ in dict_list[t_].keys():
-        f_o.write(('{}\n').format(dict_list[t_][b_]))
+        f_o.write(('{}\n').format(float(dict_list[t_][b_]) / 30))
+        d_c += float(dict_list[t_][b_] / 30)
+        f_i.write(('{}\n').format(d_c))
+        
     f_o.close()
-
+    f_i.close()
