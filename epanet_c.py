@@ -122,7 +122,7 @@ def epanet(batch, simType, dbCursor, dbObject):
             if ((simType == "noTime") or (data[simType]['pump']['fS'][index] == 0)):
 
                 per_failed1 = distList['pump'][math.floor(float(data[simType]['pump']['exp'][index]))]
-                print(per_failed1, float(data[simType]['pump']['exp'][index])))
+                print(per_failed1, float(data[simType]['pump']['exp'][index]))
                 per_failed2 = distList['pump'][math.ceil(float(data[simType]['pump']['exp'][index]))]
                 print(per_failed2)
                 per_failed = (float(per_failed2) - float(per_failed1)) * (float(data[simType]['pump']['exp'][index]) - math.floor(float(data[simType]['pump']['exp'][index])) + float(per_failed1))
