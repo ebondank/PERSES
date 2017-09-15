@@ -104,10 +104,7 @@ while (linkCounter < linkList.contents.value):
             data['noTime_noCC']['iron']['index'].append(indexVal)
 
         elif (int(currentRough.contents.value) < 140):
-            if (linkCounter > 20):
-                # 0 = float(np.random.normal(27, 6, 1)[0])
-            else:
-                # 0 = float(np.random.normal(13, 3, 1)[0])
+            
 
             randNonAgingPVC = float(36)
             data['real']['pvc']['exp'].append(0)
