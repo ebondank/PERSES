@@ -87,7 +87,7 @@ while (linkCounter < linkList.contents.value):
             data['noTime_yesCC']['iron']['fS'].append(0)
             data['noTime_noCC']['iron']['fS'].append(0)
 
-            ltH = list(np.random.normal(.4, .05, 50000))
+            ltH = list(np.random.uniform(0, 1, 50000))
             ctH = float(ltH[0])
             data['real']['iron']['ltH'].append(ltH)
             data['real']['iron']['ctH'].append(ctH)
@@ -117,7 +117,7 @@ while (linkCounter < linkList.contents.value):
             data['noTime_yesCC']['pvc']['fS'].append(0)
             data['noTime_noCC']['pvc']['fS'].append(0)
 
-            ltH = list(np.random.normal(.4, .05, 50000))
+            ltH = list(np.random.uniform(0, 1, 50000))
             ctH = float(ltH[0])
             data['real']['pvc']['ltH'].append(ltH)
             data['real']['pvc']['ctH'].append(ctH)
@@ -140,9 +140,9 @@ data['noTemp']['pump']['exp'] = list([0, 0])
 # data['noTime_yesCC']['pump']['exp'] = list([5.5, 5.25])
 # data['noTime_noCC']['pump']['exp'] = list([5.5, 5.25])
 
-ltH1 = list(np.random.normal(.2, .025, 50000))
+ltH1 = list(np.random.uniform(0, 1, 50000))
 ctH1 = float(ltH1[0])
-ltH2 = list(np.random.uniform(.2, .025, 50000))
+ltH2 = list(np.random.uniform(0, 1, 50000))
 ctH2 = float(ltH2[0])
 data['real']['pump']['ltH'] = [ltH1, ltH2]
 data['real']['pump']['ctH'] = [ctH1, ctH2]
