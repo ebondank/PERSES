@@ -76,10 +76,10 @@ def epanet(batch, simType, dbCursor, dbObject):
             # Currently functional and testing for failure
             if (simType == 'noTime') or (int(data[simType]['iron']['fS'][index]) == 0):
                 
-                per_failed1 = distList['iron'][math.floor(data[simType]['iron']['exp'][index])]
-                per_failed2 = distList['iron'][math.ceil(data[simType]['iron']['exp'][index])]
-                per_failed = (float(per_failed2) - float(per_failed1)) * (data[simType]['iron']['exp'][index] - math.floor(data[simType]['iron']['exp'][index]) + float(per_failed1))
-                print(per_failed)
+                per_failed1 = distList['iron'][math.floor(float(data[simType]['iron']['exp'][index]))]
+                per_failed2 = distList['iron'][math.ceil(float(data[simType]['iron']['exp'][index]))]
+                per_failed = (float(per_failed2) - float(per_failed1)) * (float(data[simType]['iron']['exp'][index]) - math.floor(float(data[simType]['iron']['exp'][index])) + float(per_failed1))
+
                 if (per_failed > float(data[simType]['iron']['ctH'][index])):
                     normal_run = 0
                     
@@ -121,9 +121,9 @@ def epanet(batch, simType, dbCursor, dbObject):
             # Not currently failed block
             if ((simType == "noTime") or (data[simType]['pump']['fS'][index] == 0)):
 
-                per_failed1 = distList['pump'][math.floor(data[simType]['pump']['exp'][index])]
-                per_failed2 = distList['pump'][math.ceil(data[simType]['pump']['exp'][index])]
-                per_failed = (float(per_failed2) - float(per_failed1)) * (data[simType]['pump']['exp'][index] - math.floor(data[simType]['pump']['exp'][index]) + float(per_failed1))
+                per_failed1 = distList['pump'][math.floor(float(data[simType]['pump']['exp'][index]))]
+                per_failed2 = distList['pump'][math.ceil(float(data[simType]['pump']['exp'][index]))]
+                per_failed = (float(per_failed2) - float(per_failed1)) * (float(data[simType]['pump']['exp'][index]) - math.floor(float(data[simType]['pump']['exp'][index])) + float(per_failed1))
                 if (per_failed > float(data[simType]['pump']['ctH'][index])):
                     normal_run = 0
                     
