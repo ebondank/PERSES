@@ -145,12 +145,12 @@ def epanet(batch, simType, dbCursor, dbObject):
                 if ((simType == 'noTemp') or (simType == 'real')):
                     data[simType]['pump']['exp'][index] = float(data[simType]['pump']['exp'][index]) + float(biHourToYear * tasMaxACT)
                     if (index == 0):
-                        print("testing", data[simType]['pump']['exp'][index])
+                        
                 if (data[simType]['pump']['fS'][index] == 0):
                     epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(11), ct.c_float(1.0))
 
         # Does the hydraulic solving
-        # print('errorcode: %s' % errorcode)
+        
         if (normal_run == 0):
             epalib.ENrunH(time)
             intCount = 1
@@ -158,7 +158,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                 epalib.ENgetnodevalue(ct.c_int(intCount), ct.c_int(11), nodeValue)
                 epalib.ENgetnodeid(ct.c_int(intCount), nodeID)
                 dbCursor.execute('''INSERT INTO NodeData VALUES (?, ?, ?)''', (biHour, (nodeID.value).decode('utf-8'), nodeValue.contents.value))
-                # print(('{} {} {} \n').format(biHour, nodeID.value, nodeValue.contents.value))
+                
                 intCount += 1
         else:
             if (len(normal_run_list[int(biHour % 24)]) == 0):
