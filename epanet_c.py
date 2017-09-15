@@ -124,6 +124,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                 per_failed1 = distList['pump'][math.floor(float(data[simType]['pump']['exp'][index]))]
                 per_failed2 = distList['pump'][math.ceil(float(data[simType]['pump']['exp'][index]))]
                 per_failed = (float(per_failed2) - float(per_failed1)) * (float(data[simType]['pump']['exp'][index]) - math.floor(float(data[simType]['pump']['exp'][index])) + float(per_failed1))
+                print(per_failed)
                 if (per_failed > float(data[simType]['pump']['ctH'][index])):
                     normal_run = 0
                     
