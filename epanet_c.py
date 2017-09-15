@@ -33,12 +33,12 @@ def epanet(batch, simType, dbCursor, dbObject):
                     
             if ((simType == 'noTime') or (int(data[simType]['pvc']['fS'][index]) == 0)):
                 indexSelect = 0
-                if isinstance((biHour / 12), int):
-                    data[simType]['pvc']['prob']['count'] += 1
-                    data[simType]['pvc']['prob'][index]['averageTemp'] = (data[simType]['pvc']['prob'][index]['averageTemp'] * data[simType]['pvc']['prob'][index]['count'] + tasMaxACT) / (data[simType]['pvc']['prob'][index]['count'])
+                # if isinstance((biHour / 12), int):
+                    # data[simType]['pvc']['prob']['count'] += 1
+                    # data[simType]['pvc']['prob'][index]['averageTemp'] = (data[simType]['pvc']['prob'][index]['averageTemp'] * data[simType]['pvc']['prob'][index]['count'] + tasMaxACT) / (data[simType]['pvc']['prob'][index]['count'])
 
-                tasMaxACTAvg = data[simType]['pvc']['prob'][index]['averageTemp']
-                indexSelect = (math.trunc(tasMaxACTAvg) - 19)
+                # tasMaxACTAvg = data[simType]['pvc']['prob'][index]['averageTemp']
+                # indexSelect = (math.trunc(tasMaxACTAvg) - 19)
                 if indexSelect <= 0:
                     indexSelect = 0
                 # indexSelect = indexSelect + int(30 * int(math.trunc(float(data[simType]['pvc']['exp'][index]))))
@@ -92,10 +92,10 @@ def epanet(batch, simType, dbCursor, dbObject):
 
             # Currently functional and testing for failure
             if (simType == 'noTime') or (int(data[simType]['iron']['fS'][index]) == 0):
-                if isinstance((biHour / 12), int):
-                    data[simType]['iron']['prob']['count'] += 1
-                    data[simType]['iron']['prob'][index]['averageTemp'] = (data[simType]['iron']['prob'][index]['averageTemp'] * data[simType]['iron']['prob'][index]['count'] + tasMaxACT) / (data[simType]['iron']['prob'][index]['count'])
-                tasMaxACTAvg = data[simType]['iron']['prob'][index]['averageTemp']
+                # if isinstance((biHour / 12), int):
+                #     data[simType]['iron']['prob']['count'] += 1
+                #     data[simType]['iron']['prob'][index]['averageTemp'] = (data[simType]['iron']['prob'][index]['averageTemp'] * data[simType]['iron']['prob'][index]['count'] + tasMaxACT) / (data[simType]['iron']['prob'][index]['count'])
+                # tasMaxACTAvg = data[simType]['iron']['prob'][index]['averageTemp']
                 # indexSelect = 0
                 # indexSelect = (math.trunc(tasMaxACTAvg) - 19)
                 # if indexSelect < 0:
@@ -173,7 +173,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     # data[simType]['pump']['prob'][index]['averageTemp'] = tasMaxACT
                     # data[simType]['pump']['prob'][index]['count'] = 1
                     if ((simType == 'noTemp') or (simType == 'real')):
-                        data[simType]['pump']['exp'][index] = biHourToYear
+                        data[simType]['pump']['exp'][index] = 0
                         # data[simType]['pump']['tH'][index] = (np.random.uniform(0, 1, 1)[0])
                         indexOfctH = data[simType]['pump']['ltH'][index].index(data[simType]['pump']['ctH'][index]) + 1
                         data[simType]['pump']['ctH'][index] = data[simType]['pump']['ltH'][index][indexOfctH]
