@@ -52,7 +52,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     # This is based off of the 88 hr repair time, can be
                     # changed to w/e
                 if ((simType == 'noTemp') or (simType == 'real')):
-                    data[simType]['pvc']['exp'][index] = float(data[simType]['pvc']['exp'][index]) + biHourToYear * tasMaxACT
+                    data[simType]['pvc']['exp'][index] = float(data[simType]['pvc']['exp'][index]) + (biHourToYear * tasMaxACT)
 
                 if (data[simType]['pvc']['fS'][index] == 0):
                     epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(1.0))
@@ -98,7 +98,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     # changed to w/e
                     data[simType]['iron']['fS'][index] = 44
                 if ((simType == 'noTemp') or (simType == 'real')):
-                    data[simType]['iron']['exp'][index] = float(data[simType]['iron']['exp'][index]) + biHourToYear * tasMaxACT
+                    data[simType]['iron']['exp'][index] = float(data[simType]['iron']['exp'][index]) + (biHourToYear * tasMaxACT)
 
                 if (data[simType]['iron']['fS'][index] == 0):
                     epalib.ENsetlinkvalue(data[simType]['iron']['index'][index], ct.c_int(11), ct.c_float(1.0))
@@ -141,7 +141,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     
                     data[simType]['pump']['fS'][index] = 8
                 if ((simType == 'noTemp') or (simType == 'real')):
-                    data[simType]['pump']['exp'][index] = float(data[simType]['pump']['exp'][index]) + biHourToYear * tasMaxACT
+                    data[simType]['pump']['exp'][index] = float(data[simType]['pump']['exp'][index]) + (biHourToYear * tasMaxACT)
                     if (index == 0):
                         print(data[simType]['pump']['exp'][index])
                 if (data[simType]['pump']['fS'][index] == 0):
