@@ -81,7 +81,7 @@ databaseCursor_noTime.execute('''CREATE TABLE failureData (Bihour_Count real, No
 # Opens the toolkit
 
 batch = 0
-while batch < 83:
+while batch < 133:
     epanet_c.epanet(batch, 'real', databaseCursorReal, databaseObjectReal)
     epanet_c.epanet(batch, 'noTemp', databaseCursor_noTime, databaseObject_noTime)
     # epanet_c.epanet(batch, 'noTime_yesCC', databaseCursor_noTime_yesCC, databaseObject_noTime_yesCC)

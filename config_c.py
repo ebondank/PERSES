@@ -14,7 +14,7 @@ tasFile = open('tasMaxBD85.txt', 'r')
 tasList = tasFile.read().expandtabs().splitlines()
 tasFile.close()
 
-histTasFile = open('histTasMaxBD.txt', 'r')
+histTasFile = open('tasMaxBD.txt', 'r')
 histTasList = histTasFile.read().expandtabs().splitlines()
 histTasFile.close()
 tasMaxACTList = {'real': list(tasList), 'noTime_yesCC': list(tasList), 'noTime_noCC': list(histTasList), 'noTemp': list(histTasList)}
