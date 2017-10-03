@@ -142,7 +142,7 @@ while (linkCounter < linkList.contents.value):
 
 data['real']['pump']['exp'] = list([0, 0])
 data['noTemp']['pump']['exp'] = list([0, 0])
-# data['historical']['pump']['exp'] = list([5.5, 5.25])
+data['historical']['pump']['exp'] = list([0, 0])
 # data['noTime_noCC']['pump']['exp'] = list([5.5, 5.25])
 
 ltH1 = list(np.random.uniform(0, 1, 50000))
