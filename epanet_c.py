@@ -11,7 +11,6 @@ def epanet(batch, simType, dbCursor, dbObject):
     time.contents = ct.c_long(0)
 
     while epaCount < 4380:
-        # using 1 hour timesteps? Make sure to fucking fix
         dayCount = math.floor(biHour / 12)
         tasMaxACT = float(tasMaxACTList[simType][dayCount])
         normal_run = 1
@@ -24,7 +23,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     # pipe enable
                     epalib.ENsetlinkvalue(data[simType]['pvc']['index'][index], ct.c_int(11), ct.c_float(1.0))
                     # no-time simulation config stuff
-                    if ((simType == 'noTemp') or (simType == 'real')):
+                    if ((simType == 'noTemp') or (simType == 'real') or (simType == 'historical')):
                         data[simType]['pvc']['exp'][index] = 0
                 # Pipe disable mid run
                 else:
@@ -37,7 +36,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                 per_failed2 = distList['pvc'][math.ceil(float(data[simType]['pvc']['exp'][index]))]
                 per_failed = (float(per_failed2) - float(per_failed1)) * (float(data[simType]['pvc']['exp'][index]) - math.floor(float(data[simType]['pvc']['exp'][index]))) + float(per_failed1)
                 if (per_failed > float(data[simType]['pvc']['ctH'][index])):
-                    if ((simType == 'noTemp') or (simType == 'real')):
+                    if ((simType == 'noTemp') or (simType == 'real') or (simType == 'historical')):
                         data[simType]['pvc']['exp'][index] = 0
                         # data[simType]['pvc']['tH'][index] = (np.random.uniform(0, 1, 1)[0])
                         indexOfctH = data[simType]['pvc']['ltH'][index].index(data[simType]['pvc']['ctH'][index]) + 1
@@ -51,7 +50,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     data[simType]['pvc']['fS'][index] = 44
                     # This is based off of the 88 hr repair time, can be
                     # changed to w/e
-                if ((simType == 'noTemp') or (simType == 'real')):
+                if ((simType == 'noTemp') or (simType == 'real') or (simType == 'historical')):
                     data[simType]['pvc']['exp'][index] = float(data[simType]['pvc']['exp'][index]) + (biHourToYear * tasMaxACT)
 
                 if (data[simType]['pvc']['fS'][index] == 0):
@@ -83,7 +82,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                 if (per_failed > float(data[simType]['iron']['ctH'][index])):
                     normal_run = 0
                     
-                    if ((simType == 'noTemp') or (simType == 'real')):
+                    if ((simType == 'noTemp') or (simType == 'real') or (simType == 'historical')):
                         data[simType]['iron']['exp'][index] = 0
 
                         indexOfctH = data[simType]['iron']['ltH'][index].index(data[simType]['iron']['ctH'][index]) + 1
@@ -98,7 +97,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     # This is based off of the 88 hr repair time, can be
                     # changed to w/e
                     data[simType]['iron']['fS'][index] = 44
-                if ((simType == 'noTemp') or (simType == 'real')):
+                if ((simType == 'noTemp') or (simType == 'real') or (simType == 'historical')):
                     data[simType]['iron']['exp'][index] = float(data[simType]['iron']['exp'][index]) + (biHourToYear * tasMaxACT)
 
                 if (data[simType]['iron']['fS'][index] == 0):
@@ -112,7 +111,7 @@ def epanet(batch, simType, dbCursor, dbObject):
 
                 if (int(data[simType]['pump']['fS'][index]) <= 0):
                     epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(11), ct.c_float(1.0))
-                    if ((simType == 'noTemp') or (simType == 'real')):
+                    if ((simType == 'noTemp') or (simType == 'real') or (simType == 'historical')):
                         data[simType]['pump']['exp'][index] = 0
                 else:
                     epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(11), ct.c_float(0.0))
@@ -129,7 +128,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                 
                 if (per_failed > float(data[simType]['pump']['ctH'][index])):
                     normal_run = 0
-                    if ((simType == 'noTemp') or (simType == 'real')):
+                    if ((simType == 'noTemp') or (simType == 'real') or (simType == 'historical')):
                         data[simType]['pump']['exp'][index] = 0
                         indexOfctH = data[simType]['pump']['ltH'][index].index(data[simType]['pump']['ctH'][index]) + 1
                         data[simType]['pump']['ctH'][index] = data[simType]['pump']['ltH'][index][indexOfctH]
@@ -142,7 +141,7 @@ def epanet(batch, simType, dbCursor, dbObject):
                     epalib.ENsetlinkvalue(data[simType]['pump']['index'][index], ct.c_int(11), ct.c_float(0.0))
                     
                     data[simType]['pump']['fS'][index] = 8
-                if ((simType == 'noTemp') or (simType == 'real')):
+                if ((simType == 'noTemp') or (simType == 'real') or (simType == 'historical')):
                     data[simType]['pump']['exp'][index] = float(data[simType]['pump']['exp'][index]) + float(biHourToYear * tasMaxACT)
                         
                 if (data[simType]['pump']['fS'][index] == 0):

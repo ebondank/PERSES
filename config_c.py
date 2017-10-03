@@ -6,7 +6,7 @@ epalib = ct.cdll.LoadLibrary('epanet2mingw64.dll')
 biHourToYear = float(.0002283105022831050228310502283105)
 biHour = 0
 
-data = {'real':{'iron':{'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 'index':list(), 'prob': list()}, 'pvc':{'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 'index':list(), 'prob': list()}, 'pump':{'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 'index':list(), 'prob': list()}}, 'noTemp': {'iron':{'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 'index':list(), 'prob': list()}, 'pvc':{'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 'index':list(), 'prob': list()}, 'pump':{'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 'index':list(), 'prob': list()}}, 'noTime_yesCC': {'iron':{'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 'index':list(), 'prob': list()}, 'pvc':{'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 'index':list(), 'prob': list()}, 'pump':{'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 'index':list(), 'prob': list()}}, 'noTime_noCC': {'iron':{'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 'index':list(), 'prob': list()}, 'pvc':{'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 'index':list(), 'prob': list()}, 'pump':{'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 'index':list(), 'prob': list()}}}
+data = {'real':{'iron':{'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 'index':list(), 'prob': list()}, 'pvc':{'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 'index':list(), 'prob': list()}, 'pump':{'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 'index':list(), 'prob': list()}}, 'noTemp': {'iron':{'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 'index':list(), 'prob': list()}, 'pvc':{'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 'index':list(), 'prob': list()}, 'pump':{'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 'index':list(), 'prob': list()}}, 'historical': {'iron':{'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 'index':list(), 'prob': list()}, 'pvc':{'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 'index':list(), 'prob': list()}, 'pump':{'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 'index':list(), 'prob': list()}}, 'noTime_noCC': {'iron':{'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 'index':list(), 'prob': list()}, 'pvc':{'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 'index':list(), 'prob': list()}, 'pump':{'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 'index':list(), 'prob': list()}}}
 
 normal_run_list = [list()]*24
 
@@ -17,7 +17,12 @@ tasFile.close()
 histTasFile = open('tasMaxBD.txt', 'r')
 histTasList = histTasFile.read().expandtabs().splitlines()
 histTasFile.close()
-tasMaxACTList = {'real': list(tasList), 'noTime_yesCC': list(tasList), 'noTime_noCC': list(histTasList), 'noTemp': list(histTasList)}
+
+realHistTasFile = open('histTasMaxBD.txt', 'r')
+realHistTasList = realHistTasFile.read().expandtabs().splitlines()
+realHistTasFile.close()
+
+tasMaxACTList = {'real': list(tasList), 'noTime_noCC': list(histTasList), 'noTemp': list(histTasList), 'historical': list(realHistTasList)}
 
 f = open('north_marin_c.inp', 'r')
 fi = open('placeholder.rpt', 'w')
@@ -56,7 +61,7 @@ linkID = ct.c_char_p(str(10).encode('utf-8'))
 epalib.ENgetlinkindex(linkID, indexReturn1)
 data['real']['pump']['index'].append(indexReturn1.contents)
 data['noTemp']['pump']['index'].append(indexReturn1.contents)
-data['noTime_yesCC']['pump']['index'].append(indexReturn1.contents)
+data['historical']['pump']['index'].append(indexReturn1.contents)
 data['noTime_noCC']['pump']['index'].append(indexReturn1.contents)
 # For the first pipe out of pump 335
 linkID = ct.c_char_p(str(335).encode('utf-8'))
@@ -64,7 +69,7 @@ indexReturn2 = ct.pointer(ct.c_int(0))
 epalib.ENgetlinkindex(linkID, indexReturn2)
 data['real']['pump']['index'].append(indexReturn2.contents)
 data['noTemp']['pump']['index'].append(indexReturn2.contents)
-data['noTime_yesCC']['pump']['index'].append(indexReturn2.contents)
+data['historical']['pump']['index'].append(indexReturn2.contents)
 data['noTime_noCC']['pump']['index'].append(indexReturn2.contents)
 
 # Roughness look to determine pipe type
@@ -79,12 +84,12 @@ while (linkCounter < linkList.contents.value):
             # randironAge2 = float(90)
             data['real']['iron']['exp'].append(0)
             data['noTemp']['iron']['exp'].append(0)
-            data['noTime_yesCC']['iron']['exp'].append(0)
+            data['historical']['iron']['exp'].append(0)
             data['noTime_noCC']['iron']['exp'].append(0)
 
             data['real']['iron']['fS'].append(0)
             data['noTemp']['iron']['fS'].append(0)
-            data['noTime_yesCC']['iron']['fS'].append(0)
+            data['historical']['iron']['fS'].append(0)
             data['noTime_noCC']['iron']['fS'].append(0)
 
             ltH = list(np.random.uniform(0, 1, 50000))
@@ -93,14 +98,14 @@ while (linkCounter < linkList.contents.value):
             data['real']['iron']['ctH'].append(ctH)
             data['noTemp']['iron']['ltH'].append(ltH)
             data['noTemp']['iron']['ctH'].append(ctH)
-            data['noTime_yesCC']['iron']['ltH'].append(ltH)
-            data['noTime_yesCC']['iron']['ctH'].append(ctH)
+            data['historical']['iron']['ltH'].append(ltH)
+            data['historical']['iron']['ctH'].append(ctH)
             data['noTime_noCC']['iron']['ltH'].append(ltH)
             data['noTime_noCC']['iron']['ctH'].append(ctH)
 
             data['real']['iron']['index'].append(indexVal)
             data['noTemp']['iron']['index'].append(indexVal)
-            data['noTime_yesCC']['iron']['index'].append(indexVal)
+            data['historical']['iron']['index'].append(indexVal)
             data['noTime_noCC']['iron']['index'].append(indexVal)
 
         elif (int(currentRough.contents.value) < 140):
@@ -109,12 +114,12 @@ while (linkCounter < linkList.contents.value):
             randNonAgingPVC = float(36)
             data['real']['pvc']['exp'].append(0)
             data['noTemp']['pvc']['exp'].append(0)
-            data['noTime_yesCC']['pvc']['exp'].append(0)
+            data['historical']['pvc']['exp'].append(0)
             data['noTime_noCC']['pvc']['exp'].append(0)
 
             data['real']['pvc']['fS'].append(0)
             data['noTemp']['pvc']['fS'].append(0)
-            data['noTime_yesCC']['pvc']['fS'].append(0)
+            data['historical']['pvc']['fS'].append(0)
             data['noTime_noCC']['pvc']['fS'].append(0)
 
             ltH = list(np.random.uniform(0, 1, 50000))
@@ -123,21 +128,21 @@ while (linkCounter < linkList.contents.value):
             data['real']['pvc']['ctH'].append(ctH)
             data['noTemp']['pvc']['ltH'].append(ltH)
             data['noTemp']['pvc']['ctH'].append(ctH)
-            data['noTime_yesCC']['pvc']['ltH'].append(ltH)
-            data['noTime_yesCC']['pvc']['ctH'].append(ctH)
+            data['historical']['pvc']['ltH'].append(ltH)
+            data['historical']['pvc']['ctH'].append(ctH)
             data['noTime_noCC']['pvc']['ltH'].append(ltH)
             data['noTime_noCC']['pvc']['ctH'].append(ctH)
 
             data['real']['pvc']['index'].append(indexVal)
             data['noTemp']['pvc']['index'].append(indexVal)
-            data['noTime_yesCC']['pvc']['index'].append(indexVal)
+            data['historical']['pvc']['index'].append(indexVal)
             data['noTime_noCC']['pvc']['index'].append(indexVal)
 
     linkCounter += 1
 
 data['real']['pump']['exp'] = list([0, 0])
 data['noTemp']['pump']['exp'] = list([0, 0])
-# data['noTime_yesCC']['pump']['exp'] = list([5.5, 5.25])
+# data['historical']['pump']['exp'] = list([5.5, 5.25])
 # data['noTime_noCC']['pump']['exp'] = list([5.5, 5.25])
 
 ltH1 = list(np.random.uniform(0, 1, 50000))
@@ -148,14 +153,14 @@ data['real']['pump']['ltH'] = [ltH1, ltH2]
 data['real']['pump']['ctH'] = [ctH1, ctH2]
 data['noTemp']['pump']['ltH'] = [ltH1, ltH2]
 data['noTemp']['pump']['ctH'] = [ctH1, ctH2]
-data['noTime_yesCC']['pump']['ltH'] = [ltH1, ltH2]
-data['noTime_yesCC']['pump']['ctH'] = [ctH1, ctH2]
+data['historical']['pump']['ltH'] = [ltH1, ltH2]
+data['historical']['pump']['ctH'] = [ctH1, ctH2]
 data['noTime_noCC']['pump']['ltH'] = [ltH1, ltH2]
 data['noTime_noCC']['pump']['ctH'] = [ctH1, ctH2]
 
 data['real']['pump']['fS'] = list([0, 0])
 data['noTemp']['pump']['fS'] = list([0, 0])
-data['noTime_yesCC']['pump']['fS'] = list([0, 0])
+data['historical']['pump']['fS'] = list([0, 0])
 data['noTime_noCC']['pump']['fS'] = list([0, 0])
 
 pvcWeibullFile = open('pvc_made_cdf.txt', 'r')
@@ -170,7 +175,7 @@ pumpWeibullFile = open('pump_made_cdf.txt', 'r')
 pumpWeibullList = pumpWeibullFile.read().splitlines()
 pumpWeibullFile.close()
 
-simList = ['real', 'noTemp', 'noTime_yesCC', 'noTime_noCC']
+simList = ['real', 'noTemp', 'historical', 'noTime_noCC']
 compList = ['pump', 'pvc', 'iron']
 distList = {'pump': pumpWeibullList, 'pvc': pvcWeibullList, 'iron': ironWeibullList}
 
