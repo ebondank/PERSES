@@ -11,10 +11,12 @@ class component_populations:
     god_factor_list = list()
     component_type = None
     biHourToYear = float(.0002283105022831050228310502283105)
+    db_cur = None
 
 
-    def __init__(self, temp_curve_file, failure_dist_file, component_type, amount):
+    def __init__(self, temp_curve_file, failure_dist_file, component_type, amount, db_cur):
         self.component_type = component_type
+        self.db_cur = db_cur
         f_ = open(temp_curve_file, 'r')
         f_list = f_.read().splitlines()
         f_.close()
@@ -32,13 +34,13 @@ class component_populations:
             count += 1
     
 
-    def failure_evaluation(self, index, time, db_cur):
+    def failure_evaluation(self, index, time, time2):
         per_failed1 = self.distribution_list[math.floor(float(self.exposure_array[index]))]
         per_failed2 = self.distribution_list[math.ceil(float(self.exposure_array[index]))]
         per_failed = (float(per_failed2) - float(per_failed1)) * (float(self.exposure_array[index]) - math.floor(float(self.exposure_array[index]))) + float(per_failed1)
 
         if (per_failed > self.god_factor_list[index]):
-            db_cur.execute('''INSERT INTO failureData VALUES (?, ?, ?)''', (time, index, self.component_type))
+            self.db_cur.execute('''INSERT INTO failureData VALUES (?, ?, ?)''', (time2, index, self.component_type))
             self.exposure_array[index] = 0
         else:
             self.exposure_array[index] = self.exposure_array[index] + (self.biHourToYear * float(self.temp_curve[time]))
@@ -55,12 +57,13 @@ if __name__ == "__main__":
     statistics_list = list()
     pop_list = ["iron", "pvc", "pump"]
     for item in pop_list:
-        statistics_list.append(component_populations("tasMaxBD85.txt", ("{}_made_cdf.txt").format(item), item, 1000))
+        statistics_list.append(component_populations("tasMaxBD85.txt", ("{}_made_cdf.txt").format(item), item, 500, db_cur))
     time = 0
-    goal_time = 350000
+    goal_time = 170000
     while time < goal_time:
         for population in statistics_list:
             for index, value in enumerate(population.god_factor_list):
-                population.failure_evaluation(index, math.floor(time / 12), db_cur)
+                population.failure_evaluation(index, math.floor(time / 12), time)
         time += 1
-
+    db_obj.commit()
+    db_obj.close()
