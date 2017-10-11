@@ -5,3 +5,6 @@ tags
 .vscode
 histTasMaxBD
 */*
+*.png
+*.inp
+*.txt
