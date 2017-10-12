@@ -73,5 +73,5 @@ if __name__ == "__main__":
                 for index, value in enumerate(population.god_factor_list):
                     population.failure_evaluation(index, math.floor(time / 12), time)
             time += 1
-        simulation.commit()
+        db_obj_list[simulation_index].commit()
         db_obj_list[simulation_index].close()
