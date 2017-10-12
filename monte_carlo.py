@@ -46,24 +46,32 @@ class component_populations:
             self.exposure_array[index] = self.exposure_array[index] + (self.biHourToYear * float(self.temp_curve[time]))
 
 if __name__ == "__main__":
-    try:
-        os.remove('statistics.db')
-    except Exception as exp:
-        print('No database here')
-    db_obj = sql.connect('statistics.db')
-    db_cur = db_obj.cursor()
-    db_cur.execute('''CREATE TABLE failureData (Bihour_Count real, NodeID real, componentType real)''')
+    db_cur_list_labels = ["histTasMaxBD", "tasMaxBD", "tasMaxBD85"]
+    db_cur_list = list()
+    db_obj_list = list()
+    for item in db_cur_list_labels:
+        try:
+            os.remove(("{}.db").format(item))
+        except Exception as exp:
+            print('No database here')
+        db_obj = sql.connect(("{}.db").format(item))
+        db_cur = db_obj.cursor()
+        db_cur.execute('''CREATE TABLE failureData (Bihour_Count real, NodeID real, componentType real)''')
+        db_cur_list.append(db_cur)
+        db_obj_list.append(db_obj)
 
     statistics_list = list()
-    pop_list = ["iron", "pvc", "pump"]
-    for item in pop_list:
-        statistics_list.append(component_populations("tasMaxBD85.txt", ("{}_made_cdf.txt").format(item), item, 500, db_cur))
-    time = 0
-    goal_time = 170000
-    while time < goal_time:
-        for population in statistics_list:
-            for index, value in enumerate(population.god_factor_list):
-                population.failure_evaluation(index, math.floor(time / 12), time)
-        time += 1
-    db_obj.commit()
-    db_obj.close()
+    pop_list = ["pump", "pvc", "iron"]
+    for simulation_index, simulation in enumerate(db_cur_list):
+        for index, item in enumerate(pop_list):
+            statistics_list.append(component_populations(("{}.txt").format(db_cur_list_labels[index]), \
+                ("{}_made_cdf.txt").format(item), item, 100, simulation))
+        time = 0
+        goal_time = 350000
+        while time < goal_time:
+            for population in statistics_list:
+                for index, value in enumerate(population.god_factor_list):
+                    population.failure_evaluation(index, math.floor(time / 12), time)
+            time += 1
+        simulation.commit()
+        db_obj_list[simulation_index].close()
