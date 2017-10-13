@@ -34,13 +34,13 @@ class component_populations:
             count += 1
     
 
-    def failure_evaluation(self, index, time, time2):
+    def failure_evaluation(self, index, time, time2, db_cur):
         per_failed1 = self.distribution_list[math.floor(float(self.exposure_array[index]))]
         per_failed2 = self.distribution_list[math.ceil(float(self.exposure_array[index]))]
         per_failed = (float(per_failed2) - float(per_failed1)) * (float(self.exposure_array[index]) - math.floor(float(self.exposure_array[index]))) + float(per_failed1)
 
         if (per_failed > self.god_factor_list[index]):
-            self.db_cur.execute('''INSERT INTO failureData VALUES (?, ?, ?)''', (time2, index, self.component_type))
+            db_cur.execute('''INSERT INTO failureData VALUES (?, ?, ?)''', (time2, index, self.component_type))
             self.exposure_array[index] = 0
         else:
             self.exposure_array[index] = self.exposure_array[index] + (self.biHourToYear * float(self.temp_curve[time]))
@@ -71,7 +71,7 @@ if __name__ == "__main__":
         while time < goal_time:
             for population in statistics_list:
                 for index, value in enumerate(population.god_factor_list):
-                    population.failure_evaluation(index, math.floor(time / 12), time)
+                    population.failure_evaluation(index, math.floor(time / 12), time, simulation)
             time += 1
         db_obj_list[simulation_index].commit()
         db_obj_list[simulation_index].close()
