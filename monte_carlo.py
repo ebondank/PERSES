@@ -60,9 +60,10 @@ if __name__ == "__main__":
         db_cur_list.append(db_cur)
         db_obj_list.append(db_obj)
 
-    statistics_list = list()
+    
     pop_list = ["pump", "pvc", "iron"]
     for simulation_index, simulation in enumerate(db_cur_list):
+        statistics_list = list()
         for index, item in enumerate(pop_list):
             statistics_list.append(component_populations(("{}.txt").format(db_cur_list_labels[index]), \
                 ("{}_made_cdf.txt").format(item), item, 100, simulation))
