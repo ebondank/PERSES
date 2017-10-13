@@ -22,8 +22,11 @@ class component_populations:
         new_list = list()
         for index, item in enumerate(f_list):
             if len(item.split(' ')) != (1 or 0):
-                for item_split in item.split(' '):
-                    new_list.append(item_split)
+                for item_split in item.split():
+                    try:
+                        new_list.append(float(item_split))
+                    except ValueError as val:
+                        print(item_split)
             else:
                 new_list.append(item)
         f_.close()
@@ -36,8 +39,11 @@ class component_populations:
         new_list = list()
         for index, item in enumerate(f_list):
             if len(item.split(' ')) != (1 or 0):
-                for item_split in item.split(' '):
-                    new_list.append(item_split)
+                for item_split in item.split():
+                    try:
+                        new_list.append(float(item_split))
+                    except ValueError as val:
+                        print(item_split)
             else:
                 new_list.append(item)
         self.distribution_list = new_list
