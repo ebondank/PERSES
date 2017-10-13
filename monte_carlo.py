@@ -66,9 +66,11 @@ if __name__ == "__main__":
         statistics_list = list()
         for index, item in enumerate(pop_list):
             statistics_list.append(component_populations(("{}.txt").format(db_cur_list_labels[index]), \
-                ("{}_made_cdf.txt").format(item), item, 1, simulation))
+                ("{}_made_cdf.txt").format(item), pop_list[index], 1, simulation))
+            print(item)
         time = 0
-        goal_time = 350
+        goal_time = 350000
+        print(pop_list)
         while time < goal_time:
             for population in statistics_list:
                 for index, value in enumerate(population.god_factor_list):
