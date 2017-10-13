@@ -18,14 +18,29 @@ class component_populations:
         self.component_type = component_type
         self.db_cur = db_cur
         f_ = open(temp_curve_file, 'r')
-        f_list = f_.read().expandtabs().splitlines().split(' ')
+        f_list = f_.read().expandtabs().splitlines()
+        new_list = list()
+        for index, item in enumerate(f_list):
+            if len(item.split(' ')) != (1 or 0):
+                for item_split in item.split(' ')
+                    new_list.append(item_split)
+            else:
+                new_list.append(item)
         f_.close()
-        self.temp_curve = f_list
+        self.temp_curve = new_list
 
         f_ = open(failure_dist_file, 'r')
-        f_list = f_.read().expandtabs().splitlines().split(' ')
+        f_list = f_.read().expandtabs().splitlines()
+        
         f_.close()
-        self.distribution_list = f_list
+        new_list = list()
+        for index, item in enumerate(f_list):
+            if len(item.split(' ')) != (1 or 0):
+                for item_split in item.split(' ')
+                    new_list.append(item_split)
+            else:
+                new_list.append(item)
+        self.distribution_list = new_list
 
         count = 0
         while (count < amount):
