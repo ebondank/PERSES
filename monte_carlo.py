@@ -61,7 +61,7 @@ if __name__ == "__main__":
         db_obj_list.append(db_obj)
 
     
-    pop_list = ["pump", "pvc", "iron"]
+    pop_list = ["pvc", "pump", "iron"]
     for simulation_index, simulation in enumerate(db_cur_list):
         statistics_list = list()
         for index, item in enumerate(pop_list):
