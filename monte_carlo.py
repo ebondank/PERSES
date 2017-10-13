@@ -65,7 +65,7 @@ class component_populations:
             self.exposure_array[index] = 0
         else:
             try:
-                self.exposure_array[index] = self.exposure_array[index] + (self.biHourToYear * float(self.temp_curve[time]))
+                self.exposure_array[index] = self.exposure_array[index] + (self.biHourToYear * float(self.temp_curve[math.floor(time/12)]))
             except IndexError as idx:
                 print(time)
                 print(self.temp_curve[time-1])
