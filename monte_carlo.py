@@ -22,7 +22,7 @@ class component_populations:
         new_list = list()
         for index, item in enumerate(f_list):
             if len(item.split(' ')) != (1 or 0):
-                for item_split in item.split(' ')
+                for item_split in item.split(' '):
                     new_list.append(item_split)
             else:
                 new_list.append(item)
@@ -36,7 +36,7 @@ class component_populations:
         new_list = list()
         for index, item in enumerate(f_list):
             if len(item.split(' ')) != (1 or 0):
-                for item_split in item.split(' ')
+                for item_split in item.split(' '):
                     new_list.append(item_split)
             else:
                 new_list.append(item)
