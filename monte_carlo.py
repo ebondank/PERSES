@@ -64,7 +64,15 @@ class component_populations:
             self.db_cur.execute('''INSERT INTO failureData VALUES (?, ?, ?)''', (time, index, self.component_type))
             self.exposure_array[index] = 0
         else:
-            self.exposure_array[index] = self.exposure_array[index] + (self.biHourToYear * float(self.temp_curve[time]))
+            try:
+                self.exposure_array[index] = self.exposure_array[index] + (self.biHourToYear * float(self.temp_curve[time]))
+            except IndexError as idx:
+                print(time)
+                print(self.temp_curve[time-1])
+                print(self.exposure_array[index-1])
+                print(index)
+                print(self.exposure_array[index])
+                exit()
 
 if __name__ == "__main__":
     db_cur_list_labels = ["histTasMaxBD", "tasMaxBD", "tasMaxBD85"]
