@@ -18,12 +18,12 @@ class component_populations:
         self.component_type = component_type
         self.db_cur = db_cur
         f_ = open(temp_curve_file, 'r')
-        f_list = f_.read().splitlines()
+        f_list = f_.read().expandtabs().split(' ')
         f_.close()
         self.temp_curve = f_list
 
         f_ = open(failure_dist_file, 'r')
-        f_list = f_.read().splitlines()
+        f_list = f_.read().expandtabs().split(' ')
         f_.close()
         self.distribution_list = f_list
 
