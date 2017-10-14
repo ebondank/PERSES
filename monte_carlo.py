@@ -12,11 +12,13 @@ class component_populations:
     component_type = None
     biHourToYear = float(.0002283105022831050228310502283105)
     db_cur = None
+    table_name = None
 
 
-    def __init__(self, temp_curve_file, failure_dist_file, component_type, amount, db_cur):
+    def __init__(self, temp_curve_file, failure_dist_file, component_type, amount, db_cur, table_name):
         self.component_type = component_type
         self.db_cur = db_cur
+        self.table_name = table_name
         f_ = open(temp_curve_file, 'r')
         f_list = f_.read().expandtabs().splitlines()
         new_list = list()
@@ -61,7 +63,7 @@ class component_populations:
         per_failed = (float(per_failed2) - float(per_failed1)) * (float(self.exposure_array[index]) - math.floor(float(self.exposure_array[index]))) + float(per_failed1)
 
         if (per_failed > self.god_factor_list[index]):
-            self.db_cur.execute('''INSERT INTO failureData VALUES (?, ?, ?)''', (time, index, self.component_type))
+            self.db_cur.execute(('''INSERT INTO {} VALUES (?, ?, ?)''').format(self.table_name), (time, index, self.component_type))
             self.exposure_array[index] = 0
         else:
             try:
@@ -75,27 +77,23 @@ class component_populations:
                 exit()
 
 if __name__ == "__main__":
-    db_cur_list_labels = ["histTasMaxBD", "tasMaxBD", "tasMaxBD85"]
-    db_cur_list = list()
-    db_obj_list = list()
-    for item in db_cur_list_labels:
-        try:
-            os.remove(("{}.db").format(item))
-        except Exception as exp:
-            print('No database here')
-        db_obj = sql.connect(("{}.db").format(item))
-        db_cur = db_obj.cursor()
-        db_cur.execute('''CREATE TABLE failureData (Bihour_Count real, NodeID real, componentType real)''')
-        db_cur_list.append(db_cur)
-        db_obj_list.append(db_obj)
+    db_table_list = ["histTasMaxBD", "tasMaxBD", "tasMaxBD85"]
+    try:
+        os.remove("statistics.db")
+    except Exception as exp:
+        print('No database here')
 
+    db_obj = sql.connect("statistics.db")
+    db_cur = db_obj.cursor()
+
+    for item in db_table_list:
+        db_cur.execute(('''CREATE TABLE {} (Bihour_Count real, NodeID real, componentType real)''').format(item))
     
     pop_list = ["pvc", "pump", "iron"]
-    for simulation_index, simulation in enumerate(db_cur_list):
+    for simulation in db_table_list:
         statistics_list = list()
         for index, item in enumerate(pop_list):
-            statistics_list.append(component_populations(("{}.txt").format(db_cur_list_labels[index]), \
-                ("{}_made_cdf.txt").format(item), pop_list[index], 1, simulation))
+            statistics_list.append(component_populations(("{}.txt").format(simulation), ("{}_made_cdf.txt").format(item), item, 1, db_cur, simulation))
             print(item)
         time = 0
         goal_time = 350000
@@ -105,5 +103,5 @@ if __name__ == "__main__":
                 for index, value in enumerate(population.god_factor_list):
                     population.failure_evaluation(index, time)
             time += 1
-        db_obj_list[simulation_index].commit()
-        db_obj_list[simulation_index].close()
+        db_obj.commit()
+    db_obj.close()
