@@ -16,7 +16,7 @@ db_table_list = ["histTasMaxBD", "tasMaxBD", "tasMaxBD85"]
 break_count_by_simulation_list = list()
 for simulation_index, simulation in enumerate(db_table_list):
     count = 0
-    break_count_by_simulation_list.append(list(), list(), list())
+    break_count_by_simulation_list.append([list(), list(), list()])
     while count < 83:
         break_count_by_simulation_list[simulation_index][0].append(0)
         break_count_by_simulation_list[simulation_index][1].append(0)
