@@ -32,11 +32,11 @@ for simulation_index, simulation in enumerate(db_table_list):
     for item in com.execute(('SELECT * FROM {} ORDER BY Bihour_Count ASC').format(simulation)):
         thisIndex = int(np.floor((int(item[0]) / 4380)))
         if item[2] == "pump":
-            break_count_by_simulation_list[simulation_index][0] += 1
+            break_count_by_simulation_list[simulation_index][0][thisIndex] += 1
         if item[2] == "pvc":
-            break_count_by_simulation_list[simulation_index][1] += 1
+            break_count_by_simulation_list[simulation_index][1][thisIndex] += 1
         if item[2] == "iron":
-            break_count_by_simulation_list[simulation_index][2] += 1
+            break_count_by_simulation_list[simulation_index][2][thisIndex] += 1
 
 
     print('\n\n\n')
