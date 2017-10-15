@@ -92,8 +92,9 @@ if __name__ == "__main__":
     pop_list = ["pvc", "pump", "iron"]
     for simulation in db_table_list:
         statistics_list = list()
-        for index, item in enumerate(pop_list):
-            statistics_list.append(component_populations(("{}.txt").format(simulation), ("{}_made_cdf.txt").format(item), item, 1, db_cur, simulation))
+        for item in pop_list:
+            new_simulation = component_populations(("{}.txt").format(simulation), ("{}_made_cdf.txt").format(item), item, 1, db_cur, simulation)
+            statistics_list.append(new_simulation)
             print(item)
         time = 0
         goal_time = 350000
