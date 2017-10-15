@@ -58,6 +58,8 @@ class component_populations:
     
 
     def failure_evaluation(self, index, time):
+        if self.component_type != "pump":
+            print("workign???")
         per_failed1 = self.distribution_list[math.floor(float(self.exposure_array[index]))]
         per_failed2 = self.distribution_list[math.ceil(float(self.exposure_array[index]))]
         per_failed = (float(per_failed2) - float(per_failed1)) * (float(self.exposure_array[index]) - math.floor(float(self.exposure_array[index]))) + float(per_failed1)
