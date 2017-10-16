@@ -83,7 +83,7 @@ if __name__ == "__main__":
         for index, item in enumerate(pop_list):
             temp_curve = ("{}.txt").format(simulation)
             cdf_curve = ("{}_made_cdf.txt").format(item)
-            new_simulation = component_populations(temp_curve, cdf_curve, item, 10, db_cur, simulation)
+            new_simulation = component_populations(temp_curve, cdf_curve, item, 250, db_cur, simulation)
             statistics_dict[("{}_{}").format(simulation, item)] = new_simulation
             print(item)
         time = 0
