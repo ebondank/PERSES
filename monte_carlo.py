@@ -57,7 +57,6 @@ class component_populations(object):
         per_failed = (float(per_failed2) - float(per_failed1)) * (float(self.exposure_array[index]) - math.floor(float(self.exposure_array[index]))) + float(per_failed1)
 
         if (per_failed > self.god_factor_list[index]):
-            print(self.table_name, self.component_type, self.god_factor_list[index])
             self.db_cur.execute(('''INSERT INTO {} VALUES (?, ?, ?)''').format(self.table_name), (time, index, component_type))
             self.exposure_array[index] = 0
             self.god_factor_list[index] = float(np.random.uniform(0, 1))
@@ -89,7 +88,6 @@ if __name__ == "__main__":
             print(item)
         time = 0
         goal_time = 160000
-        print(pop_list)
         while time < goal_time:
             for population in statistics_dict.keys():
                 testing_tuple_bug = enumerate(statistics_dict[population].god_factor_list)
