@@ -4,21 +4,13 @@ import numpy as np
 import os
 
 
-class component_populations:
-    exposure_array = list()
-    temp_curve = list()
-    distribution_list = list()
-    god_factor_list = list()
-    component_type = None
-    biHourToYear = float(.0002283105022831050228310502283105)
-    db_cur = None
-    table_name = None
-
-
+class component_populations(object):
+    
     def __init__(self, temp_curve_file, failure_dist_file, component_type, amount, db_cur, table_name):
         self.component_type = component_type
         self.db_cur = db_cur
         self.table_name = table_name
+        self.biHourToYear = .0002283105022831050228310502283105
         f_ = open(temp_curve_file, 'r')
         f_list = f_.read().expandtabs().splitlines()
         new_list = list()
@@ -49,7 +41,8 @@ class component_populations:
             else:
                 new_list.append(item)
         self.distribution_list = new_list
-
+        self.god_factor_list = list()
+        self.exposure_array = list()
         count = 0
         while (count < amount):
             self.god_factor_list.append(float(np.random.uniform(0, 1)))
@@ -57,26 +50,20 @@ class component_populations:
             count += 1
     
 
-    def failure_evaluation(self, index, time):
-        if self.component_type != "pump":
-            print("workign???")
+    def failure_evaluation(self, index, time, component_type):
+        
         per_failed1 = self.distribution_list[math.floor(float(self.exposure_array[index]))]
         per_failed2 = self.distribution_list[math.ceil(float(self.exposure_array[index]))]
         per_failed = (float(per_failed2) - float(per_failed1)) * (float(self.exposure_array[index]) - math.floor(float(self.exposure_array[index]))) + float(per_failed1)
 
         if (per_failed > self.god_factor_list[index]):
-            self.db_cur.execute(('''INSERT INTO {} VALUES (?, ?, ?)''').format(self.table_name), (time, index, self.component_type))
+            print(self.table_name, self.component_type, self.god_factor_list[index])
+            self.db_cur.execute(('''INSERT INTO {} VALUES (?, ?, ?)''').format(self.table_name), (time, index, component_type))
             self.exposure_array[index] = 0
+            self.god_factor_list[index] = float(np.random.uniform(0, 1))
         else:
-            try:
-                self.exposure_array[index] = self.exposure_array[index] + (self.biHourToYear * float(self.temp_curve[math.floor(time/12)]))
-            except IndexError as idx:
-                print(time)
-                print(self.temp_curve[time-1])
-                print(self.exposure_array[index-1])
-                print(index)
-                print(self.exposure_array[index])
-                exit()
+            self.exposure_array[index] = self.exposure_array[index] + (self.biHourToYear * float(self.temp_curve[math.floor(time/12)]))
+            
 
 if __name__ == "__main__":
     db_table_list = ["histTasMaxBD", "tasMaxBD", "tasMaxBD85"]
@@ -91,20 +78,24 @@ if __name__ == "__main__":
     for item in db_table_list:
         db_cur.execute(('''CREATE TABLE {} (Bihour_Count real, NodeID real, componentType real)''').format(item))
     
-    pop_list = ["pvc", "pump", "iron"]
+    pop_list = ["pump", "pvc", "iron"]
     for simulation in db_table_list:
-        statistics_list = list()
-        for item in pop_list:
-            new_simulation = component_populations(("{}.txt").format(simulation), ("{}_made_cdf.txt").format(item), item, 1, db_cur, simulation)
-            statistics_list.append(new_simulation)
+        statistics_dict = dict()
+        for index, item in enumerate(pop_list):
+            temp_curve = ("{}.txt").format(simulation)
+            cdf_curve = ("{}_made_cdf.txt").format(item)
+            new_simulation = component_populations(temp_curve, cdf_curve, item, 10, db_cur, simulation)
+            statistics_dict[("{}_{}").format(simulation, item)] = new_simulation
             print(item)
         time = 0
-        goal_time = 350000
+        goal_time = 160000
         print(pop_list)
         while time < goal_time:
-            for population in statistics_list:
-                for index, value in enumerate(population.god_factor_list):
-                    population.failure_evaluation(index, time)
+            for population in statistics_dict.keys():
+                testing_tuple_bug = enumerate(statistics_dict[population].god_factor_list)
+                for index, value in testing_tuple_bug:
+                    component_type = list(population.split('_'))[1]
+                    statistics_dict[population].failure_evaluation(index, time, component_type)
             time += 1
-        db_obj.commit()
+    db_obj.commit()
     db_obj.close()
