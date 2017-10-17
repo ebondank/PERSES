@@ -87,7 +87,7 @@ if __name__ == "__main__":
             statistics_dict[("{}_{}").format(simulation, item)] = new_simulation
             print(item)
         time = 0
-        goal_time = 160000
+        goal_time = 350000
         while time < goal_time:
             for population in statistics_dict.keys():
                 testing_tuple_bug = enumerate(statistics_dict[population].god_factor_list)
