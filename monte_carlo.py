@@ -6,10 +6,12 @@ import os
 
 class component_populations(object):
     
-    def __init__(self, temp_curve_file, failure_dist_file, component_type, amount, db_cur, table_name):
+    def __init__(self, temp_curve_file, failure_dist_file, component_type, component_god_factor_list, amount, db_cur, table_name):
         self.component_type = component_type
         self.db_cur = db_cur
         self.table_name = table_name
+        self.god_factor_list = component_god_factor_list
+        self.god_factor_count = 0
         self.biHourToYear = .0002283105022831050228310502283105
         f_ = open(temp_curve_file, 'r')
         f_list = f_.read().expandtabs().splitlines()
@@ -41,11 +43,11 @@ class component_populations(object):
             else:
                 new_list.append(item)
         self.distribution_list = new_list
-        self.god_factor_list = list()
+        self.god_factor_list_current = list()
         self.exposure_array = list()
         count = 0
         while (count < amount):
-            self.god_factor_list.append(float(np.random.uniform(0, 1)))
+            self.god_factor_list_current.append(self.god_factor_list[0][self.god_factor_count])
             self.exposure_array.append(0)
             count += 1
     
@@ -56,10 +58,11 @@ class component_populations(object):
         per_failed2 = self.distribution_list[math.ceil(float(self.exposure_array[index]))]
         per_failed = (float(per_failed2) - float(per_failed1)) * (float(self.exposure_array[index]) - math.floor(float(self.exposure_array[index]))) + float(per_failed1)
 
-        if (per_failed > self.god_factor_list[index]):
+        if (per_failed > self.god_factor_list_current[index]):
             self.db_cur.execute(('''INSERT INTO {} VALUES (?, ?, ?)''').format(self.table_name), (time, index, component_type))
             self.exposure_array[index] = 0
-            self.god_factor_list[index] = float(np.random.uniform(0, 1))
+            self.god_factor_count += 1
+            self.god_factor_list_current[index] = self.god_factor_list[self.god_factor_count]
         else:
             self.exposure_array[index] = self.exposure_array[index] + (self.biHourToYear * float(self.temp_curve[math.floor(time/12)]))
             
@@ -78,12 +81,22 @@ if __name__ == "__main__":
         db_cur.execute(('''CREATE TABLE {} (Bihour_Count real, NodeID real, componentType real)''').format(item))
     
     pop_list = ["pump", "pvc", "iron"]
+    god_factor_simulation_syncing = {"pump": [], "pvc": [], "iron": []}
+    component_count = 250
+    count = 0
+
+    # {"pump": [1, .2, .6], etc.}
+    while (count < component_count):
+        for item in pop_list:
+            god_factor_simulation_syncing[item].append(list(np.random.uniform(0, 1, 1000)))
+        count += 1
     for simulation in db_table_list:
         statistics_dict = dict()
         for index, item in enumerate(pop_list):
             temp_curve = ("{}.txt").format(simulation)
             cdf_curve = ("{}_made_cdf.txt").format(item)
-            new_simulation = component_populations(temp_curve, cdf_curve, item, 250, db_cur, simulation)
+            gf = god_factor_simulation_syncing[item]
+            new_simulation = component_populations(temp_curve, cdf_curve, item, gf, component_count, db_cur, simulation)
             statistics_dict[("{}_{}").format(simulation, item)] = new_simulation
             print(item)
         time = 0
