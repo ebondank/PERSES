@@ -64,7 +64,7 @@ class component_populations(object):
             
 
 if __name__ == "__main__":
-    db_table_list = ["histTasMaxBD", "csiro_mk_45", "csiro_mk_85"]
+    db_table_list = ["histTasMaxBD", "csiromk45", "csiromk85"]
     try:
         os.remove("statistics.db")
     except Exception as exp:
@@ -78,7 +78,7 @@ if __name__ == "__main__":
     
     pop_list = ["pump", "pvc", "iron"]
     god_factor_simulation_syncing = [list(), list(), list()]
-    component_count = 250
+    component_count = 1
     count = 0
 
     # {"pump": [1, .2, .6], etc.}
@@ -98,6 +98,7 @@ if __name__ == "__main__":
             print(item)
         time = 0
         goal_time = 350000
+        # goal_time = 100000
         while time < goal_time:
             for population in statistics_dict.keys():
                 index = 0

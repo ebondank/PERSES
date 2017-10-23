@@ -4,7 +4,7 @@ import sqlite3 as sql
 
 # file1 = open(os.path.expanduser('8-08-17/noTime_yesCC_ironPipeFail.txt'), 'r')
 # list1 = file1.read().splitlines()
-Path = '10-23-17/statistics.db'
+Path = 'statistics.db'
 run_time = 80
 db = sql.connect(Path)
 com = db.cursor()
@@ -13,7 +13,7 @@ yearList = list()
 breakCountpvc = list()
 breakCountiron = list()
 breakCountpump = list()
-db_table_list = ["histTasMaxBD", "csiro_mk_45", "csiro_mk_85"]
+db_table_list = ["histTasMaxBD", "csiromk45", "csiromk85"]
 break_count_by_simulation_list = list()
 for simulation_index, simulation in enumerate(db_table_list):
     count = 0
