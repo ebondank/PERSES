@@ -9,7 +9,7 @@ try:
 except Exception as exp:
     print('No database here')
 try:
-    os.remove('noTime_yesCC0.db')
+    os.remove('historical0.db')
 except Exception as exp:
     print('No database here')
 try:
@@ -48,13 +48,13 @@ failureFile.close()
 failureFile = open('noTime_noCC_pumpFail.txt', 'w')
 
 failureFile.close()
-failureFile = open('noTime_yesCC_ironPipeFail.txt', 'w')
+failureFile = open('historical_ironPipeFail.txt', 'w')
 
 failureFile.close()
-failureFile = open('noTime_yesCC_pvcPipeFail.txt', 'w')
+failureFile = open('historical_pvcPipeFail.txt', 'w')
 
 failureFile.close()
-failureFile = open('noTime_yesCC_pumpFail.txt', 'w')
+failureFile = open('historical_pumpFail.txt', 'w')
 
 failureFile.close()
 # Creating all three database
@@ -63,10 +63,10 @@ databaseCursorReal = databaseObjectReal.cursor()
 databaseCursorReal.execute('''CREATE TABLE NodeData (Bihour_Count real, NodeID real, Pressure real)''')
 databaseCursorReal.execute('''CREATE TABLE failureData (Bihour_Count real, NodeID real, componentType real)''')
 
-databaseObject_noTime_yesCC = sql.connect(('noTime_yesCC{}.db').format(os.environ['SIMCOUNT']))
-databaseCursor_noTime_yesCC = databaseObject_noTime_yesCC.cursor()
-databaseCursor_noTime_yesCC.execute('''CREATE TABLE NodeData (Bihour_Count real, NodeID real, Pressure real)''')
-databaseCursor_noTime_yesCC.execute('''CREATE TABLE failureData (Bihour_Count real, NodeID real, componentType real)''')
+databaseObject_historical = sql.connect(('historical{}.db').format(os.environ['SIMCOUNT']))
+databaseCursor_historical = databaseObject_historical.cursor()
+databaseCursor_historical.execute('''CREATE TABLE NodeData (Bihour_Count real, NodeID real, Pressure real)''')
+databaseCursor_historical.execute('''CREATE TABLE failureData (Bihour_Count real, NodeID real, componentType real)''')
 
 databaseObject_noTime_noCC = sql.connect(('noTime_noCC{}.db').format(os.environ['SIMCOUNT']))
 databaseCursor_noTime_noCC = databaseObject_noTime_noCC.cursor()
@@ -81,11 +81,13 @@ databaseCursor_noTime.execute('''CREATE TABLE failureData (Bihour_Count real, No
 # Opens the toolkit
 
 batch = 0
-while batch < 83:
-    # epanet_c.epanet(batch, 'real', databaseCursorReal, databaseObjectReal)
-    # epanet_c.epanet(batch, 'noTemp', databaseCursor_noTime, databaseObject_noTime)
-    epanet_c.epanet(batch, 'noTime_yesCC', databaseCursor_noTime_yesCC, databaseObject_noTime_yesCC)
-    epanet_c.epanet(batch, 'noTime_noCC', databaseCursor_noTime_noCC, databaseObject_noTime_noCC)
+while batch < 133:
+    epanet_c.epanet(batch, 'real', databaseCursorReal, databaseObjectReal)
+    epanet_c.epanet(batch, 'noTemp', databaseCursor_noTime, databaseObject_noTime)
+    epanet_c.epanet(batch, 'historical', databaseCursor_historical, databaseObject_historical)
+    
+    # epanet_c.epanet(batch, 'noTime_yesCC', databaseCursor_noTime_yesCC, databaseObject_noTime_yesCC)
+    # epanet_c.epanet(batch, 'noTime_noCC', databaseCursor_noTime_noCC, databaseObject_noTime_noCC)
     print(batch)
     batch += 1
 
