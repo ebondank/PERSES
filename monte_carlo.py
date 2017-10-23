@@ -78,7 +78,7 @@ if __name__ == "__main__":
     
     pop_list = ["pump", "pvc", "iron"]
     god_factor_simulation_syncing = [list(), list(), list()]
-    component_count = 100
+    component_count = 1
     count = 0
 
     # {"pump": [1, .2, .6], etc.}
@@ -98,6 +98,7 @@ if __name__ == "__main__":
             print(item)
         time = 0
         goal_time = 350000
+        # goal_time = 100000
         while time < goal_time:
             for population in statistics_dict.keys():
                 index = 0
