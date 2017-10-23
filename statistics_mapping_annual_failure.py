@@ -13,7 +13,7 @@ yearList = list()
 breakCountpvc = list()
 breakCountiron = list()
 breakCountpump = list()
-db_table_list = ["histTasMaxBD", "csiro_mk_45", "csiro_mk_85"]
+db_table_list = ["histTasMaxBD", "csiromk45", "csiromk85"]
 break_count_by_simulation_list = list()
 for simulation_index, simulation in enumerate(db_table_list):
     count = 0
