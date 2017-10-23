@@ -4,8 +4,8 @@ import sqlite3 as sql
 
 # file1 = open(os.path.expanduser('8-08-17/noTime_yesCC_ironPipeFail.txt'), 'r')
 # list1 = file1.read().splitlines()
-Path = 'statistics.db'
-run_time = 42
+Path = '10-16-17/statistics.db'
+run_time = 80
 db = sql.connect(Path)
 com = db.cursor()
 
