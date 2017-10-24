@@ -64,7 +64,7 @@ class component_populations(object):
             
 
 if __name__ == "__main__":
-    db_table_list = ["histTasMaxBD", "csiromk45", "csiromk85"]
+    db_table_list = ["histTasMaxBD", "_45", "_85"]
     try:
         os.remove("statistics.db")
     except Exception as exp:
