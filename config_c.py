@@ -10,11 +10,11 @@ data = {'real':{'iron':{'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 
 
 normal_run_list = [list()]*24
 
-tasFile = open('_85_.txt', 'r')
+tasFile = open('c85.txt', 'r')
 tasList = tasFile.read().expandtabs().splitlines()
 tasFile.close()
 
-histTasFile = open('_45_.txt', 'r')
+histTasFile = open('c45.txt', 'r')
 histTasList = histTasFile.read().expandtabs().splitlines()
 histTasFile.close()
 
