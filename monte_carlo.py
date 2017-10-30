@@ -64,7 +64,7 @@ class component_populations(object):
             
 
 if __name__ == "__main__":
-    db_table_list = ["histTasMaxBD", "_45_", "_85_"]
+    db_table_list = ["histTasMaxBD", "c45", "c85"]
     try:
         os.remove("statistics.db")
     except Exception as exp:
@@ -75,10 +75,11 @@ if __name__ == "__main__":
 
     for item in db_table_list:
         db_cur.execute(('''CREATE TABLE {} (Bihour_Count real, NodeID real, componentType real)''').format(item))
+        db_obj.commit()
     
     pop_list = ["pump", "pvc", "iron"]
     god_factor_simulation_syncing = [list(), list(), list()]
-    component_count = 100
+    component_count = 250
     count = 0
 
     # {"pump": [1, .2, .6], etc.}
