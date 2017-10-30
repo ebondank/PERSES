@@ -1,5 +1,5 @@
 # f_ = open("temp_output/ccsm4_85.txt", 'r')
-f_ = open("_85_.txt", 'r')
+f_ = open("_45_max.txt", 'r')
 f_list = f_.read().splitlines()
 f_.close()
 f_list.pop(0)

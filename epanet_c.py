@@ -2,8 +2,6 @@ import math
 import ctypes as ct
 from config_c import *
 
-
-
 def epanet(batch, simType, dbCursor, dbObject):
     epaCount = 0
     biHour = (batch * 4380)
