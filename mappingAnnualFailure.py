@@ -4,7 +4,7 @@ import sqlite3 as sql
 
 # file1 = open(os.path.expanduser('8-08-17/noTime_yesCC_ironPipeFail.txt'), 'r')
 # list1 = file1.read().splitlines()
-Path = '10-13-17/histTasMaxBD.db'
+Path = '10-31-17/historical0.db'
 db = sql.connect(Path)
 com = db.cursor()
 
@@ -13,7 +13,7 @@ breakCountpvc = list()
 breakCountiron = list()
 breakCountpump = list()
 count = 0
-while count < 83:
+while count < 133:
     yearList.append(count)
     breakCountpvc.append(0)
     breakCountiron.append(0)

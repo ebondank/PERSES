@@ -3,7 +3,7 @@ import math
 import os
 
 
-Path = '10-3-17/realistic0.db'
+Path = '10-31-17/historical0.db'
 print(Path)
 db = sql.connect(Path)
 com = db.cursor()
@@ -57,8 +57,5 @@ for row in list1:
         except Exception:
             print(row, "Broken")
 
-for item in dbOUCount:
-    print(item)
-print("\n\n\n")
-for item in dbOUCount2:
-    print(item)
+for index, item in enumerate(dbOUCount):
+    print(("{} {}").format(dbOUCount2[index], item))

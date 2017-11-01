@@ -5,3 +5,5 @@
 *.inp
 temp_output/*
 temp_output_2099/*
+*.db
+*/*.db
