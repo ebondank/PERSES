@@ -4,7 +4,7 @@ import sqlite3 as sql
 
 # file1 = open(os.path.expanduser('8-08-17/noTime_yesCC_ironPipeFail.txt'), 'r')
 # list1 = file1.read().splitlines()
-Path = '10-31-17/historical0.db'
+Path = '10-31-17/realistic0.db'
 db = sql.connect(Path)
 com = db.cursor()
 
@@ -30,11 +30,5 @@ for item in com.execute('SELECT * FROM failureData ORDER BY Bihour_Count ASC'):
         breakCountpump[thisIndex] = breakCountpump[thisIndex] + 1
 
 for index, iteam in enumerate(breakCountpvc):
-    print(('{}').format(breakCountpvc[index]))
+    print(('{} {} {}').format(breakCountpump[index], breakCountpvc[index], breakCountiron[index]))
 
-print('\n\n\n')
-for index, iteam in enumerate(breakCountpump):
-    print(('{}').format(breakCountpump[index]))
-print('\n\n\n')
-for index, iteam in enumerate(breakCountiron):
-    print(('{}').format(breakCountiron[index]))

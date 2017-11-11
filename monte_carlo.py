@@ -79,7 +79,7 @@ if __name__ == "__main__":
     
     pop_list = ["pump", "pvc", "iron"]
     god_factor_simulation_syncing = [list(), list(), list()]
-    component_count = 250
+    component_count = 2500
     count = 0
 
     # {"pump": [1, .2, .6], etc.}
