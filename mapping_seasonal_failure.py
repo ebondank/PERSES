@@ -17,6 +17,7 @@ while c < 12:
     c += 1
 
 for item in com.execute('SELECT * FROM failureData ORDER BY Bihour_Count ASC'):
+    print(item)
     day_count = float(item[0])
     month = (math.floor(day_count / 365)) % 12
     month_bins[month] = month_bins[month] + 1

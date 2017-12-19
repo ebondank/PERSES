@@ -31,4 +31,3 @@ for item in com.execute('SELECT * FROM failureData ORDER BY Bihour_Count ASC'):
 
 for index, iteam in enumerate(breakCountpvc):
     print(('{} {} {}').format(breakCountpump[index], breakCountpvc[index], breakCountiron[index]))
-

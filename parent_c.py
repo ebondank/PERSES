@@ -3,94 +3,30 @@ import sqlite3 as sql
 from config_c import *
 import epanet_c
 
-# TODO Environment variables for server aren't persisting for some reason
-try:
-    os.remove('realistic0.db')
-except Exception as exp:
-    print('No database here')
-try:
-    os.remove('historical0.db')
-except Exception as exp:
-    print('No database here')
-try:
-    os.remove('noTime_noCC0.db')
-except Exception as exp:
-    print('No database here')
-try:
-    os.remove('noTemp0.db')
-except Exception as exp:
-    print('No database here')
-
-failureFile = open('real_ironPipeFail.txt', 'w')
-
-failureFile.close()
-failureFile = open('real_pvcPipeFail.txt', 'w')
-
-failureFile.close()
-failureFile = open('real_pumpFail.txt', 'w')
-
-failureFile.close()
-failureFile = open('noTemp_ironPipeFail.txt', 'w')
-
-failureFile.close()
-failureFile = open('noTemp_pvcPipeFail.txt', 'w')
-
-failureFile.close()
-failureFile = open('noTemp_pumpFail.txt', 'w')
-
-failureFile.close()
-failureFile = open('noTime_noCC_ironPipeFail.txt', 'w')
-
-failureFile.close()
-failureFile = open('noTime_noCC_pvcPipeFail.txt', 'w')
-
-failureFile.close()
-failureFile = open('noTime_noCC_pumpFail.txt', 'w')
-
-failureFile.close()
-failureFile = open('historical_ironPipeFail.txt', 'w')
-
-failureFile.close()
-failureFile = open('historical_pvcPipeFail.txt', 'w')
-
-failureFile.close()
-failureFile = open('historical_pumpFail.txt', 'w')
-
-failureFile.close()
-# Creating all three database
-databaseObjectReal = sql.connect(('realistic{}.db').format(os.environ['SIMCOUNT']))
-databaseCursorReal = databaseObjectReal.cursor()
-databaseCursorReal.execute('''CREATE TABLE NodeData (Bihour_Count real, NodeID real, Pressure real)''')
-databaseCursorReal.execute('''CREATE TABLE failureData (Bihour_Count real, NodeID real, componentType real)''')
-
-databaseObject_historical = sql.connect(('historical{}.db').format(os.environ['SIMCOUNT']))
-databaseCursor_historical = databaseObject_historical.cursor()
-databaseCursor_historical.execute('''CREATE TABLE NodeData (Bihour_Count real, NodeID real, Pressure real)''')
-databaseCursor_historical.execute('''CREATE TABLE failureData (Bihour_Count real, NodeID real, componentType real)''')
-
-databaseObject_noTime_noCC = sql.connect(('noTime_noCC{}.db').format(os.environ['SIMCOUNT']))
-databaseCursor_noTime_noCC = databaseObject_noTime_noCC.cursor()
-databaseCursor_noTime_noCC.execute('''CREATE TABLE NodeData (Bihour_Count real, NodeID real, Pressure real)''')
-databaseCursor_noTime_noCC.execute('''CREATE TABLE failureData (Bihour_Count real, NodeID real, componentType real)''')
-
-databaseObject_noTime = sql.connect(('noTemp{}.db').format(os.environ['SIMCOUNT']))
-databaseCursor_noTime = databaseObject_noTime.cursor()
-databaseCursor_noTime.execute('''CREATE TABLE NodeData (Bihour_Count real, NodeID real, Pressure real)''')
-databaseCursor_noTime.execute('''CREATE TABLE failureData (Bihour_Count real, NodeID real, componentType real)''')
-
-# Opens the toolkit
+# Creating all the databases
+simsToRun = ['real', 'noTemp', 'historical']
+conn_dict = dict()
+cursor_dict = dict()
+for sim in simsToRun:
+    for comp_type in threeSim.keys():
+        f_ = open(('{}_{}.txt').format(sim, comp_type), 'w')
+        f_.close()
+    try:
+        os.remove(('{}.db').format(sim))
+    except Exception as exp:
+        print('No database here')
+    conn_dict[sim] = sql.connect(('{}.db').format(sim))
+    cursor_dict[sim] = conn_dict[sim].cursor()
+    cursor_dict[sim].execute('''CREATE TABLE NodeData (Bihour_Count real, NodeID real, Pressure real)''')
+    cursor_dict[sim].execute('''CREATE TABLE failureData (Bihour_Count real, NodeID real, componentType real)''')
 
 batch = 0
-while batch < 133:
-    epanet_c.epanet(batch, 'real', databaseCursorReal, databaseObjectReal)
-    epanet_c.epanet(batch, 'noTemp', databaseCursor_noTime, databaseObject_noTime)
-    epanet_c.epanet(batch, 'historical', databaseCursor_historical, databaseObject_historical)
-    
-    # epanet_c.epanet(batch, 'noTime_yesCC', databaseCursor_noTime_yesCC, databaseObject_noTime_yesCC)
-    # epanet_c.epanet(batch, 'noTime_noCC', databaseCursor_noTime_noCC, databaseObject_noTime_noCC)
+while batch < 150:
+    for sim in simsToRun:
+        epanet_c.epanet(batch, sim, cursor_dict[sim], conn_dict[sim])
+
     print(batch)
     batch += 1
 
 epalib.ENcloseH()
 epalib.ENclose()
-os.environ['SIMCOUNT'] = str(int(os.environ['SIMCOUNT']) + 1)
