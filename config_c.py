@@ -1,6 +1,7 @@
+import os
+import math
 import numpy as np
 import ctypes as ct
-import math
 
 epalib = ct.cdll.LoadLibrary('epanet2mingw64.dll')
 biHourToYear = float(.0002283105022831050228310502283105)
@@ -93,11 +94,13 @@ for key in data:
         data[key]['pump']['motor_ctH'].append(value[0])
         data[key]['pump']['elec_ctH'].append(value[0])
 
-with open('\\new_cdf\\pvc_made_cdf.txt', 'r') as pvc_exp_f:
+
+with open(os.path.relpath('new_cdf\\pvc_made_cdf.txt'), 'r') as pvc_exp_f:
     pvc_exp_list = pvc_exp_f.read().splitlines()
-with open('\\new_cdf\\iron_made_cdf.txt', 'r') as iron_exp_f:
+with open(os.path.relpath('new_cdf\\iron_made_cdf.txt'), 'r') as iron_exp_f:
     iron_exp_list = iron_exp_f.read().splitlines()
-with open('\\new_cdf\\mid_case_elec.txt', 'r') as elec_exp_f, open('\\new_cdf\\mid_case_motor.txt', 'r') as motor_exp_f:
+with open(os.path.relpath('new_cdf\\mid_case_elec.txt'), 'r') as elec_exp_f, \
+     open(os.path.relpath('\\new_cdf\\mid_case_motor.txt'), 'r') as motor_exp_f:
     elec_exp_list = elec_exp_f.read().splitlines()
     motor_exp_list = motor_exp_f.read().splitlines()
 distList = {'motor': motor_exp_list, 'elec': elec_exp_list, 'pvc': pvc_exp_list, 'iron': iron_exp_list}
