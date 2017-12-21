@@ -57,11 +57,11 @@ with open('north_marin_c.inp', 'r') as f, open('placeholder.rpt', 'w') as fi:
 
     # Roughness look to determine pipe type
     # Using pure c integers in the lists
+    iron_count = 1
+    pvc_count = 1
     while (linkCounter < linkList.contents.value):
         indexVal = ct.c_int(linkCounter)
         epalib.ENgetlinkvalue(indexVal, ct.c_int(2), currentRough)
-        iron_count = 0
-        pvc_count = 0
         if linkCounter != (indexReturn1.contents.value or indexReturn2.contents.value):
             if (int(currentRough.contents.value) > 140):
                 iron_count += 1
