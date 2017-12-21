@@ -76,8 +76,8 @@ pump_count = len(data[key]['pump']['index'])
 for key in data:
     data[key]['pvc']['exp'] = [0]*pvc_count
     data[key]['iron']['exp'] = [0]*iron_count
-    data[key]['pvc']['ltH'] = list(np.random.rand(pvc_count, 100))
-    data[key]['iron']['ltH'] = list(np.random.rand(iron_count, 100))
+    data[key]['pvc']['ltH'] = np.random.rand(pvc_count, 100).tolist()
+    data[key]['iron']['ltH'] = np.random.rand(iron_count, 100).tolist()
     data[key]['pvc']['fS'] = [0]*pvc_count
     data[key]['iron']['fS'] = [0]*iron_count
     for value in data[key]['iron']['ltH']:
@@ -87,8 +87,8 @@ for key in data:
 
     data[key]['pump']['motor_exp'] = [0]*pump_count
     data[key]['pump']['elec_exp'] = [0]*pump_count
-    data[key]['pump']['motor_ltH'] = list(np.random.rand(pump_count, 100))
-    data[key]['pump']['elec_ltH'] = list(np.random.rand(pump_count, 100))
+    data[key]['pump']['motor_ltH'] = np.random.rand(pump_count, 100).tolist()
+    data[key]['pump']['elec_ltH'] = np.random.rand(pump_count, 100).tolist()
     data[key]['pump']['fS'] = [0]*pump_count
     for value in data[key]['pump']['motor_ltH']:
         data[key]['pump']['motor_ctH'].append(value[0])
