@@ -25,12 +25,12 @@ class simulation(object):
         self.sim = dict()
     def sims_to_run(self, simulation_dict):
         for key in simulation_dict.keys():
-            self.sim[key] = list()
+            self.sim[key] = dict()
             for component_type in simulation_dict[key]:
                 if 'pump' in component_type:
-                    self.sim[key].append({component_type: pump_attributes().prop})
+                    self.sim[key][component_type] = pump_attributes().prop
                 else:
-                    self.sim[key].append({component_type: pipe_attributes().prop})
+                    self.sim[key][component_type] = pipe_attributes().prop
         return self.sim
 
 comps = ['pump', 'iron', 'pvc']
