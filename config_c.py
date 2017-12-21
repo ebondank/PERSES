@@ -9,16 +9,17 @@ normal_run_list = [list()]*24
 tasMaxACTList = dict()
 biHour = 0
 
-
+# Current Threshold, List of Thresholds, Exposure, Failure Status, Index
 class pipe_attributes(object):
     def __init__(self):
-        self.prop = {'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 'index':list(), 'prob': list()}
+        self.prop = {'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 'index':list()}
 
 
+# Motors Current Threshold,Electronics current threshold, List of Thresholds for both, Exposure for both, Failure Status, Index
 class pump_attributes(object):
     def __init__(self):
         self.prop = {'motor_ctH':list(), 'elec_ctH':list(), 'motor_ltH': list(), \
-            'elec_ltH': list(), 'motor_exp': list(),'elec_exp':list(), 'fS':list(), 'index':list(), 'prob': list()}
+            'elec_ltH': list(), 'motor_exp': list(),'elec_exp':list(), 'fS':list(), 'index':list()}
 
 class simulation(object):
     def __init__(self):
@@ -36,6 +37,7 @@ class simulation(object):
 comps = ['pump', 'iron', 'pvc']
 data = simulation().sims_to_run({'real': comps, 'historical': comps, 'noTemp': comps})
 
+# Temperature files, there are available in the github repo
 tempFileList = {'real': 'hist85.txt', \
                 'noTime_noCC': 'hist45.txt', \
                 'noTemp':'hist45.txt', \
@@ -44,9 +46,9 @@ for key in tempFileList:
     with open(tempFileList[key], 'r') as f_:
         tasMaxACTList[key] = f_.read().expandtabs().splitlines() 
 
+# Sample input network, finding pumps in a network is a pain so I hardcoded that portion
 with open('north_marin_c.inp', 'r') as f, open('placeholder.rpt', 'w') as fi:
-    # Initializes the files for encoding
-    # Byte objects
+    # Initializes the files for encoding and creates their byte objects
     a = 'north_marin_c.inp'; b_a = a.encode('UTF-8')
     b = 'placeholder.rpt'; b_b = b.encode('UTF-8')
     epalib.ENopen(b_a, b_b, "")
@@ -55,17 +57,17 @@ with open('north_marin_c.inp', 'r') as f, open('placeholder.rpt', 'w') as fi:
     time = ct.pointer(ct.c_long(0))
     init_flag = ct.c_int(1)
     epalib.ENinitH(init_flag)
-
+    # Getting network statistics
     nodeCount = ct.pointer(ct.c_int(0))
     epalib.ENgetcount(ct.c_int(0), nodeCount)
     nodeValue = ct.pointer(ct.c_float(0.0))
     nodeID = ct.c_char_p(('Testing purposes').encode('UTF-8'))
-
+    # Getting the list of links
     linkList = ct.pointer(ct.c_int(0))
     epalib.ENgetcount(ct.c_int(2), linkList)
     linkCounter = 1
     currentRough = ct.pointer(ct.c_float(0.0))
-
+    # Seperating the link population based on roughness
     indexReturn1 = ct.pointer(ct.c_int(0))
     # For the first pipe out of pump 10
     linkID = ct.c_char_p(str(10).encode('utf-8'))
@@ -92,6 +94,8 @@ with open('north_marin_c.inp', 'r') as f, open('placeholder.rpt', 'w') as fi:
                     data[key]['pvc']['index'].append(indexVal)
         linkCounter += 1
 
+# Setting fixed distributions to ensure synchrony across simulations
+# Extremely important if attemping to compare simulations based on isolated variable changes
 pvc_count = len(data[key]['pvc']['index'])
 iron_count = len(data[key]['iron']['index'])
 pump_count = len(data[key]['pump']['index'])
@@ -100,6 +104,7 @@ elec_ltH = np.random.rand(pump_count, 100).tolist()
 pvc_ltH = np.random.rand(pvc_count, 100).tolist()
 iron_ltH = np.random.rand(iron_count, 100).tolist()
 
+# Setting component level attributes for everything in the current simulation set
 for key in data:
     data[key]['pvc']['exp'] = [0]*pvc_count
     data[key]['iron']['exp'] = [0]*iron_count
@@ -122,6 +127,7 @@ for key in data:
     for value in data[key]['pump']['elec_ltH']:
         data[key]['pump']['elec_ctH'].append(value[0])
 
+# Adding in the exposure files, which are loosely relatable to a CDF
 with open(os.path.relpath('new_cdf\\pvc_made_cdf.txt'), 'r') as pvc_exp_f:
     pvc_exp_list = pvc_exp_f.read().splitlines()
 with open(os.path.relpath('new_cdf\\iron_made_cdf.txt'), 'r') as iron_exp_f:

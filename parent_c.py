@@ -1,9 +1,10 @@
 import os
 import sqlite3 as sql
+# All code in config_c must be ran before parent_c can funtion, DO NOT alter this line
 from config_c import *
 import epanet_c
 
-# Creating all the databases
+# Creating all the databases, failure files, and simulation parametes necessary
 simsToRun = ['real', 'noTemp', 'historical']
 conn_dict = dict()
 cursor_dict = dict()
@@ -21,6 +22,8 @@ for sim in data.keys():
     cursor_dict[sim].execute('''CREATE TABLE failureData (Bihour_Count real, NodeID real, componentType real)''')
 batch = 0
 
+# Doing batched simulations
+# TODO: Parallelize this code
 while batch < 150:
     for sim in simsToRun:
         epanet_c.epanet(batch, sim, cursor_dict[sim], conn_dict[sim])
