@@ -103,9 +103,8 @@ def failure_evaluation(comp, simType, index, tasMaxACT):
         if (per_failed > float(ctH_from_dict[fail_type][index])):
             if ((simType == 'noTemp') or (simType == 'real') or (simType == 'historical')):
                 exp_list[index] = 0
-                try:
-                    indexOfctH = (ltH_from_dict[fail_type][index].index(ctH_from_dict[fail_type][index])) + 1
-                    ctH_from_dict[fail_type][index] = ltH_from_dict[fail_type][index][indexOfctH]
+                indexOfctH = (ltH_from_dict[fail_type][index].index(ctH_from_dict[fail_type][index])) + 1
+                ctH_from_dict[fail_type][index] = ltH_from_dict[fail_type][index][indexOfctH]
             failure_flag = True
             return failure_flag
     if ((simType == 'noTemp') or (simType == 'real') or (simType == 'historical')):
