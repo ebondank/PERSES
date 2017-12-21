@@ -95,11 +95,16 @@ with open('north_marin_c.inp', 'r') as f, open('placeholder.rpt', 'w') as fi:
 pvc_count = len(data[key]['pvc']['index'])
 iron_count = len(data[key]['iron']['index'])
 pump_count = len(data[key]['pump']['index'])
+motor_ltH = np.random.rand(pump_count, 100).tolist()
+elec_ltH = np.random.rand(pump_count, 100).tolist()
+pvc_ltH = np.random.rand(pvc_count, 100).tolist()
+iron_ltH = np.random.rand(iron_count, 100).tolist()
+
 for key in data:
     data[key]['pvc']['exp'] = [0]*pvc_count
     data[key]['iron']['exp'] = [0]*iron_count
-    data[key]['pvc']['ltH'] = np.random.rand(pvc_count, 100).tolist()
-    data[key]['iron']['ltH'] = np.random.rand(iron_count, 100).tolist()
+    data[key]['pvc']['ltH'] = pvc_ltH
+    data[key]['iron']['ltH'] = iron_ltH
     data[key]['pvc']['fS'] = [0]*pvc_count
     data[key]['iron']['fS'] = [0]*iron_count
     for value in data[key]['iron']['ltH']:
@@ -109,13 +114,14 @@ for key in data:
 
     data[key]['pump']['motor_exp'] = [0]*pump_count
     data[key]['pump']['elec_exp'] = [0]*pump_count
-    data[key]['pump']['motor_ltH'] = np.random.rand(pump_count, 100).tolist()
-    data[key]['pump']['elec_ltH'] = np.random.rand(pump_count, 100).tolist()
+    data[key]['pump']['motor_ltH'] = motor_ltH
+    data[key]['pump']['elec_ltH'] = elec_ltH
     data[key]['pump']['fS'] = [0]*pump_count
     for value in data[key]['pump']['motor_ltH']:
         data[key]['pump']['motor_ctH'].append(value[0])
         data[key]['pump']['elec_ctH'].append(value[0])
-
+    print(data[key]['pump']['motor_ctH'])
+    print(data[key]['pump']['elec_ctH'])
 
 with open(os.path.relpath('new_cdf\\pvc_made_cdf.txt'), 'r') as pvc_exp_f:
     pvc_exp_list = pvc_exp_f.read().splitlines()
