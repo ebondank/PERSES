@@ -15,7 +15,7 @@ def epanet(batch, simType, dbCursor, dbObject):
         for comp in data[simType]:
             for index, item in enumerate(data[simType][comp]['index']):
                 # If the pipe is already in the failed stae
-                if (int(data[simType][comp]['fS'][index]) != 0):
+                if data[simType][comp]['fS'][index] != 0:
                     data[simType][comp]['fS'][index] = int(data[simType][comp]['fS'][index]) - 1
                     if (int(data[simType][comp]['fS'][index]) <= 0):
                         # pipe enable
@@ -28,13 +28,14 @@ def epanet(batch, simType, dbCursor, dbObject):
                         normal_run = 0
                         epalib.ENsetlinkvalue(data[simType][comp]['index'][index], ct.c_int(11), ct.c_float(0.0))
                         
-                if ((simType == 'noTime') or (int(data[simType][comp]['fS'][index]) == 0)):
+                if (simType == 'noTime' or data[simType][comp]['fS'][index]) == 0:
                     failure_det = failure_evaluation(comp, simType, index, tasMaxACT)
                     if (failure_det == True):
                         epalib.ENsetlinkvalue(data[simType][comp]['index'][index], ct.c_int(11), ct.c_float(0.0))
                         with open(('{}_{}_fail.txt').format(simType, comp), 'a') as failure_f:
                             failure_f.write('%s %s\n' % (index, biHour))
                         dbCursor.execute('''INSERT INTO failureData VALUES (?, ?, ?)''', (biHour, index, comp))
+                        normal_run = 0
                         if (comp != 'pump'):
                             data[simType][comp]['fS'][index] = 44
                         else:
@@ -100,8 +101,13 @@ def failure_evaluation(comp, simType, index, tasMaxACT):
             if ((simType == 'noTemp') or (simType == 'real') or (simType == 'historical')):
                 exp_list[index] = 0
                 # data[simType][comp]['tH'][index] = (np.random.uniform(0, 1, 1)[0])
-                indexOfctH = (ltH_from_dict[fail_type][index].index(ctH_from_dict[fail_type][index])) + 1
-                ctH_from_dict[fail_type][index] = ltH_from_dict[fail_type][index][indexOfctH]
+                try:
+                    indexOfctH = (ltH_from_dict[fail_type][index].index(ctH_from_dict[fail_type][index])) + 1
+                    ctH_from_dict[fail_type][index] = ltH_from_dict[fail_type][index][indexOfctH]
+                except ValueError as v:
+                    print(v.with_traceback)
+                    print(ltH_from_dict[fail_type][index])
+                    print(ctH_from_dict[fail_type][index])
             failure_flag = True
             return failure_flag
     if ((simType == 'noTemp') or (simType == 'real') or (simType == 'historical')):
