@@ -8,8 +8,9 @@ normal_run_list = [list()]*24
 tasMaxACTList = dict()
 biHour = 0
 
-compType = {'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 'index':list(), 'prob': list()}
-threeSim = {'iron': compType, 'pvc':compType, 'pump':compType}
+pipe_attributes = {'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 'index':list(), 'prob': list()}
+pump_attributes = {'motor_ctH':list(), 'elec_ctH':list(), 'motor_ltH': list(), 'elec_ltH': list(), 'motor_exp': list(),'elec_exp':list(), 'fS':list(), 'index':list(), 'prob': list()}
+threeSim = {'iron': pipe_attributes, 'pvc': pipe_attributes, 'pump': pump_attributes}
 data = {'real':threeSim, 'noTemp': threeSim, 'historical': threeSim}
 
 tempFileList = {'real': 'hist85.txt', \
@@ -84,7 +85,8 @@ for key in data:
     for value in key['pvc']['ltH']:
         key['pvc']['ctH'].append(value[0])
 
-    key['pump']['exp'] = [0]*(len(key['pump']['index']))
+    key['pump']['motor_exp'] = [0]*(len(key['pump']['index']))
+    key['pump']['elec_exp'] = [0]*(len(key['pump']['index']))
     key['pump']['ltH'] = np.random.rand(len(key['pump']['index']), 100)
     key['pump']['fS'] = [0]*(len(key['pump']['index']))
     for value in key['pump']['ltH']:

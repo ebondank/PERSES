@@ -7,15 +7,19 @@ from scipy.stats import gamma
 from scipy.stats import lognorm
 import matplotlib.pyplot as plt
 
-file_list = ['pump_cdf.txt', 'pvc_cdf.txt', 'iron_cdf.txt']
-dict_list = {'pump': {}, 'iron': {}, 'pvc': {}}
+# file_list = ['pump_cdf.txt', 'pvc_cdf.txt', 'iron_cdf.txt']
+file_list = ['new_cdf/mid_case_elec.txt', 'new_cdf/mid_case_motor.txt']
+# dict_list = {'pump': {}, 'iron': {}, 'pvc': {}}
+dict_list = {'elec': {}, 'motor': {}}
 
 for f_ in file_list:
     line_f = open(f_, 'r')
     line_list = line_f.read().splitlines()
     line_f.close()
 
-    comp_type = f_.split('_')[0]
+    # comp_type = f_.split('_')[0]
+    comp_type = f_.split('_')[3]
+    comp_type = comp_type.split('.')[0]
     l_ = len(line_list)
 
     for j in range(0, l_):
@@ -30,8 +34,8 @@ for f_ in file_list:
 
 for t_ in dict_list.keys():
     d_c = 0
-    f_o = open(('{}_exposure_from_pdf.txt').format(t_), 'w')
-    f_i = open(('{}_made_cdf.txt').format(t_), 'w')
+    f_o = open(('new_cdf/{}_exposure_from_pdf.txt').format(t_), 'w')
+    f_i = open(('new_cdf/{}_made_cdf.txt').format(t_), 'w')
     for b_ in dict_list[t_].keys():
         f_o.write(('{}\n').format(float(dict_list[t_][b_]) / 30))
         d_c += float(dict_list[t_][b_] / 30)

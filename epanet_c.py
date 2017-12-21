@@ -5,7 +5,6 @@ from config_c import *
 def epanet(batch, simType, dbCursor, dbObject):
     epaCount = 0
     biHour = (batch * 4380)
-    
     time.contents = ct.c_long(0)
 
     while epaCount < 4380:
@@ -13,7 +12,6 @@ def epanet(batch, simType, dbCursor, dbObject):
         tasMaxACT = float(tasMaxACTList[simType][dayCount])
         normal_run = 1
 
-        ############### PVC PIPE ##### PVC PIPE ##### PVC PIPE ####################
         for comp in data[simType]:
             for index, item in enumerate(data[simType][comp]['index']):
                 # If the pipe is already in the failed stae
@@ -24,34 +22,23 @@ def epanet(batch, simType, dbCursor, dbObject):
                         epalib.ENsetlinkvalue(data[simType][comp]['index'][index], ct.c_int(11), ct.c_float(1.0))
                         # no-time simulation config stuff
                         if ((simType == 'noTemp') or (simType == 'real') or (simType == 'historical')):
-                            data[simType][comp]['exp'][index] = 0
+                            reset_exposure(simType, comp, index)
                     # Pipe disable mid run
                     else:
                         normal_run = 0
                         epalib.ENsetlinkvalue(data[simType][comp]['index'][index], ct.c_int(11), ct.c_float(0.0))
                         
                 if ((simType == 'noTime') or (int(data[simType][comp]['fS'][index]) == 0)):
-                    per_failed1 = distList[comp][math.floor(float(data[simType][comp]['exp'][index]))]
-                    per_failed2 = distList[comp][math.ceil(float(data[simType][comp]['exp'][index]))]
-                    per_failed = (float(per_failed2) - float(per_failed1)) * (float(data[simType][comp]['exp'][index]) - math.floor(float(data[simType][comp]['exp'][index]))) + float(per_failed1)
-                    if (per_failed > float(data[simType][comp]['ctH'][index])):
-                        if ((simType == 'noTemp') or (simType == 'real') or (simType == 'historical')):
-                            data[simType][comp]['exp'][index] = 0
-                            # data[simType][comp]['tH'][index] = (np.random.uniform(0, 1, 1)[0])
-                            indexOfctH = data[simType][comp]['ltH'][index].index(data[simType][comp]['ctH'][index]) + 1
-                            data[simType][comp]['ctH'][index] = data[simType][comp]['ltH'][index][indexOfctH]
-
+                    failure_det = failure_evaluation(comp, simType, index, tasMaxACT)
+                    if (failure_det == True):
                         epalib.ENsetlinkvalue(data[simType][comp]['index'][index], ct.c_int(11), ct.c_float(0.0))
-                        pipeFailureFile = open(('{}_pvcPipeFail.txt').format(simType), 'a')
+                        pipeFailureFile = open(('{}_{}Fail.txt').format(simType, comp), 'a')
                         pipeFailureFile.write('%s %s\n' % (index, biHour))
                         pipeFailureFile.close()
                         dbCursor.execute('''INSERT INTO failureData VALUES (?, ?, ?)''', (biHour, index, comp))
                         data[simType][comp]['fS'][index] = 44
                         # This is based off of the 88 hr repair time, can be
                         # changed to w/e
-                    if ((simType == 'noTemp') or (simType == 'real') or (simType == 'historical')):
-                        data[simType][comp]['exp'][index] = float(data[simType][comp]['exp'][index]) \
-                            + (biHourToYear * tasMaxACT)
                     if (data[simType][comp]['fS'][index] == 0):
                         epalib.ENsetlinkvalue(data[simType][comp]['index'][index], ct.c_int(11), ct.c_float(1.0))
 
@@ -93,3 +80,40 @@ def epanet(batch, simType, dbCursor, dbObject):
         biHour += 1
         epaCount += 1
     dbObject.commit()
+
+def failure_evaluation(comp, simType, index, tasMaxACT):
+    if (comp != 'pump'):
+        exp_from_dict = [data[simType][comp]['exp']]
+        ltH_from_dict = [data[simType][comp]['ltH']]
+        ctH_from_dict = [data[simType][comp]['ctH']]
+    else:
+        exp_from_dict = [data[simType][comp]['motor_exp'], data[simType][comp]['elec_exp']]
+        ltH_from_dict = [data[simType][comp]['motor_ltH'], data[simType][comp]['elec_ltH']]
+        ctH_from_dict = [data[simType][comp]['motor_ctH'], data[simType][comp]['elec_ctH']]
+    failure_flag = False
+    for fail_type, exp_list in enumerate(exp_from_dict):
+        per_failed1 = distList[comp][math.floor(float(exp_list[index]))]
+        per_failed2 = distList[comp][math.ceil(float(exp_list[index]))]
+        per_failed = (float(per_failed2) - float(per_failed1)) * (float(exp_list[index]) - math.floor(float(exp_list[index]))) + float(per_failed1)
+        if (per_failed > float(ctH_from_dict[fail_type][index])):
+            if ((simType == 'noTemp') or (simType == 'real') or (simType == 'historical')):
+                exp_list[index] = 0
+                # data[simType][comp]['tH'][index] = (np.random.uniform(0, 1, 1)[0])
+                indexOfctH = ltH_from_dict[fail_type][index].index(ctH_from_dict[fail_type][index]) + 1
+                ctH_from_dict[fail_type][index] = ltH_from_dict[fail_type][index][indexOfctH]
+            failure_flag = True
+            return failure_flag
+    if ((simType == 'noTemp') or (simType == 'real') or (simType == 'historical')):
+        exp_list[index] = float(exp_list[index]) + (biHourToYear * tasMaxACT)
+
+    return failure_flag
+
+
+def reset_exposure(simType, comp, index):
+    if (comp != 'pump'):
+        exp_from_dict = [data[simType][comp]['exp']]
+    else:
+        exp_from_dict = [data[simType][comp]['motor_exp'], data[simType][comp]['elec_exp']]
+
+    for fail_type, exp_list in enumerate(exp_from_dict):
+        exp_list[index] = 0
