@@ -9,7 +9,7 @@ conn_dict = dict()
 cursor_dict = dict()
 for sim in simsToRun:
     for comp_type in threeSim.keys():
-        f_ = open(('{}_{}.txt').format(sim, comp_type), 'w')
+        f_ = open(('{}_{}_fail.txt').format(sim, comp_type), 'w')
         f_.close()
     try:
         os.remove(('{}.db').format(sim))
