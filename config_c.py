@@ -119,6 +119,7 @@ for key in data:
     data[key]['pump']['fS'] = [0]*pump_count
     for value in data[key]['pump']['motor_ltH']:
         data[key]['pump']['motor_ctH'].append(value[0])
+    for value in data[key]['pump']['elec_ltH']:
         data[key]['pump']['elec_ctH'].append(value[0])
 
 with open(os.path.relpath('new_cdf\\pvc_made_cdf.txt'), 'r') as pvc_exp_f:
