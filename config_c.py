@@ -28,9 +28,9 @@ class simulation(object):
             self.sim[key] = list()
             for component_type in simulation_dict[key]:
                 if 'pump' in component_type:
-                    self.sim[key][component_type] = pump_attributes().prop
+                    self.sim[key].append({component_type: pump_attributes().prop})
                 else:
-                    self.sim[key][component_type] = pipe_attributes().prop
+                    self.sim[key].append({component_type: pipe_attributes().prop})
 
 comps = ['pump', 'iron', 'pvc']
 data = simulation().sims_to_run({'real': comps, 'historical': comps, 'noTemp': comps})
