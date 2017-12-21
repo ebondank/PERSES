@@ -99,8 +99,8 @@ with open(os.path.relpath('new_cdf\\pvc_made_cdf.txt'), 'r') as pvc_exp_f:
     pvc_exp_list = pvc_exp_f.read().splitlines()
 with open(os.path.relpath('new_cdf\\iron_made_cdf.txt'), 'r') as iron_exp_f:
     iron_exp_list = iron_exp_f.read().splitlines()
-with open(os.path.relpath('new_cdf\\mid_case_elec.txt'), 'r') as elec_exp_f, \
-     open(os.path.relpath('new_cdf\\mid_case_motor.txt'), 'r') as motor_exp_f:
+with open(os.path.relpath('new_cdf\\elec_made_cdf.txt'), 'r') as elec_exp_f, \
+     open(os.path.relpath('new_cdf\\motor_made_cdf.txt'), 'r') as motor_exp_f:
     elec_exp_list = elec_exp_f.read().splitlines()
     motor_exp_list = motor_exp_f.read().splitlines()
 distList = {'motor': motor_exp_list, 'elec': elec_exp_list, 'pvc': pvc_exp_list, 'iron': iron_exp_list}
