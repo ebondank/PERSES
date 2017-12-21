@@ -87,10 +87,12 @@ for key in data:
 
     data[key]['pump']['motor_exp'] = [0]*(len(data[key]['pump']['index']))
     data[key]['pump']['elec_exp'] = [0]*(len(data[key]['pump']['index']))
-    data[key]['pump']['ltH'] = np.random.rand(len(data[key]['pump']['index']), 100)
+    data[key]['pump']['motor_ltH'] = np.random.rand(len(data[key]['pump']['index']), 100)
+    data[key]['pump']['elec_ltH'] = np.random.rand(len(data[key]['pump']['index']), 100)
     data[key]['pump']['fS'] = [0]*(len(data[key]['pump']['index']))
-    for value in data[key]['pump']['ltH']:
-        data[key]['pump']['ctH'].append(value[0])
+    for value in data[key]['pump']['motor_ltH']:
+        data[key]['pump']['motor_ctH'].append(value[0])
+        data[key]['pump']['elec_ctH'].append(value[0])
 
 with open('pvc_made_cdf.txt', 'r') as pvcWeibullFile:
     pvcWeibullList = pvcWeibullFile.read().splitlines()
