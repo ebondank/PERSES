@@ -7,8 +7,8 @@ import epanet_c
 simsToRun = ['real', 'noTemp', 'historical']
 conn_dict = dict()
 cursor_dict = dict()
-for sim in simsToRun:
-    for comp_type in threeSim.keys():
+for sim in data.keys():
+    for comp_type in data[sim].keys():
         f_ = open(('{}_{}_fail.txt').format(sim, comp_type), 'w')
         f_.close()
     try:
