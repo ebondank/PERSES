@@ -31,6 +31,7 @@ class simulation(object):
                     self.sim[key].append({component_type: pump_attributes().prop})
                 else:
                     self.sim[key].append({component_type: pipe_attributes().prop})
+        return self.sim
 
 comps = ['pump', 'iron', 'pvc']
 data = simulation().sims_to_run({'real': comps, 'historical': comps, 'noTemp': comps})
