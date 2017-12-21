@@ -19,12 +19,11 @@ for sim in simsToRun:
     cursor_dict[sim] = conn_dict[sim].cursor()
     cursor_dict[sim].execute('''CREATE TABLE NodeData (Bihour_Count real, NodeID real, Pressure real)''')
     cursor_dict[sim].execute('''CREATE TABLE failureData (Bihour_Count real, NodeID real, componentType real)''')
-
 batch = 0
+
 while batch < 150:
     for sim in simsToRun:
         epanet_c.epanet(batch, sim, cursor_dict[sim], conn_dict[sim])
-
     print(batch)
     batch += 1
 

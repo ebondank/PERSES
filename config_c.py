@@ -17,7 +17,7 @@ tempFileList = {'real': 'hist85.txt', \
                 'noTime_noCC': 'hist45.txt', \
                 'noTemp':'hist45.txt', \
                 'historical': 'histTasMaxBD.txt'}
-for key in tempFileList.keys():
+for key in tempFileList:
     with open(tempFileList[key], 'r') as f_:
         tasMaxACTList[key] = f_.read().expandtabs().splitlines() 
 
@@ -52,8 +52,8 @@ with open('north_marin_c.inp', 'r') as f, open('placeholder.rpt', 'w') as fi:
     indexReturn2 = ct.pointer(ct.c_int(0))
     epalib.ENgetlinkindex(linkID, indexReturn2)
     for key in data:
-        key['pump']['index'].append(indexReturn1.contents)
-        key['pump']['index'].append(indexReturn2.contents)
+        data[key]['pump']['index'].append(indexReturn1.contents)
+        data[key]['pump']['index'].append(indexReturn2.contents)
 
     # Roughness look to determine pipe type
     # Using pure c integers in the lists
@@ -66,31 +66,31 @@ with open('north_marin_c.inp', 'r') as f, open('placeholder.rpt', 'w') as fi:
             if (int(currentRough.contents.value) > 140):
                 iron_count += 1
                 for key in data:
-                    key['iron']['index'].append(indexVal)
+                    data[key]['iron']['index'].append(indexVal)
             elif (int(currentRough.contents.value) < 140):
                 pvc_count += 1
                 for key in data:
-                    key['pvc']['index'].append(indexVal)
+                    data[key]['pvc']['index'].append(indexVal)
         linkCounter += 1
 
 for key in data:
-    key['pvc']['exp'] = [0]*pvc_count
-    key['iron']['exp'] = [0]*iron_count
-    key['pvc']['ltH'] = np.random.rand(pvc_count, 100)
-    key['iron']['ltH'] = np.random.rand(iron_count, 100)
-    key['pvc']['fS'] = [0]*pvc_count
-    key['iron']['fS'] = [0]*iron_count
-    for value in key['iron']['ltH']:
-        key['iron']['ctH'].append(value[0])
-    for value in key['pvc']['ltH']:
-        key['pvc']['ctH'].append(value[0])
+    data[key]['pvc']['exp'] = [0]*pvc_count
+    data[key]['iron']['exp'] = [0]*iron_count
+    data[key]['pvc']['ltH'] = np.random.rand(pvc_count, 100)
+    data[key]['iron']['ltH'] = np.random.rand(iron_count, 100)
+    data[key]['pvc']['fS'] = [0]*pvc_count
+    data[key]['iron']['fS'] = [0]*iron_count
+    for value in data[key]['iron']['ltH']:
+        data[key]['iron']['ctH'].append(value[0])
+    for value in data[key]['pvc']['ltH']:
+        data[key]['pvc']['ctH'].append(value[0])
 
-    key['pump']['motor_exp'] = [0]*(len(key['pump']['index']))
-    key['pump']['elec_exp'] = [0]*(len(key['pump']['index']))
-    key['pump']['ltH'] = np.random.rand(len(key['pump']['index']), 100)
-    key['pump']['fS'] = [0]*(len(key['pump']['index']))
-    for value in key['pump']['ltH']:
-        key['pump']['ctH'].append(value[0])
+    data[key]['pump']['motor_exp'] = [0]*(len(data[key]['pump']['index']))
+    data[key]['pump']['elec_exp'] = [0]*(len(data[key]['pump']['index']))
+    data[key]['pump']['ltH'] = np.random.rand(len(data[key]['pump']['index']), 100)
+    data[key]['pump']['fS'] = [0]*(len(data[key]['pump']['index']))
+    for value in data[key]['pump']['ltH']:
+        data[key]['pump']['ctH'].append(value[0])
 
 with open('pvc_made_cdf.txt', 'r') as pvcWeibullFile:
     pvcWeibullList = pvcWeibullFile.read().splitlines()
