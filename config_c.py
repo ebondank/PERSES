@@ -3,16 +3,37 @@ import math
 import numpy as np
 import ctypes as ct
 
-epalib = ct.cdll.LoadLibrary('epanet2mingw64.dll')
 biHourToYear = float(.0002283105022831050228310502283105)
+epalib = ct.cdll.LoadLibrary('epanet2mingw64.dll')
 normal_run_list = [list()]*24
 tasMaxACTList = dict()
 biHour = 0
 
-pipe_attributes = {'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 'index':list(), 'prob': list()}
-pump_attributes = {'motor_ctH':list(), 'elec_ctH':list(), 'motor_ltH': list(), 'elec_ltH': list(), 'motor_exp': list(),'elec_exp':list(), 'fS':list(), 'index':list(), 'prob': list()}
-threeSim = {'iron': pipe_attributes, 'pvc': pipe_attributes, 'pump': pump_attributes}
-data = {'real':threeSim, 'noTemp': threeSim, 'historical': threeSim}
+
+class pipe_attributes(object):
+    def __init__(self):
+        self.prop = {'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 'index':list(), 'prob': list()}
+
+
+class pump_attributes(object):
+    def __init__(self):
+        self.prop = {'motor_ctH':list(), 'elec_ctH':list(), 'motor_ltH': list(), \
+            'elec_ltH': list(), 'motor_exp': list(),'elec_exp':list(), 'fS':list(), 'index':list(), 'prob': list()}
+
+class simulation(object):
+    def __init__(self):
+        self.sim = dict()
+    def sims_to_run(self, simulation_dict):
+        for key in simulation_dict.keys():
+            self.sim[key] = list()
+            for component_type in simulation_dict[key]:
+                if 'pump' in component_type:
+                    self.sim[key][component_type] = pump_attributes().prop
+                else:
+                    self.sim[key][component_type] = pipe_attributes().prop
+
+comps = ['pump', 'iron', 'pvc']
+data = simulation().sims_to_run({'real': comps, 'historical': comps, 'noTemp': comps})
 
 tempFileList = {'real': 'hist85.txt', \
                 'noTime_noCC': 'hist45.txt', \
