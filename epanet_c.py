@@ -32,11 +32,10 @@ def epanet(batch, simType, dbCursor, dbObject):
                     failure_det = failure_evaluation(comp, simType, index, tasMaxACT)
                     if (failure_det == True):
                         epalib.ENsetlinkvalue(data[simType][comp]['index'][index], ct.c_int(11), ct.c_float(0.0))
-                        pipeFailureFile = open(('{}_{}_fail.txt').format(simType, comp), 'a')
-                        pipeFailureFile.write('%s %s\n' % (index, biHour))
-                        pipeFailureFile.close()
+                        with open(('{}_{}_fail.txt').format(simType, comp), 'a') as failure_f:
+                            failure_f.write('%s %s\n' % (index, biHour))
                         dbCursor.execute('''INSERT INTO failureData VALUES (?, ?, ?)''', (biHour, index, comp))
-                        if (comp != pump):
+                        if (comp != 'pump'):
                             data[simType][comp]['fS'][index] = 44
                         else:
                             data[simType][comp]['fS'][index] = 8
@@ -101,7 +100,7 @@ def failure_evaluation(comp, simType, index, tasMaxACT):
             if ((simType == 'noTemp') or (simType == 'real') or (simType == 'historical')):
                 exp_list[index] = 0
                 # data[simType][comp]['tH'][index] = (np.random.uniform(0, 1, 1)[0])
-                indexOfctH = ltH_from_dict[fail_type][index].index(ctH_from_dict[fail_type][index]) + 1
+                indexOfctH = (ltH_from_dict[fail_type][index].index(ctH_from_dict[fail_type][index])) + 1
                 ctH_from_dict[fail_type][index] = ltH_from_dict[fail_type][index][indexOfctH]
             failure_flag = True
             return failure_flag

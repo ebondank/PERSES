@@ -120,8 +120,6 @@ for key in data:
     for value in data[key]['pump']['motor_ltH']:
         data[key]['pump']['motor_ctH'].append(value[0])
         data[key]['pump']['elec_ctH'].append(value[0])
-    print(data[key]['pump']['motor_ctH'])
-    print(data[key]['pump']['elec_ctH'])
 
 with open(os.path.relpath('new_cdf\\pvc_made_cdf.txt'), 'r') as pvc_exp_f:
     pvc_exp_list = pvc_exp_f.read().splitlines()
