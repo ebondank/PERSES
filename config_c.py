@@ -57,22 +57,21 @@ with open('north_marin_c.inp', 'r') as f, open('placeholder.rpt', 'w') as fi:
 
     # Roughness look to determine pipe type
     # Using pure c integers in the lists
-    iron_count = 1
-    pvc_count = 1
     while (linkCounter < linkList.contents.value):
         indexVal = ct.c_int(linkCounter)
         epalib.ENgetlinkvalue(indexVal, ct.c_int(2), currentRough)
         if linkCounter != (indexReturn1.contents.value or indexReturn2.contents.value):
             if (int(currentRough.contents.value) > 140):
-                iron_count += 1
                 for key in data:
                     data[key]['iron']['index'].append(indexVal)
             elif (int(currentRough.contents.value) < 140):
-                pvc_count += 1
                 for key in data:
                     data[key]['pvc']['index'].append(indexVal)
         linkCounter += 1
 
+pvc_count = len(data[key]['pvc']['index'])
+iron_count = len(data[key]['iron']['index'])
+pump_count = len(data[key]['pump']['index'])
 for key in data:
     data[key]['pvc']['exp'] = [0]*pvc_count
     data[key]['iron']['exp'] = [0]*iron_count
@@ -85,11 +84,11 @@ for key in data:
     for value in data[key]['pvc']['ltH']:
         data[key]['pvc']['ctH'].append(value[0])
 
-    data[key]['pump']['motor_exp'] = [0]*(len(data[key]['pump']['index']))
-    data[key]['pump']['elec_exp'] = [0]*(len(data[key]['pump']['index']))
-    data[key]['pump']['motor_ltH'] = np.random.rand(len(data[key]['pump']['index']), 100)
-    data[key]['pump']['elec_ltH'] = np.random.rand(len(data[key]['pump']['index']), 100)
-    data[key]['pump']['fS'] = [0]*(len(data[key]['pump']['index']))
+    data[key]['pump']['motor_exp'] = [0]*pump_count
+    data[key]['pump']['elec_exp'] = [0]*pump_count
+    data[key]['pump']['motor_ltH'] = np.random.rand(pump_count, 100)
+    data[key]['pump']['elec_ltH'] = np.random.rand(pump_count, 100)
+    data[key]['pump']['fS'] = [0]*pump_count
     for value in data[key]['pump']['motor_ltH']:
         data[key]['pump']['motor_ctH'].append(value[0])
         data[key]['pump']['elec_ctH'].append(value[0])
