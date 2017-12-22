@@ -1,11 +1,7 @@
 import os
 import math
 import numpy as np
-import scipy.stats as ss
-from scipy.stats import invgauss
-from scipy.stats import gamma
-from scipy.stats import lognorm
-import matplotlib.pyplot as plt
+
 
 # file_list = ['pump_cdf.txt', 'pvc_cdf.txt', 'iron_cdf.txt']
 file_list = ['new_cdf/mid_case_elec.txt', 'new_cdf/mid_case_motor.txt']
