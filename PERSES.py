@@ -1,7 +1,7 @@
 import os
 import sqlite3 as sql
-# All code in config_c must be ran before parent_c can funtion, DO NOT alter this line
-from config_c import *
+# All code in PERSES_configuration must be ran before PERSES can funtion, DO NOT alter this line
+from PERSES_configuration import *
 import epanet_c
 
 # Creating all the databases, failure files, and simulation parametes necessary

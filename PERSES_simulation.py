@@ -1,6 +1,6 @@
 import math
 import ctypes as ct
-from config_c import *
+from PERSES_configuration import *
 
 def epanet(batch, simType, dbCursor, dbObject):
     epaCount = 0
