@@ -2,7 +2,7 @@ import os
 import sqlite3 as sql
 # All code in PERSES_configuration must be ran before PERSES can funtion, DO NOT alter this line
 from PERSES_configuration import *
-from PERSES_simulation import simulation
+from PERSES_simulation import EPANET_simulation
 
 # Creating all the databases, failure files, and simulation parametes necessary
 simsToRun = ['real', 'noTemp', 'historical']
@@ -26,7 +26,7 @@ batch = 0
 # TODO: Parallelize this code
 while batch < 150:
     for sim in simsToRun:
-        simulation(batch, sim, cursor_dict[sim], conn_dict[sim])
+        EPANET_simulation(batch, sim, cursor_dict[sim], conn_dict[sim])
     print(batch)
     batch += 1
 

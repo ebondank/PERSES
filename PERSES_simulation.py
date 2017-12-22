@@ -2,7 +2,7 @@ import math
 import ctypes as ct
 from PERSES_configuration import *
 
-def simulation(batch, simType, dbCursor, dbObject):
+def EPANET_simulation(batch, simType, dbCursor, dbObject):
     epaCount = 0
     biHour = (batch * 4380)
     time.contents = ct.c_long(0)
