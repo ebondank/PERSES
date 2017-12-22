@@ -93,7 +93,7 @@ if __name__ == "__main__":
         statistics_dict = dict()
         for index, item in enumerate(pop_list):
             temp_curve = ("{}.txt").format(simulation)
-            cdf_curve = ("{}_made_cdf.txt").format(item)
+            cdf_curve = (os.path.relpath('new_cdf\\{}_made_cdf.txt').format(item))
             gf = god_factor_simulation_syncing[index]
             new_simulation = component_populations(temp_curve, cdf_curve, item, gf, component_count, db_cur, simulation)
             statistics_dict[("{}_{}").format(simulation, item)] = new_simulation
