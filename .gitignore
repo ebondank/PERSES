@@ -11,3 +11,5 @@ temp_output_2099/*
 .idea
 __pycache__
 Images/
+*.inp
+*/*.inp
