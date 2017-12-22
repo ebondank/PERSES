@@ -7,3 +7,7 @@ temp_output/*
 temp_output_2099/*
 *.db
 */*.db
+*.idea
+.idea
+__pycache__
+Images/
