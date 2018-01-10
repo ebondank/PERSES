@@ -26,17 +26,17 @@ if __name__ == "__main__":
 
     # Doing batched simulations
     # TODO: Parallelize this code
-    cursors = cursor_dict.values()
-    conns = conn_dict.values()
+    cursors = list(cursor_dict.values())
+    conns = list(conn_dict.values())
     while batch < 150:
         pool = mp.Pool(len(simsToRun))
         sim_list = []
         for sim in simsToRun:
             sim_list.append(tuple([batch, sim]))
         res = pool.starmap(EPANET_simulation, sim_list)
-        for index, output in enumerate(res):
-            cursors[index].executemany('''INSERT INTO failureData VALUES (?, ?, ?)''', output['failure_data'])
-            cursors[index].executemany('''INSERT INTO NodeData VALUES (?, ?, ?)''', output['node_data'])
+        for index in range(0, len(res)):
+            cursors[index].executemany('''INSERT INTO failureData VALUES (?, ?, ?)''', res[index]['failure_data'])
+            cursors[index].executemany('''INSERT INTO NodeData VALUES (?, ?, ?)''', res[index]['node_data'])
             conns[index].commit()
         print(batch)
         batch += 1
