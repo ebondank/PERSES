@@ -2,10 +2,12 @@ import math
 import ctypes as ct
 from PERSES_configuration import *
 
-def EPANET_simulation(batch, simType, dbCursor, dbObject):
+def EPANET_simulation(batch, simType):
     epaCount = 0
     biHour = (batch * 4380)
     time.contents = ct.c_long(0)
+    node_data = list()
+    failure_data = list()
     # Currently set to do year long batches
     while epaCount < 4380:
         dayCount = math.floor(biHour / 12)
@@ -40,7 +42,8 @@ def EPANET_simulation(batch, simType, dbCursor, dbObject):
                         epalib.ENsetlinkvalue(data[simType][comp]['index'][index], ct.c_int(11), ct.c_float(0.0))
                         with open(('{}_{}_fail.txt').format(simType, comp), 'a') as failure_f:
                             failure_f.write('%s %s\n' % (index, biHour))
-                        dbCursor.execute('''INSERT INTO failureData VALUES (?, ?, ?)''', (biHour, index, comp))
+                        failure_data.append(tuple([biHour, index, comp]))
+                        # dbCursor.execute('''INSERT INTO failureData VALUES (?, ?, ?)''', (biHour, index, comp))
                         # It is now an abnormal run, and we set the failure state of the component according to given values
                         normal_run = 0
                         if (comp != 'pump'):
@@ -54,8 +57,9 @@ def EPANET_simulation(batch, simType, dbCursor, dbObject):
             while (intCount < nodeCount.contents.value):
                 epalib.ENgetnodevalue(ct.c_int(intCount), ct.c_int(11), nodeValue)
                 epalib.ENgetnodeid(ct.c_int(intCount), nodeID)
-                dbCursor.execute('''INSERT INTO NodeData VALUES (?, ?, ?)''', \
-                    (biHour, (nodeID.value).decode('utf-8'), nodeValue.contents.value))
+                # dbCursor.execute('''INSERT INTO NodeData VALUES (?, ?, ?)''', \
+                    # (biHour, (nodeID.value).decode('utf-8'), nodeValue.contents.value))
+                node_data.append(tuple([biHour, (nodeID.value).decode('utf-8'), nodeValue.contents.value]))
                 intCount += 1
         else:
             if (len(normal_run_list[int(biHour % 24)]) == 0):
@@ -64,20 +68,23 @@ def EPANET_simulation(batch, simType, dbCursor, dbObject):
                 while (intCount < nodeCount.contents.value):
                     epalib.ENgetnodevalue(ct.c_int(intCount), ct.c_int(11), nodeValue)
                     epalib.ENgetnodeid(ct.c_int(intCount), nodeID)
-                    dbCursor.execute('''INSERT INTO NodeData VALUES (?, ?, ?)''', \
-                        (biHour, (nodeID.value).decode('utf-8'), nodeValue.contents.value))
+                    # dbCursor.execute('''INSERT INTO NodeData VALUES (?, ?, ?)''', \
+                        # (biHour, (nodeID.value).decode('utf-8'), nodeValue.contents.value))
+                    node_data.append(tuple([biHour, (nodeID.value).decode('utf-8'), nodeValue.contents.value]))
                     normal_run_list[int(biHour % 24)].append([(nodeID.value).decode('utf-8'), nodeValue.contents.value])
                     intCount += 1
             else:
                 for item in normal_run_list[int(biHour % 24)]:
-                    dbCursor.execute('''INSERT INTO NodeData VALUES (?, ?, ?)''', (biHour, item[0], item[1]))
+                    # dbCursor.execute('''INSERT INTO NodeData VALUES (?, ?, ?)''', (biHour, item[0], item[1]))
+                    node_data.append(tuple([biHour, (nodeID.value).decode('utf-8'), nodeValue.contents.value]))
         if (time.contents.value == 86400):
             time.contents = ct.c_int(0)
         epalib.ENnextH(timestep)
 
         biHour += 1
         epaCount += 1
-    dbObject.commit()
+    return {"failure_data": failure_data, "node_data": node_data}
+    # dbObject.commit()
 
 def failure_evaluation(comp, simType, index, tasMaxACT):
     # Pumps have multiple failure mechanisms (electrical and motor), so they have special treatment
