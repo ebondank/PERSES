@@ -33,7 +33,7 @@ class simulation(object):
                 else:
                     self.sim[key][component_type] = pipe_attributes().prop
         return self.sim
-
+epalib = ct.cdll.LoadLibrary('epanet2.dll')
 comps = ['pump', 'iron', 'pvc']
 data = simulation().sims_to_run({'real': comps, 'historical': comps, 'noTemp': comps})
 
@@ -57,31 +57,31 @@ with open('north_marin_c.inp', 'r') as f, open('placeholder.rpt', 'w') as fi:
     # Initializes the files for encoding and creates their byte objects
     a = 'north_marin_c.inp'; b_a = a.encode('UTF-8')
     b = 'placeholder.rpt'; b_b = b.encode('UTF-8')
-    data['real']['epanet'].ENopen(b_a, b_b, "")
-    data['real']['epanet'].ENopenH()
+    epalib.ENopen(b_a, b_b, "")
+    epalib.ENopenH()
     timestep = ct.pointer(ct.c_long(7200))
     time = ct.pointer(ct.c_long(0))
     init_flag = ct.c_int(1)
-    data['real']['epanet'].ENinitH(init_flag)
+    epalib.ENinitH(init_flag)
     # Getting network statistics
     nodeCount = ct.pointer(ct.c_int(0))
-    data['real']['epanet'].ENgetcount(ct.c_int(0), nodeCount)
+    epalib.ENgetcount(ct.c_int(0), nodeCount)
     nodeValue = ct.pointer(ct.c_float(0.0))
     nodeID = ct.c_char_p(('Testing purposes').encode('UTF-8'))
     # Getting the list of links
     linkList = ct.pointer(ct.c_int(0))
-    data['real']['epanet'].ENgetcount(ct.c_int(2), linkList)
+    epalib.ENgetcount(ct.c_int(2), linkList)
     linkCounter = 1
     currentRough = ct.pointer(ct.c_float(0.0))
     # Seperating the link population based on roughness
     indexReturn1 = ct.pointer(ct.c_int(0))
     # For the first pipe out of pump 10
     linkID = ct.c_char_p(str(10).encode('utf-8'))
-    data['real']['epanet'].ENgetlinkindex(linkID, indexReturn1)
+    epalib.ENgetlinkindex(linkID, indexReturn1)
     # For the first pipe out of pump 335
     linkID = ct.c_char_p(str(335).encode('utf-8'))
     indexReturn2 = ct.pointer(ct.c_int(0))
-    data['real']['epanet'].ENgetlinkindex(linkID, indexReturn2)
+    epalib.ENgetlinkindex(linkID, indexReturn2)
     for key in data:
         data[key]['pump']['index'].append(indexReturn1.contents)
         data[key]['pump']['index'].append(indexReturn2.contents)

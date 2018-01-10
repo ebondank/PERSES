@@ -43,23 +43,18 @@ class simulation(object):
                         self.data[self.simType][comp]['fS'][index] = int(self.data[self.simType][comp]['fS'][index]) - 1
                         if (int(self.data[self.simType][comp]['fS'][index]) <= 0):
                             # Turning the pipe back on in the simulation
-                            self.data[self.simType]['epanet'].ENsetlinkvalue(self.data[self.simType][comp]['index'][
-                                                                                index],
-                                                                     ct.c_int(11),
-                                                               ct.c_float(
-                                1.0))
+                            self.data[self.simType]['epanet'].ENsetlinkvalue(\
+                                self.data[self.simType][comp]['index'][index],ct.c_int(11),ct.c_float(1.0))
                             # no-time simulation config stuff
-                            if ((self.simType == 'noTemp') or (self.simType == 'real') or (self.simType ==
-                                                                                               'historical')):
+                            if ((self.simType == 'noTemp') or \
+                                (self.simType == 'real') or \
+                                (self.simType == 'historical')):
                                 self.reset_exposure(self.simType, comp, index)
                         else:
                             # Pipe disable mid run
                             normal_run = 0
-                            self.data[self.simType]['epanet'].ENsetlinkvalue(self.data[self.simType][comp]['index'][
-                                                                                index],
-                                                                     ct.c_int(11),
-                                                               ct.c_float(
-                                0.0))
+                            self.data[self.simType]['epanet'].ENsetlinkvalue(\
+                                self.data[self.simType][comp]['index'][index],ct.c_int(11),ct.c_float(0.0))
                     # noTime has a special set of configurations, just ignore
                     # Testing if component is not failed, can't fail already failed component
                     if (self.simType == 'noTime' or self.data[self.simType][comp]['fS'][index]) == 0:
@@ -67,11 +62,8 @@ class simulation(object):
                         failure_det = self.failure_evaluation(comp, index, tasMaxACT)
                         # If the component should be failed, we turn it off and record the failure in both locations
                         if (failure_det == True):
-                            self.data[self.simType]['epanet'].ENsetlinkvalue(self.data[self.simType][comp]['index'][
-                                                                                index],
-                                                                     ct.c_int(11),
-                                                               ct.c_float(
-                                0.0))
+                            self.data[self.simType]['epanet'].ENsetlinkvalue(\
+                                self.data[self.simType][comp]['index'][index],ct.c_int(11),ct.c_float(0.0))
                             failure_data.append(tuple([biHour, index, comp]))
                             # It is now an abnormal run, and we set the failure state of the component according to given values
                             normal_run = 0
@@ -86,26 +78,22 @@ class simulation(object):
                 while (intCount < self.nodeCount.contents.value):
                     self.data[self.simType]['epanet'].ENgetnodevalue(ct.c_int(intCount), ct.c_int(11), self.nodeValue)
                     self.data[self.simType]['epanet'].ENgetnodeid(ct.c_int(intCount), self.nodeID)
-                    node_data.append(tuple([biHour, (self.nodeID.value).decode('utf-8'),
-                                            self.nodeValue.contents.value]))
+                    node_data.append(tuple([biHour, (self.nodeID.value).decode('utf-8'),self.nodeValue.contents.value]))
                     intCount += 1
             else:
                 if (len(self.normal_run_list[int(biHour % 24)]) == 0):
                     self.data[self.simType]['epanet'].ENrunH(self.time)
                     intCount = 1
                     while (intCount < self.nodeCount.contents.value):
-                        self.data[self.simType]['epanet'].ENgetnodevalue(ct.c_int(intCount), ct.c_int(11),
-                                                                         self.nodeValue)
+                        self.data[self.simType]['epanet'].ENgetnodevalue(ct.c_int(intCount), ct.c_int(11),self.nodeValue)
                         self.data[self.simType]['epanet'].ENgetnodeid(ct.c_int(intCount), self.nodeID)
-                        node_data.append(tuple([biHour, (self.nodeID.value).decode('utf-8'),
-                                                self.nodeValue.contents.value]))
-                        self.normal_run_list[int(biHour % 24)].append([(self.nodeID.value).decode('utf-8'),
-                                                                  self.nodeValue.contents.value])
+                        node_data.append(tuple([biHour, (self.nodeID.value).decode('utf-8'), self.nodeValue.contents.value]))
+                        self.normal_run_list[int(biHour % 24)].append(\
+                            [(self.nodeID.value).decode('utf-8'), self.nodeValue.contents.value])
                         intCount += 1
                 else:
                     for item in self.normal_run_list[int(biHour % 24)]:
-                        node_data.append(tuple([biHour, (self.nodeIDvalue).decode('utf-8'),
-                                                self.nodeValue.contents.value]))
+                        node_data.append(tuple([biHour, (self.nodeID).decode('utf-8'),self.nodeValue.contents.value]))
             if (self.time.contents.value == 86400):
                 self.time.contents = ct.c_int(0)
             self.data[self.simType]['epanet'].ENnextH(self.timestep)
@@ -153,7 +141,7 @@ class simulation(object):
         if (comp != 'pump'):
             exp_from_dict = [self.data[self.simType][comp]['exp']]
         else:
-            exp_from_dict = [[self.data[self.simType][comp]['motor_exp'], self.dataself.simTypecomp]['elec_exp']]
+            exp_from_dict = [[self.data[self.simType][comp]['motor_exp'], self.data[self.simType][comp]['elec_exp']]
 
         for fail_type, exp_list in enumerate(exp_from_dict):
             exp_list[index] = 0
