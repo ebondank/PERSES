@@ -40,8 +40,8 @@ if __name__ == "__main__":
         for sim in simsToRun:
             sim_list.append(tuple([batch, sim]))
         res = pool.starmap(EPANET_simulation, sim_list)
-        pool.join()
         pool.close()
+        pool.join()
         for index in range(0, len(res)):
             cursors[index].executemany('''INSERT INTO failureData VALUES (?, ?, ?)''', res[index]['failure_data'])
             conns[index].commit()
