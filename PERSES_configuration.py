@@ -105,10 +105,15 @@ with open('north_marin_c.inp', 'r') as f, open('placeholder.rpt', 'w') as fi:
 pvc_count = len(data[key]['pvc']['index'])
 iron_count = len(data[key]['iron']['index'])
 pump_count = len(data[key]['pump']['index'])
-motor_ltH = np.random.rand(pump_count, 100).tolist()
-elec_ltH = np.random.rand(pump_count, 100).tolist()
-pvc_ltH = np.random.rand(pvc_count, 100).tolist()
-iron_ltH = np.random.rand(iron_count, 100).tolist()
+motor_ltH = list()
+elec_ltH = list()
+pvc_ltH = list()
+iron_ltH = list()
+for i in range(0, pump_count):
+    motor_ltH.append(np.random.random(100).tolist())
+    elec_ltH.append(np.random.random(100).tolist())
+for i in range(0, pvc_count): pvc_ltH.append(np.random.random(100).tolist())
+for i in range(0, iron_count): iron_ltH.append(np.random.random(100).tolist())
 
 # Setting component level attributes for everything in the current simulation set
 for key in data:
