@@ -1,9 +1,6 @@
 import math
 import ctypes as ct
-# from PERSES_configuration import self.data, time, tasMaxACTList, self.nodeCount, self.nodeID, self.nodeValue.,
-# self.normal_run_list,
-# distList,
-# timestep, biHourToYear
+
 class simulation(object):
     def __init__(self, batch, simType, **kwargs):
         self.alive = True
@@ -23,6 +20,7 @@ class simulation(object):
     def EPANET_simulation(self):
         epaCount = 0
         biHour = (self.batch * 4380)
+        simType = str(self.simType)
         self.time.contents = ct.c_long(0)
         node_data = list()
         failure_data = list()
@@ -30,14 +28,17 @@ class simulation(object):
         while epaCount < 4380:
             dayCount = math.floor(biHour / 12)
             # Temperature at Surface maximum at current timestep
-            tasMaxACT = float(self.tasMaxACTList[self.simType][dayCount])
+            tasMaxACT = float(self.tasMaxACTList[simType][dayCount])
             # Normal run used to track state of EPANET simulation
             normal_run = 1
             # Comp = Component, iterates over all component types in the simulation
-            for comp in self.data[self.simType]:
+            comps = list(filter(lambda x: x != "epanet", self.data[self.simType]))
+            for comp in comps:
                 # Iterates over all instances of each component type, eg. PVC_1, PVC_2, etc, for all PVC
-                for index, item in enumerate(self.data[self.simType][comp]['index']):
-                    # If the pipe is already in the failed stae
+                for index, item in enumerate(self.data[self.simType][comp]):
+                    # If the pipe is already in the failed state
+                    print(index)
+                    index -= 1
                     if self.data[self.simType][comp]['fS'][index] != 0:
                         self.data[self.simType][comp]['fS'][index] = int(self.data[self.simType][comp]['fS'][index]) - 1
                         if (int(self.data[self.simType][comp]['fS'][index]) <= 0):
@@ -63,7 +64,7 @@ class simulation(object):
                     # Testing if component is not failed, can't fail already failed component
                     if (self.simType == 'noTime' or self.data[self.simType][comp]['fS'][index]) == 0:
                         # Failure determination module, can be modified for individual uses
-                        failure_det = self.failure_evaluation(comp, self.simType, index, tasMaxACT)
+                        failure_det = self.failure_evaluation(comp, index, tasMaxACT)
                         # If the component should be failed, we turn it off and record the failure in both locations
                         if (failure_det == True):
                             self.data[self.simType]['epanet'].ENsetlinkvalue(self.data[self.simType][comp]['index'][

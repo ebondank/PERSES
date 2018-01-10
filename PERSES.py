@@ -40,7 +40,7 @@ if __name__ == "__main__":
         res = []
         for sim in simsToRun:
             sim_item = simulation(batch, sim,data = data,time = time,tasMaxACTList =
-            tasMaxACTList,nodeCount = nodeCount, nodeID = nodeID, normal_run_list = normal_run_list,distList =
+            tasMaxACTList,nodeCount = nodeCount,nodeValue=nodeValue, nodeID = nodeID, normal_run_list = normal_run_list,distList =
             distList, timestep = timestep,biHourToYear = biHourToYear)
             sim_list.append(sim_item)
             res.append(sim_item.EPANET_simulation())
