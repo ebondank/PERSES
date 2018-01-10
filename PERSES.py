@@ -1,10 +1,16 @@
 import os
 import sqlite3 as sql
+import atexit
 # All code in PERSES_configuration must be ran before PERSES can funtion, DO NOT alter this line
 from PERSES_configuration import *
 from PERSES_simulation import EPANET_simulation
 import multiprocessing as mp
 
+def file_cleaning():
+    with os.scandir() as it:
+        for file in it:
+            if len(file.name().split('.')) > 1:
+                os.remove(file.name)
 # Creating all the databases, failure files, and simulation parametes necessary
 if __name__ == "__main__":
     simsToRun = ['real', 'noTemp', 'historical']
@@ -34,6 +40,8 @@ if __name__ == "__main__":
         for sim in simsToRun:
             sim_list.append(tuple([batch, sim]))
         res = pool.starmap(EPANET_simulation, sim_list)
+        pool.join()
+        pool.close()
         for index in range(0, len(res)):
             cursors[index].executemany('''INSERT INTO failureData VALUES (?, ?, ?)''', res[index]['failure_data'])
             conns[index].commit()
@@ -51,3 +59,4 @@ if __name__ == "__main__":
 
     epalib.ENcloseH()
     epalib.ENclose()
+atexit.register(file_cleaning)

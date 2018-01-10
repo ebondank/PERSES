@@ -80,7 +80,6 @@ def EPANET_simulation(batch, simType):
         if (time.contents.value == 86400):
             time.contents = ct.c_int(0)
         epalib.ENnextH(timestep)
-
         biHour += 1
         epaCount += 1
     return {"failure_data": failure_data, "node_data": node_data}
