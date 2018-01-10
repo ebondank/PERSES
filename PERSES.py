@@ -25,7 +25,7 @@ batch = 0
 
 # Doing batched simulations
 # TODO: Parallelize this code
-pool = mp.Pool(mp.cpu_count())
+pool = mp.Pool(len(simsToRun))
 while batch < 150:
     sim_list = list()
     for sim in simsToRun:

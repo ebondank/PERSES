@@ -44,9 +44,9 @@ if os.name == "nt":
                     'noTemp':'rcp45_1950_2100.txt', \
                     'historical': 'histTasMaxBD.txt'}
 else:
-    tempFileList = {'real': 'hist85.txt', \
+    tempFileList = {'real': 'rcp85_1950_2100.txt', \
                     # 'noTime_noCC': 'hist45.txt', \
-                    'noTemp':'hist45.txt', \
+                    'noTemp':'rcp45_1950_2100.txt', \
                     'historical': 'histTasMaxBD.txt'}
 for key in tempFileList:
     with open(tempFileList[key], 'r') as f_:
