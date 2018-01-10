@@ -41,7 +41,8 @@ if __name__ == "__main__":
             conns[index].commit()
             # for item in sorted(list(res[index]['failure_data'].values()), key=lambda x: x[2])
             for comp in comps:
-                write_list = [x for y in list(res[index]['failure_data'].values()) if y == comp]:
+                write_list = list(res[index]['failure_data'].values()) 
+                write_list = filter(lambda write_list: write_list[2] == comp)
                 with open(("{}_{}_fail.txt").format(simsToRun[index], comp), 'a') as handle:
                     for value in write_list:
                         handle.write(("{} {}\n").format(value[1], value[0]))
