@@ -3,6 +3,7 @@ import sqlite3 as sql
 # All code in PERSES_configuration must be ran before PERSES can funtion, DO NOT alter this line
 from PERSES_configuration import *
 from PERSES_simulation import EPANET_simulation
+import multiprocessing as mp
 
 # Creating all the databases, failure files, and simulation parametes necessary
 simsToRun = ['real', 'noTemp', 'historical']
@@ -24,9 +25,12 @@ batch = 0
 
 # Doing batched simulations
 # TODO: Parallelize this code
+pool = mp.Pool(mp.cpu_count())
 while batch < 150:
+    sim_list = list()
     for sim in simsToRun:
-        EPANET_simulation(batch, sim, cursor_dict[sim], conn_dict[sim])
+        sim_list.append(tuple([batch, sim, cursor_dict[sim], conn_dict[sim]]))
+    pool.starmap(EPANET_simulation, sim_list)
     print(batch)
     batch += 1
 
