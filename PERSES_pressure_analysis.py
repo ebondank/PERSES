@@ -3,7 +3,7 @@ import math
 import os
 
 
-Path = '10-31-17/realistic0.db'
+Path = 'Output/real.db'
 print(Path)
 db = sql.connect(Path)
 com = db.cursor()
@@ -58,4 +58,4 @@ for row in list1:
             print(row, "Broken")
 
 for index, item in enumerate(dbOUCount):
-    print(("{} {}").format(dbOUCount2[index], item))
+    print(("{}\t{}").format(dbOUCount2[index], item))
