@@ -40,8 +40,8 @@ def EPANET_simulation(batch, simType):
                     # If the component should be failed, we turn it off and record the failure in both locations
                     if (failure_det == True):
                         epalib.ENsetlinkvalue(data[simType][comp]['index'][index], ct.c_int(11), ct.c_float(0.0))
-                        with open(('{}_{}_fail.txt').format(simType, comp), 'a') as failure_f:
-                            failure_f.write('%s %s\n' % (index, biHour))
+                        # with open(('{}_{}_fail.txt').format(simType, comp), 'a') as failure_f:
+                            # failure_f.write('%s %s\n' % (index, biHour))
                         failure_data.append(tuple([biHour, index, comp]))
                         # dbCursor.execute('''INSERT INTO failureData VALUES (?, ?, ?)''', (biHour, index, comp))
                         # It is now an abnormal run, and we set the failure state of the component according to given values

@@ -159,9 +159,6 @@ if __name__ == "__main__":
             for sim in statistics_dict[("{}_{}").format(simulation, item)]['sims']:
                 process_list.append(sim)
             print(item)
-    # statistics_dict["rcp85_1950_2100_pump"]["sims"][0].thread_looping()
-    # statistics_dict["rcp85_1950_2100_pump"]["sims"][1].thread_looping()
-    # statistics_dict["rcp85_1950_2100_pump"]["sims"][2].thread_looping()
     pool = mp.Pool(mp.cpu_count())
     failures = pool.map(component_populations.thread_looping, process_list)
 

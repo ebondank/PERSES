@@ -36,8 +36,15 @@ if __name__ == "__main__":
         res = pool.starmap(EPANET_simulation, sim_list)
         for index in range(0, len(res)):
             cursors[index].executemany('''INSERT INTO failureData VALUES (?, ?, ?)''', res[index]['failure_data'])
+            conns[index].commit()
             cursors[index].executemany('''INSERT INTO NodeData VALUES (?, ?, ?)''', res[index]['node_data'])
             conns[index].commit()
+            # for item in sorted(list(res[index]['failure_data'].values()), key=lambda x: x[2])
+            for comp in comps:
+                write_list = [x for y in list(res[index]['failure_data'].values()) if y == comp]:
+                with open(("{}_{}_fail.txt").format(simsToRun[index], comp), 'a') as handle:
+                    for value in write_list:
+                        handle.write(("{} {}\n").format(value[1], value[0]))
         print(batch)
         batch += 1
 

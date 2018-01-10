@@ -29,7 +29,7 @@ class temp_proj_gen(object):
     def proj_over_time(self, years_back, years_forward, baseline=None, projections=None):
         if (baseline != None) and (projections != None):
             try:
-                self.load_proj_and_BL(baseline, projections)
+                self.load_proj_and_baseline(baseline, projections)
             except Exception as loading_error:
                 raise loading_error
         elif (baseline != None) or (projections != None):
@@ -75,6 +75,6 @@ class temp_proj_gen(object):
 if __name__ == "__main__":
     test_proj = temp_proj_gen()
     test_proj.load_proj_and_baseline('./hist_for_50yr.txt', ['./_45_for_86yr.txt', './_85_for_86yr.txt'])
-    t = test_proj.proj_over_time(67, 83)
+    t = test_proj.proj_over_time(67, 90)
     print(t[0][0:10])
     test_proj.proj_to_file(['rcp45_1950_2100.txt', "rcp85_1950_2100.txt"])
