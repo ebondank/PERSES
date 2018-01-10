@@ -3,14 +3,14 @@ import sqlite3 as sql
 import atexit
 # All code in PERSES_configuration must be ran before PERSES can funtion, DO NOT alter this line
 from PERSES_configuration import *
-from PERSES_simulation import EPANET_simulation
+from PERSES_simulation import simulation
 import multiprocessing as mp
 
-def file_cleaning():
-    with os.scandir() as it:
-        for file in it:
-            if len(file.name().split('.')) > 1:
-                os.remove(file.name)
+# def file_cleaning():
+#     with os.scandir() as it:
+#         for file in it:
+#             if len(file.name().split('.')) > 1:
+#                 os.remove(file.name)
 # Creating all the databases, failure files, and simulation parametes necessary
 if __name__ == "__main__":
     simsToRun = ['real', 'noTemp', 'historical']
@@ -35,15 +35,15 @@ if __name__ == "__main__":
     cursors = list(cursor_dict.values())
     conns = list(conn_dict.values())
     while batch < 150:
-        # pool = mp.Pool(len(simsToRun))
+        pool = mp.Pool(len(simsToRun))
         sim_list = []
-        res = list()
+        res = []
         for sim in simsToRun:
-            sim_list.append(tuple([batch, sim]))
-            res.append(EPANET_simulation(batch, sim))
-        # res = pool.starmap(EPANET_simulation, sim_list)
-        # pool.close()
-        # pool.join()
+            sim_list.append(simulation(batch, sim))
+            res.append(simulation(batch, sim).EPANET_simulation())
+        res = pool.starmap(simulation.EPANET_simulation, sim_list)
+        pool.close()
+        pool.join()
         for index in range(0, len(res)):
             cursors[index].executemany('''INSERT INTO failureData VALUES (?, ?, ?)''', res[index]['failure_data'])
             conns[index].commit()
@@ -58,7 +58,6 @@ if __name__ == "__main__":
                         handle.write(("{} {}\n").format(value[1], value[0]))
         print(batch)
         batch += 1
-
-    epalib.ENcloseH()
-    epalib.ENclose()
-atexit.register(file_cleaning)
+    for sim in simsToRun:
+        data[sim]["epanet"].ENcloseH()
+        data[sim]["epanet"].ENclose()
