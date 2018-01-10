@@ -25,12 +25,14 @@ batch = 0
 
 # Doing batched simulations
 # TODO: Parallelize this code
-pool = mp.Pool(len(simsToRun))
 while batch < 150:
-    sim_list = list()
+    pool = mp.Pool(len(simsToRun))
+    sim_list = []
     for sim in simsToRun:
         sim_list.append(tuple([batch, sim, cursor_dict[sim], conn_dict[sim]]))
     pool.starmap(EPANET_simulation, sim_list)
+    pool.join()
+    pool.close()
     print(batch)
     batch += 1
 
