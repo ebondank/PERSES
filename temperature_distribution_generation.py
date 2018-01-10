@@ -74,7 +74,7 @@ class temp_proj_gen(object):
 
 if __name__ == "__main__":
     test_proj = temp_proj_gen()
-    test_proj.load_proj_and_baseline('./hist_for_50yr.txt', ['./_45_for_86yr.txt', './_85_for_86yr.txt'])
-    t = test_proj.proj_over_time(67, 90)
+    test_proj.load_proj_and_baseline('./hist_for_50yr.txt', ['./Non-Current Data/csiromk45.txt', './Non-Current Data/csiromk85.txt'])
+    t = test_proj.proj_over_time(70, 83)
     print(t[0][0:10])
-    test_proj.proj_to_file(['rcp45_1950_2100.txt', "rcp85_1950_2100.txt"])
+    test_proj.proj_to_file(['rcp45_1950_2100_2.txt', "rcp85_1950_2100_2.txt"])

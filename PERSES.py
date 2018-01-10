@@ -35,13 +35,15 @@ if __name__ == "__main__":
     cursors = list(cursor_dict.values())
     conns = list(conn_dict.values())
     while batch < 150:
-        pool = mp.Pool(len(simsToRun))
+        # pool = mp.Pool(len(simsToRun))
         sim_list = []
+        res = list()
         for sim in simsToRun:
             sim_list.append(tuple([batch, sim]))
-        res = pool.starmap(EPANET_simulation, sim_list)
-        pool.close()
-        pool.join()
+            res.append(EPANET_simulation(batch, sim))
+        # res = pool.starmap(EPANET_simulation, sim_list)
+        # pool.close()
+        # pool.join()
         for index in range(0, len(res)):
             cursors[index].executemany('''INSERT INTO failureData VALUES (?, ?, ?)''', res[index]['failure_data'])
             conns[index].commit()
