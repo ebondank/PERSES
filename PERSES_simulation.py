@@ -1,136 +1,158 @@
 import math
 import ctypes as ct
-from PERSES_configuration import data, time, tasMaxACTList, nodeCount, nodeID, nodeValue, normal_run_list, distList, timestep, biHourToYear
+# from PERSES_configuration import self.data, time, tasMaxACTList, self.nodeCount, self.nodeID, self.nodeValue.,
+# self.normal_run_list,
+# distList,
+# timestep, biHourToYear
 class simulation(object):
-    def __init__(self, batch, simType):
+    def __init__(self, batch, simType, **kwargs):
         self.alive = True
         self.batch = batch
         self.simType = simType
+        # for key, value in kwargs.items():
+        self.data = kwargs['data']
+        self.time = kwargs['time']
+        self.tasMaxACTList = kwargs['tasMaxACTList']
+        self.self.nodeCount = kwargs['self.nodeCount']
+        self.self.nodeID = kwargs['nodeValue']
+        self.self.normal_run_list = kwargs['normal_run_list']
+        self.distList = kwargs['distList']
+        self.timestep = kwargs['timestep']
+        self.nodeValue = kwargs['nodeValue']
+        self.biHourToYear = kwargs['biHourToYear']
     def EPANET_simulation(self):
-        batch = self.batch
-        simType = self.simType
         epaCount = 0
-        biHour = (batch * 4380)
-        time.contents = ct.c_long(0)
+        biHour = (self.batch * 4380)
+        self.time.contents = ct.c_long(0)
         node_data = list()
         failure_data = list()
         # Currently set to do year long batches
         while epaCount < 4380:
             dayCount = math.floor(biHour / 12)
             # Temperature at Surface maximum at current timestep
-            tasMaxACT = float(tasMaxACTList[simType][dayCount])
+            tasMaxACT = float(self.tasMaxACTList[self.simType][dayCount])
             # Normal run used to track state of EPANET simulation
             normal_run = 1
             # Comp = Component, iterates over all component types in the simulation
-            for comp in data[simType]:
+            for comp in self.data[self.simType]:
                 # Iterates over all instances of each component type, eg. PVC_1, PVC_2, etc, for all PVC
-                for index, item in enumerate(data[simType][comp]['index']):
+                for index, item in enumerate(self.data[self.simType][comp]['index']):
                     # If the pipe is already in the failed stae
-                    if data[simType][comp]['fS'][index] != 0:
-                        data[simType][comp]['fS'][index] = int(data[simType][comp]['fS'][index]) - 1
-                        if (int(data[simType][comp]['fS'][index]) <= 0):
+                    if self.data[self.simType][comp]['fS'][index] != 0:
+                        self.data[self.simType][comp]['fS'][index] = int(self.data[self.simType][comp]['fS'][index]) - 1
+                        if (int(self.data[self.simType][comp]['fS'][index]) <= 0):
                             # Turning the pipe back on in the simulation
-                            data[simType]['epanet'].ENsetlinkvalue(data[simType][comp]['index'][index], ct.c_int(11), ct.c_float(1.0))
+                            self.data[self.simType]['epanet'].ENsetlinkvalue(self.data[self.simType][comp]['index'][
+                                                                                index],
+                                                                     ct.c_int(11),
+                                                               ct.c_float(
+                                1.0))
                             # no-time simulation config stuff
-                            if ((simType == 'noTemp') or (simType == 'real') or (simType == 'historical')):
-                                reset_exposure(simType, comp, index)
+                            if ((self.simType == 'noTemp') or (self.simType == 'real') or (self.simType ==
+                                                                                               'historical')):
+                                self.reset_exposure(self.simType, comp, index)
                         else:
                             # Pipe disable mid run
                             normal_run = 0
-                            data[simType]['epanet'].ENsetlinkvalue(data[simType][comp]['index'][index], ct.c_int(11), ct.c_float(0.0))
+                            self.data[self.simType]['epanet'].ENsetlinkvalue(self.data[self.simType][comp]['index'][
+                                                                                index],
+                                                                     ct.c_int(11),
+                                                               ct.c_float(
+                                0.0))
                     # noTime has a special set of configurations, just ignore
                     # Testing if component is not failed, can't fail already failed component
-                    if (simType == 'noTime' or data[simType][comp]['fS'][index]) == 0:
+                    if (self.simType == 'noTime' or self.data[self.simType][comp]['fS'][index]) == 0:
                         # Failure determination module, can be modified for individual uses
-                        failure_det = self.failure_evaluation(comp, simType, index, tasMaxACT)
+                        failure_det = self.failure_evaluation(comp, self.simType, index, tasMaxACT)
                         # If the component should be failed, we turn it off and record the failure in both locations
                         if (failure_det == True):
-                            data[simType]['epanet'].ENsetlinkvalue(data[simType][comp]['index'][index], ct.c_int(11), ct.c_float(0.0))
-                            # with open(('{}_{}_fail.txt').format(simType, comp), 'a') as failure_f:
-                                # failure_f.write('%s %s\n' % (index, biHour))
+                            self.data[self.simType]['epanet'].ENsetlinkvalue(self.data[self.simType][comp]['index'][
+                                                                                index],
+                                                                     ct.c_int(11),
+                                                               ct.c_float(
+                                0.0))
                             failure_data.append(tuple([biHour, index, comp]))
-                            # dbCursor.execute('''INSERT INTO failureData VALUES (?, ?, ?)''', (biHour, index, comp))
                             # It is now an abnormal run, and we set the failure state of the component according to given values
                             normal_run = 0
                             if (comp != 'pump'):
-                                data[simType][comp]['fS'][index] = 44
+                                self.data[self.simType][comp]['fS'][index] = 44
                             else:
-                                data[simType][comp]['fS'][index] = 8
+                                self.data[self.simType][comp]['fS'][index] = 8
         # Does the hydraulic solving via EPANET, saves the results in our DB
             if (normal_run == 0):
-                data[simType]['epanet'].ENrunH(time)
+                self.data[self.simType]['epanet'].ENrunH(self.time)
                 intCount = 1
-                while (intCount < nodeCount.contents.value):
-                    data[simType]['epanet'].ENgetnodevalue(ct.c_int(intCount), ct.c_int(11), nodeValue)
-                    data[simType]['epanet'].ENgetnodeid(ct.c_int(intCount), nodeID)
-                    # dbCursor.execute('''INSERT INTO NodeData VALUES (?, ?, ?)''', \
-                        # (biHour, (nodeID.value).decode('utf-8'), nodeValue.contents.value))
-                    node_data.append(tuple([biHour, (nodeID.value).decode('utf-8'), nodeValue.contents.value]))
+                while (intCount < self.nodeCount.contents.value):
+                    self.data[self.simType]['epanet'].ENgetnodevalue(ct.c_int(intCount), ct.c_int(11), self.nodeValue)
+                    self.data[self.simType]['epanet'].ENgetnodeid(ct.c_int(intCount), self.nodeID)
+                    node_data.append(tuple([biHour, (self.nodeID.value).decode('utf-8'),
+                                            self.nodeValue.contents.value]))
                     intCount += 1
             else:
-                if (len(normal_run_list[int(biHour % 24)]) == 0):
-                    data[simType]['epanet'].ENrunH(time)
+                if (len(self.normal_run_list[int(biHour % 24)]) == 0):
+                    self.data[self.simType]['epanet'].ENrunH(self.time)
                     intCount = 1
-                    while (intCount < nodeCount.contents.value):
-                        data[simType]['epanet'].ENgetnodevalue(ct.c_int(intCount), ct.c_int(11), nodeValue)
-                        data[simType]['epanet'].ENgetnodeid(ct.c_int(intCount), nodeID)
-                        # dbCursor.execute('''INSERT INTO NodeData VALUES (?, ?, ?)''', \
-                            # (biHour, (nodeID.value).decode('utf-8'), nodeValue.contents.value))
-                        node_data.append(tuple([biHour, (nodeID.value).decode('utf-8'), nodeValue.contents.value]))
-                        normal_run_list[int(biHour % 24)].append([(nodeID.value).decode('utf-8'), nodeValue.contents.value])
+                    while (intCount < self.nodeCount.contents.value):
+                        self.data[self.simType]['epanet'].ENgetnodevalue(ct.c_int(intCount), ct.c_int(11),
+                                                                         self.nodeValue)
+                        self.data[self.simType]['epanet'].ENgetnodeid(ct.c_int(intCount), self.nodeID)
+                        node_data.append(tuple([biHour, (self.nodeID.value).decode('utf-8'),
+                                                self.nodeValue.contents.value]))
+                        self.normal_run_list[int(biHour % 24)].append([(self.nodeID.value).decode('utf-8'),
+                                                                  self.nodeValue.contents.value])
                         intCount += 1
                 else:
-                    for item in normal_run_list[int(biHour % 24)]:
-                        # dbCursor.execute('''INSERT INTO NodeData VALUES (?, ?, ?)''', (biHour, item[0], item[1]))
-                        node_data.append(tuple([biHour, (nodeID.value).decode('utf-8'), nodeValue.contents.value]))
-            if (time.contents.value == 86400):
-                time.contents = ct.c_int(0)
-            data[simType]['epanet'].ENnextH(timestep)
+                    for item in self.normal_run_list[int(biHour % 24)]:
+                        node_data.append(tuple([biHour, (self.nodeIDvalue).decode('utf-8'),
+                                                self.nodeValue.contents.value]))
+            if (self.time.contents.value == 86400):
+                self.time.contents = ct.c_int(0)
+            self.data[self.simType]['epanet'].ENnextH(self.timestep)
             biHour += 1
             epaCount += 1
         return {"failure_data": failure_data, "node_data": node_data}
         # dbObject.commit()
 
-    def failure_evaluation(self, comp, simType, index, tasMaxACT):
+    def failure_evaluation(self, comp, index, tasMaxACT):
         # Pumps have multiple failure mechanisms (electrical and motor), so they have special treatment
         # Everything treated as "lists" for code reusability
         if (comp != 'pump'):
-            exp_from_dict = [data[simType][comp]['exp']]
-            ltH_from_dict = [data[simType][comp]['ltH']]
-            ctH_from_dict = [data[simType][comp]['ctH']]
+            exp_from_dict = [self.data[self.simType][comp]['exp']]
+            ltH_from_dict = [self.data[self.simType][comp]['ltH']]
+            ctH_from_dict = [self.data[self.simType][comp]['ctH']]
             failure_dist = [comp]
         else:
-            exp_from_dict = [data[simType][comp]['motor_exp'], data[simType][comp]['elec_exp']]
-            ltH_from_dict = [data[simType][comp]['motor_ltH'], data[simType][comp]['elec_ltH']]
-            ctH_from_dict = [data[simType][comp]['motor_ctH'], data[simType][comp]['elec_ctH']]
+            exp_from_dict = [self.data[self.simType][comp]['motor_exp'], self.data[self.simType][comp]['elec_exp']]
+            ltH_from_dict = [self.data[self.simType][comp]['motor_ltH'], self.data[self.simType][comp]['elec_ltH']]
+            ctH_from_dict = [self.data[self.simType][comp]['motor_ctH'], self.data[self.simType][comp]['elec_ctH']]
             failure_dist = ['motor', 'elec']
         # Use failure flag to signal to w/e called this function
         failure_flag = False
         for fail_type, exp_list in enumerate(exp_from_dict):
             # Exposure calculations used for failure determination
-            per_failed1 = distList[failure_dist[fail_type]][math.floor(float(exp_list[index]))]
-            per_failed2 = distList[failure_dist[fail_type]][math.ceil(float(exp_list[index]))]
+            per_failed1 = self.distList[failure_dist[fail_type]][math.floor(float(exp_list[index]))]
+            per_failed2 = self.distList[failure_dist[fail_type]][math.ceil(float(exp_list[index]))]
             per_failed = (float(per_failed2) - float(per_failed1)) * (float(exp_list[index]) - math.floor(float(exp_list[index]))) + float(per_failed1)
-            # If component failed, again ignore simType testing, very specific use-case
+            # If component failed, again ignore self.simType testing, very specific use-case
             if (per_failed > float(ctH_from_dict[fail_type][index])):
-                if ((simType == 'noTemp') or (simType == 'real') or (simType == 'historical')):
+                if ((self.simType == 'noTemp') or (self.simType == 'real') or (self.simType == 'historical')):
                     exp_list[index] = 0
                     indexOfctH = (ltH_from_dict[fail_type][index].index(ctH_from_dict[fail_type][index])) + 1
                     ctH_from_dict[fail_type][index] = ltH_from_dict[fail_type][index][indexOfctH]
                 failure_flag = True
                 return failure_flag
-        if ((simType == 'noTemp') or (simType == 'real') or (simType == 'historical')):
-            exp_list[index] = float(exp_list[index]) + (biHourToYear * tasMaxACT)
+        if ((self.simType == 'noTemp') or (self.simType == 'real') or (self.simType == 'historical')):
+            exp_list[index] = float(exp_list[index]) + (self.biHourToYear * tasMaxACT)
 
         return failure_flag
 
 
-def reset_exposure(simType, comp, index):
-    # Used for resetting exposure, again using lists due to pump failure mechanism
-    if (comp != 'pump'):
-        exp_from_dict = [data[simType][comp]['exp']]
-    else:
-        exp_from_dict = [data[simType][comp]['motor_exp'], data[simType][comp]['elec_exp']]
+    def reset_exposure(self, simType, comp, index):
+        # Used for resetting exposure, again using lists due to pump failure mechanism
+        if (comp != 'pump'):
+            exp_from_dict = [self.data[self.simType][comp]['exp']]
+        else:
+            exp_from_dict = [[self.data[self.simType][comp]['motor_exp'], self.dataself.simTypecomp]['elec_exp']]
 
-    for fail_type, exp_list in enumerate(exp_from_dict):
-        exp_list[index] = 0
+        for fail_type, exp_list in enumerate(exp_from_dict):
+            exp_list[index] = 0
