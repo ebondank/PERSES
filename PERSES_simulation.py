@@ -38,10 +38,8 @@ class simulation(object):
             comps = list(filter(lambda x: x != "epanet", self.data[self.simType]))
             for comp in comps:
                 # Iterates over all instances of each component type, eg. PVC_1, PVC_2, etc, for all PVC
-                for index, item in enumerate(self.data[self.simType][comp]):
+                for index, item in enumerate(self.data[self.simType][comp]['fS']):
                     # If the pipe is already in the failed state
-                    print(index)
-                    index -= 1
                     if self.data[self.simType][comp]['fS'][index] != 0:
                         self.data[self.simType][comp]['fS'][index] = int(self.data[self.simType][comp]['fS'][index]) - 1
                         if (int(self.data[self.simType][comp]['fS'][index]) <= 0):
