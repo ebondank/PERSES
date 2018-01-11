@@ -5,8 +5,9 @@ import atexit
 # All code in PERSES_configuration must be ran before PERSES can funtion, DO NOT alter this line
 from PERSES_configuration import *
 from PERSES_simulation import simulation
-import multiprocessing as mp
-import pathos
+# import multiprocessing as mp
+# import pathos
+import multiprocessing_on_dill as mp
 
 # def file_cleaning():
 #     with os.scandir() as it:
@@ -37,8 +38,8 @@ if __name__ == "__main__":
     cursors = list(cursor_dict.values())
     conns = list(conn_dict.values())
     while batch < 150:
-        # pool = mp.Pool(len(simsToRun))
-        pool = pathos.pools.ProcessPool(len(simsToRun))
+        pool = mp.pool.Pool(len(simsToRun))
+        # pool = pathos.pools.ProcessPool(len(simsToRun))
         sim_list = []
         res = []
         for sim in simsToRun:
