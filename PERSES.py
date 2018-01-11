@@ -4,7 +4,7 @@ import sqlite3 as sql
 import atexit
 # All code in PERSES_configuration must be ran before PERSES can funtion, DO NOT alter this line
 from PERSES_configuration import *
-# from PERSES_simulation import simulation
+from PERSES_simulation import simulation
 # from pathos.multiprocessing import _ProcessPool as Pool
 # import multiprocessing_on_dill as mp
 
