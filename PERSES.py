@@ -5,6 +5,7 @@ import atexit
 from PERSES_configuration import *
 from PERSES_simulation import simulation
 import multiprocessing as mp
+import pathos
 
 # def file_cleaning():
 #     with os.scandir() as it:
@@ -35,7 +36,8 @@ if __name__ == "__main__":
     cursors = list(cursor_dict.values())
     conns = list(conn_dict.values())
     while batch < 150:
-        pool = mp.Pool(len(simsToRun))
+        # pool = mp.Pool(len(simsToRun))
+        pool = pathos.pools.ProcessPool(len(simsToRun))
         sim_list = []
         res = []
         for sim in simsToRun:
@@ -44,7 +46,7 @@ if __name__ == "__main__":
             distList, timestep = timestep,biHourToYear = biHourToYear)
             sim_list.append(sim_item)
             res.append(sim_item.EPANET_simulation())
-        res = pool.starmap(simulation.EPANET_simulation, sim_list)
+        res = pool.map(simulation.EPANET_simulation, sim_list)
         pool.close()
         pool.join()
         for index in range(0, len(res)):
