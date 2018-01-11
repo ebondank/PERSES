@@ -22,6 +22,9 @@ class simulation(object):
         biHour = (self.batch * 4380)
         simType = str(self.simType)
         self.time.contents = ct.c_long(0)
+        self.nodeValue = ct.pointer(ct.c_float(0.0))
+        self.nodeID = ct.c_char_p(('Testing purposes').encode('UTF-8'))
+
         node_data = list()
         failure_data = list()
         # Currently set to do year long batches
@@ -138,10 +141,10 @@ class simulation(object):
 
     def reset_exposure(self, simType, comp, index):
         # Used for resetting exposure, again using lists due to pump failure mechanism
+        exp_from_dict = list()
         if (comp != 'pump'):
             exp_from_dict = [self.data[self.simType][comp]['exp']]
         else:
-            exp_from_dict = [[self.data[self.simType][comp]['motor_exp'], self.data[self.simType][comp]['elec_exp']]
-
+            exp_from_dict = [[self.data[self.simType][comp]['motor_exp'], self.data[self.simType][comp]['elec_exp']]]
         for fail_type, exp_list in enumerate(exp_from_dict):
             exp_list[index] = 0
