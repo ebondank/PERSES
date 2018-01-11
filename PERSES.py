@@ -4,10 +4,9 @@ import sqlite3 as sql
 import atexit
 # All code in PERSES_configuration must be ran before PERSES can funtion, DO NOT alter this line
 from PERSES_configuration import *
-from PERSES_simulation import simulation
-# import multiprocessing as mp
-import pathos
-import multiprocessing_on_dill as mp
+# from PERSES_simulation import simulation
+# from pathos.multiprocessing import _ProcessPool as Pool
+# import multiprocessing_on_dill as mp
 
 # def file_cleaning():
 #     with os.scandir() as it:
@@ -39,18 +38,18 @@ if __name__ == "__main__":
     conns = list(conn_dict.values())
     while batch < 150:
         # pool = mp.pool.Pool(len(simsToRun))
-        pool = pathos.multiprocessing.ProcessPool(3)
+        # pool = Pool(3)
         sim_list = []
         res = []
         for sim in simsToRun:
             sim_item = simulation(batch, sim,data = data,time = time,tasMaxACTList =
             tasMaxACTList,nodeCount = nodeCount,nodeValue=nodeValue, nodeID = nodeID, normal_run_list = normal_run_list,distList =
             distList, timestep = timestep,biHourToYear = biHourToYear)
-            sim_list.append(sim_item)
-            # res.append(sim_item.EPANET_simulation())
-        res = pool.map(simulation.EPANET_simulation, sim_list)
-        pool.close()
-        pool.join()
+            # sim_list.append(sim_item)
+            res.append(sim_item.EPANET_simulation())
+        # res = pool.map(simulation.EPANET_simulation, sim_list)
+        # pool.close()
+        # pool.join()
         for index in range(0, len(res)):
             cursors[index].executemany('''INSERT INTO failureData VALUES (?, ?, ?)''', res[index]['failure_data'])
             conns[index].commit()
