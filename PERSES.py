@@ -6,7 +6,7 @@ import atexit
 from PERSES_configuration import *
 from PERSES_simulation import simulation
 # import multiprocessing as mp
-# import pathos
+import pathos
 import multiprocessing_on_dill as mp
 
 # def file_cleaning():
@@ -38,8 +38,8 @@ if __name__ == "__main__":
     cursors = list(cursor_dict.values())
     conns = list(conn_dict.values())
     while batch < 150:
-        pool = mp.pool.Pool(len(simsToRun))
-        # pool = pathos.pools.ProcessPool(len(simsToRun))
+        # pool = mp.pool.Pool(len(simsToRun))
+        pool = pathos.multiprocessing.ProcessPool(3)
         sim_list = []
         res = []
         for sim in simsToRun:
