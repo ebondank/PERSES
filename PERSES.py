@@ -1,3 +1,4 @@
+import dill
 import os
 import sqlite3 as sql
 import atexit
@@ -45,7 +46,7 @@ if __name__ == "__main__":
             tasMaxACTList,nodeCount = nodeCount,nodeValue=nodeValue, nodeID = nodeID, normal_run_list = normal_run_list,distList =
             distList, timestep = timestep,biHourToYear = biHourToYear)
             sim_list.append(sim_item)
-            res.append(sim_item.EPANET_simulation())
+            # res.append(sim_item.EPANET_simulation())
         res = pool.map(simulation.EPANET_simulation, sim_list)
         pool.close()
         pool.join()
