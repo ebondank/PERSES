@@ -94,7 +94,7 @@ class simulation(object):
                         intCount += 1
                 else:
                     for item in self.normal_run_list[int(biHour % 24)]:
-                        node_data.append(tuple([biHour, (self.nodeID).decode('utf-8'),self.nodeValue.contents.value]))
+                        node_data.append(tuple([biHour, (self.nodeID.value).decode('utf-8'),self.nodeValue.contents.value]))
             if (self.time.contents.value == 86400):
                 self.time.contents = ct.c_int(0)
             self.data[self.simType]['epanet'].ENnextH(self.timestep)
