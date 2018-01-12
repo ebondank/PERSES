@@ -15,7 +15,7 @@ from PERSES_simulation import simulation
 #                 os.remove(file.name)
 # Creating all the databases, failure files, and simulation parametes necessary
 if __name__ == "__main__":
-    simsToRun = ['real', 'noTemp', 'historical']
+    simsToRun = ['real', 'historical', 'noTemp']
     conn_dict = dict()
     cursor_dict = dict()
     for sim in data.keys():

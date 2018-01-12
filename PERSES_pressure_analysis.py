@@ -3,7 +3,7 @@ import math
 import os
 
 
-Path = 'Output/real.db'
+Path = 'Output/noTemp.db'
 print(Path)
 db = sql.connect(Path)
 com = db.cursor()
@@ -24,15 +24,20 @@ dbOUCount2 = list()
 timeStepCountList = list()
 count = 0
 infiniteCount = 0
-while (infiniteCount < 20):
+while (infiniteCount < 150):
     dbOUCount.append(0)
     dbOUCount2.append(0)
     infiniteCount += 1
 print(demandList)
 yrList = list()
 list1 = com.execute('SELECT * FROM NodeData ORDER BY Bihour_Count ASC')
+newItem = None
 for row in list1:
-    newItem = float(row[1])
+    try:
+        old_item = newItem
+        newItem = float(row[1])
+    except ValueError as v:
+        newItem = old_item
     if (newItem in demandList):
         try:
             ouCount = dbOUCount[math.floor((row[0]) / 4380)]
