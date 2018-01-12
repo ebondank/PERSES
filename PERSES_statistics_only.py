@@ -2,8 +2,8 @@ import sqlite3 as sql
 import math
 import numpy as np
 import os
-import inquirer
-import threading
+# import inquirer
+# import threading
 import multiprocessing as mp
 
 def input_file_cleaning(filename):
@@ -159,10 +159,14 @@ if __name__ == "__main__":
                 process_list.append(sim)
             print(item)
     # mp.Semaphore(mp.cpu_count())
-    pool = mp.Pool(mp.cpu_count())
-    failures = pool.imap(component_populations.thread_looping, process_list)
-    pool.close()
-    pool.join()
+    try:
+        pool = mp.Pool(mp.cpu_count())
+        failures = pool.imap(component_populations.thread_looping, process_list)
+        pool.close()
+        pool.join()
+    except IndexError as idx:
+        print(idx)
+        print(idx.with_traceback)
 
     with open('test_multiProc_out.txt', 'w') as testHand:
         for x in failures:
