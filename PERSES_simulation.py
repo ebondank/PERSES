@@ -112,7 +112,6 @@ class simulation(object):
             epaCount += 1
         return {"failure_data": failure_data, "node_data": node_data,\
                 "node_data_sub_20": node_data_sub_20, "node_data_sub_40": node_data_sub_40}
-        # dbObject.commit()
 
     def failure_evaluation(self, comp, index, tasMaxACT):
         # Pumps have multiple failure mechanisms (electrical and motor), so they have special treatment
