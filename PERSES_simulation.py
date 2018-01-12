@@ -26,7 +26,10 @@ class simulation(object):
         self.nodeID = ct.c_char_p(('Testing purposes').encode('UTF-8'))
 
         node_data = list()
+        node_data_sub_40 = list()
+        node_data_sub_20 = list()
         failure_data = list()
+
         # Currently set to do year long batches
         while epaCount < 4380:
             dayCount = math.floor(biHour / 12)
@@ -88,13 +91,20 @@ class simulation(object):
                     while (intCount < self.nodeCount.contents.value):
                         self.data[self.simType]['epanet'].ENgetnodevalue(ct.c_int(intCount), ct.c_int(11),self.nodeValue)
                         self.data[self.simType]['epanet'].ENgetnodeid(ct.c_int(intCount), self.nodeID)
-                        node_data.append(tuple([biHour, (self.nodeID.value).decode('utf-8'), self.nodeValue.contents.value]))
-                        self.normal_run_list[int(biHour % 24)].append(\
-                            [(self.nodeID.value).decode('utf-8'), self.nodeValue.contents.value])
+                        nodeID = self.nodeID.value.decode('utf-8')
+                        nodeValue = self.nodeValue.contents.value
+                        data_tuple = tuple([biHour,  nodeID, self.nodeValue.contents.value]))
+                        if nodeValue <= 40:
+                            if nodeValue <= 20:
+                                node_data_sub_20.append(data_tuple)
+                            else:
+                                node_data_sub_40.append(data_tuple)
+                        node_data.append(data_tuple)
+                        self.normal_run_list[int(biHour % 24)].append([nodeID, nodeValue])
                         intCount += 1
                 else:
                     for item in self.normal_run_list[int(biHour % 24)]:
-                        node_data.append(tuple([biHour, (self.nodeID.value).decode('utf-8'),self.nodeValue.contents.value]))
+                        node_data.append(tuple([biHour, item[0], item[1]]))
             if (self.time.contents.value == 86400):
                 self.time.contents = ct.c_int(0)
             self.data[self.simType]['epanet'].ENnextH(self.timestep)

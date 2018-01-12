@@ -29,6 +29,8 @@ if __name__ == "__main__":
         conn_dict[sim] = sql.connect(('{}.db').format(sim))
         cursor_dict[sim] = conn_dict[sim].cursor()
         cursor_dict[sim].execute('''CREATE TABLE NodeData (Bihour_Count real, NodeID real, Pressure real)''')
+        cursor_dict[sim].execute('''CREATE TABLE NodeDataVLow (Bihour_Count real, NodeID real, Pressure real)''')
+        cursor_dict[sim].execute('''CREATE TABLE NodeDataMLow (Bihour_Count real, NodeID real, Pressure real)''')
         cursor_dict[sim].execute('''CREATE TABLE failureData (Bihour_Count real, NodeID real, componentType real)''')
     batch = 0
 
@@ -54,6 +56,10 @@ if __name__ == "__main__":
             cursors[index].executemany('''INSERT INTO failureData VALUES (?, ?, ?)''', res[index]['failure_data'])
             conns[index].commit()
             cursors[index].executemany('''INSERT INTO NodeData VALUES (?, ?, ?)''', res[index]['node_data'])
+            conns[index].commit()
+            cursors[index].executemany('''INSERT INTO NodeDataVLow VALUES (?, ?, ?)''', res[index]['node_data_sub_20'])
+            conns[index].commit()
+            cursors[index].executemany('''INSERT INTO NodeDataMLow VALUES (?, ?, ?)''', res[index]['node_data_sub_40'])
             conns[index].commit()
             # for item in sorted(list(res[index]['failure_data'].values()), key=lambda x: x[2])
             for comp in comps:

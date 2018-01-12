@@ -3,7 +3,7 @@ import math
 import os
 
 
-Path = 'Output/noTemp.db'
+Path = 'Output/real.db'
 print(Path)
 db = sql.connect(Path)
 com = db.cursor()
@@ -37,6 +37,11 @@ for row in list1:
         old_item = newItem
         newItem = float(row[1])
     except ValueError as v:
+        print("?")
+        print(row[1])
+        print(row)
+        print(old_item)
+        input()
         newItem = old_item
     if (newItem in demandList):
         try:
