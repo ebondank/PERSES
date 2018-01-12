@@ -1,10 +1,11 @@
-import sqlite3 as sql
-import math
-import numpy as np
 import os
+import math
+import atexit
+import numpy as np
+import sqlite3 as sql
+import multiprocessing as mp
 # import inquirer
 # import threading
-import multiprocessing as mp
 
 def input_file_cleaning(filename):
     ret_list = list()
@@ -27,6 +28,12 @@ def input_file_cleaning(filename):
                     except ValueError as val:
                         print(val)
     return ret_list
+
+def write_failure_to_file(failures):
+    with open('test_multiProc_out.txt', 'w') as testHand:
+        for x in failures:
+            for y in x:
+                testHand.write(("{}\n").format(y))
 
 class component_populations(object):
     
@@ -106,6 +113,8 @@ if __name__ == "__main__":
                     # choices=["rcp85_1950_2100", "rcp45_1950_2100"],
                 # ),]
     # temp_scenarios = [(inquirer.prompt(questions))['size']]
+    failures = list()
+    atexit.register(write_failure_to_file, failures=failures)
     temp_scenarios = ["rcp85_1950_2100"]
 
     pop_list = ["pump", "pvc", "iron"]
@@ -174,7 +183,7 @@ if __name__ == "__main__":
         print(idx)
         print(idx.with_traceback)
 
-    with open('test_multiProc_out.txt', 'w') as testHand:
-        for x in failures:
-            for y in x:
-                testHand.write(("{}\n").format(y))
+    # with open('test_multiProc_out.txt', 'w') as testHand:
+    #     for x in failures:
+    #         for y in x:
+    #             testHand.write(("{}\n").format(y))
