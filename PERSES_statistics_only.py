@@ -88,7 +88,7 @@ class component_populations(object):
 
 
     def thread_looping(self):
-        while (self.biHour_counter < goal_time):
+        while (self.biHour_counter < self.goal_time):
             self.failure_evaluation()
         return self.failure_instances
 
@@ -136,7 +136,7 @@ if __name__ == "__main__":
             gf = god_factor_simulation_syncing[index]
             temp_comp_count = component_count_dict[item]
             # slice_size = math.floor(component_count_dict[item] / mp.cpu_count())
-            slice_size = 1000
+            slice_size = 35000
             thread_splice_count = 0
             new_simulation = list()
             while (temp_comp_count > 0):
@@ -158,6 +158,7 @@ if __name__ == "__main__":
             for sim in statistics_dict[("{}_{}").format(simulation, item)]['sims']:
                 process_list.append(sim)
             print(item)
+    # mp.Semaphore(mp.cpu_count())
     pool = mp.Pool(mp.cpu_count())
     failures = pool.imap(component_populations.thread_looping, process_list)
     pool.close()
