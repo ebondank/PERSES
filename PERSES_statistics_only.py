@@ -103,9 +103,8 @@ if __name__ == "__main__":
     temp_scenarios = ["rcp85_1950_2100"]
 
     pop_list = ["pump", "pvc", "iron"]
-    god_factor_list = [["new_cdf/mid_case_motor.txt", "new_cdf/mid_case_elec.txt"],\
-                        ["new_cdf/pvc_made_cdf.txt"],\
-                        ["new_cdf/iron_made_cdf.txt"]]
+    god_factor_list = [["mid_case_motor.txt", "mid_case_elec.txt"],\
+                        ["pvc_made_cdf.txt"], ["iron_made_cdf.txt"]]
     component_count_dict = {"pump": 113, "pvc": 30750, "iron": 30750}
     process_list = []
     goal_time = 54000
@@ -128,12 +127,12 @@ if __name__ == "__main__":
         cdf_file_data = list()
         temperature_data = input_file_cleaning(temp_curve)
         for index, item in enumerate(pop_list):
-            if (os.name != "nt"):
-                cdf_curves.append(god_factor_list[index])
-                cdf_file_data.append(input_file_cleaning(god_factor_list[index]))
+            # if (os.name != "nt"):
+            cdf_curves.append(god_factor_list[index])
+            cdf_file_data.append(input_file_cleaning(god_factor_list[index]))
                     
-            else:
-                cdf_curve = (os.path.relpath('new_cdf\\{}_made_cdf.txt').format(item))
+            # else:
+                # cdf_curve = (os.path.relpath('new_cdf\\{}_made_cdf.txt').format(item))
             gf = god_factor_simulation_syncing[index]
             temp_comp_count = component_count_dict[item]
             # slice_size = math.floor(component_count_dict[item] / mp.cpu_count())
