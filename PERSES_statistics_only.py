@@ -60,37 +60,43 @@ class component_populations(object):
         self.god_factor_counts = [[0]*component_count]*len(self.distribution_lists)
 
     def failure_evaluation(self):
-        if self.index >= self.ending_index:
-            self.index = self.starting_index
-            # self.biHour_counter += 1
-            self.day_count += 1
-        for idx, dist in enumerate(self.distribution_lists):
-            # print(math.floor(self.exposure_arrays[index][self.index]))
-            per_failed1 = dist[math.floor(self.exposure_arrays[idx][self.index])]
-            per_failed2 = dist[math.ceil(self.exposure_arrays[idx][self.index])]
-            per_failed = (per_failed2 - per_failed1) * (self.exposure_arrays[idx][self.index] - \
-                 math.floor(self.exposure_arrays[idx][self.index])) + per_failed1
-            if (per_failed > self.god_factor_lists[idx][self.index][self.god_factor_counts[idx][self.index]]):
-                self.failure_instances.append(("{}|{}|{}|{}|{}|{}|{}").format(self.day_count, \
-                    self.index, self.component_type, self.thread_splice,\
-                    self.god_factor_lists[idx][self.index][self.god_factor_counts[idx][self.index]], \
-                    self.exposure_arrays[idx][self.index], self.god_factor_counts[idx][self.index]))
-                # print(self.failure_instances[-1])
-                for x in range(0, len(self.distribution_lists)):
-                    self.exposure_arrays[x][self.index] = 0
-                    self.god_factor_counts[x][self.index] += 1
+        try:
+            if self.index >= self.ending_index:
+                self.index = self.starting_index
+                # self.biHour_counter += 1
+                self.day_count += 1
+            for idx, dist in enumerate(self.distribution_lists):
+                # print(math.floor(self.exposure_arrays[index][self.index]))
+                per_failed1 = dist[math.floor(self.exposure_arrays[idx][self.index])]
+                per_failed2 = dist[math.ceil(self.exposure_arrays[idx][self.index])]
+                per_failed = (per_failed2 - per_failed1) * (self.exposure_arrays[idx][self.index] - \
+                    math.floor(self.exposure_arrays[idx][self.index])) + per_failed1
+                if (per_failed > self.god_factor_lists[idx][self.index][self.god_factor_counts[idx][self.index]]):
+                    self.failure_instances.append(("{}|{}|{}|{}|{}|{}|{}").format(self.day_count, \
+                        self.index, self.component_type, self.thread_splice,\
+                        self.god_factor_lists[idx][self.index][self.god_factor_counts[idx][self.index]], \
+                        self.exposure_arrays[idx][self.index], self.god_factor_counts[idx][self.index]))
+                    # print(self.failure_instances[-1])
+                    for x in range(0, len(self.distribution_lists)):
+                        self.exposure_arrays[x][self.index] = 0
+                        self.god_factor_counts[x][self.index] += 1
+                else:
+                    self.exposure_arrays[idx][self.index] = self.exposure_arrays[idx][self.index] + \
+                        float(self.temp_curve[self.day_count] / 365)
             else:
-                self.exposure_arrays[idx][self.index] = self.exposure_arrays[idx][self.index] + \
-                    float(self.temp_curve[self.day_count] / 365)
-        else:
-            self.index += 1
+                self.index += 1
+        except (IndexError, KeyboardInterrupt) as ex:
+            raise ex
 
 
 
     def thread_looping(self):
-        while (self.biHour_counter < self.goal_time):
-            self.failure_evaluation()
-        return self.failure_instances
+        try:
+            while (self.biHour_counter < self.goal_time):
+                self.failure_evaluation()
+            return self.failure_instances
+        except (IndexError, KeyboardInterrupt) as ex:
+            raise ex
 
 
 if __name__ == "__main__":
