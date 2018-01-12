@@ -164,7 +164,7 @@ if __name__ == "__main__":
         failures = pool.imap(component_populations.thread_looping, process_list)
         pool.close()
         pool.join()
-    except IndexError as idx:
+    except (IndexError, KeyboardInterrupt) as idx:
         print(idx)
         print(idx.with_traceback)
 
