@@ -93,7 +93,7 @@ class simulation(object):
                         self.data[self.simType]['epanet'].ENgetnodeid(ct.c_int(intCount), self.nodeID)
                         nodeID = self.nodeID.value.decode('utf-8')
                         nodeValue = self.nodeValue.contents.value
-                        data_tuple = tuple([biHour,  nodeID, self.nodeValue.contents.value]))
+                        data_tuple = tuple([biHour,  nodeID, self.nodeValue.contents.value])
                         if nodeValue <= 40:
                             if nodeValue <= 20:
                                 node_data_sub_20.append(data_tuple)
