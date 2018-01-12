@@ -35,6 +35,7 @@ class component_populations(object):
         self.god_factor_lists = component_god_factor_list
         self.biHourToYear = .0002283105022831050228310502283105
         self.biHour_counter = 0
+        self.day_count = 0
         self.index = 0
         self.component_count = component_count - 1
         self.failure_instances = []
@@ -61,7 +62,8 @@ class component_populations(object):
     def failure_evaluation(self):
         if self.index >= self.ending_index:
             self.index = self.starting_index
-            self.biHour_counter += 1
+            # self.biHour_counter += 1
+            self.day_count += 1
         for idx, dist in enumerate(self.distribution_lists):
             # print(math.floor(self.exposure_arrays[index][self.index]))
             per_failed1 = dist[math.floor(self.exposure_arrays[idx][self.index])]
@@ -69,17 +71,17 @@ class component_populations(object):
             per_failed = (per_failed2 - per_failed1) * (self.exposure_arrays[idx][self.index] - \
                  math.floor(self.exposure_arrays[idx][self.index])) + per_failed1
             if (per_failed > self.god_factor_lists[idx][self.index][self.god_factor_counts[idx][self.index]]):
-                self.failure_instances.append(("{}|{}|{}|{}|{}|{}|{}").format(self.biHour_counter, \
+                self.failure_instances.append(("{}|{}|{}|{}|{}|{}|{}").format(self.day_count, \
                     self.index, self.component_type, self.thread_splice,\
                     self.god_factor_lists[idx][self.index][self.god_factor_counts[idx][self.index]], \
                     self.exposure_arrays[idx][self.index], self.god_factor_counts[idx][self.index]))
-                print(self.failure_instances[-1])
+                # print(self.failure_instances[-1])
                 for x in range(0, len(self.distribution_lists)):
                     self.exposure_arrays[x][self.index] = 0
                     self.god_factor_counts[x][self.index] += 1
             else:
                 self.exposure_arrays[idx][self.index] = self.exposure_arrays[idx][self.index] + \
-                    (self.biHourToYear * self.temp_curve[int(math.floor(self.biHour_counter/12))])
+                    float(self.temp_curve[self.day_count] / 365)
         else:
             self.index += 1
 
@@ -106,7 +108,7 @@ if __name__ == "__main__":
                         ["new_cdf/iron_made_cdf.txt"]]
     component_count_dict = {"pump": 113, "pvc": 30750, "iron": 30750}
     process_list = []
-    goal_time = 100000
+    goal_time = 54000
 
     god_factor_simulation_syncing = list()
     for index, sim in enumerate(pop_list):
@@ -118,7 +120,7 @@ if __name__ == "__main__":
                 god_factor_simulation_syncing[index][x].append(np.ndarray.tolist(np.random.random(100)))
                 count += 1
 
-    q = mp.Queue()
+    # q = mp.Queue()
     for simulation in temp_scenarios:
         statistics_dict = dict()
         temp_curve = ("{}.txt").format(simulation)
@@ -136,8 +138,6 @@ if __name__ == "__main__":
             temp_comp_count = component_count_dict[item]
             # slice_size = math.floor(component_count_dict[item] / mp.cpu_count())
             slice_size = 1000
-            thread_comp_count = mp.cpu_count()
-            print(thread_comp_count)
             thread_splice_count = 0
             new_simulation = list()
             while (temp_comp_count > 0):
@@ -160,7 +160,9 @@ if __name__ == "__main__":
                 process_list.append(sim)
             print(item)
     pool = mp.Pool(mp.cpu_count())
-    failures = pool.map(component_populations.thread_looping, process_list)
+    failures = pool.imap(component_populations.thread_looping, process_list)
+    pool.close()
+    pool.join()
 
     with open('test_multiProc_out.txt', 'w') as testHand:
         for x in failures:
