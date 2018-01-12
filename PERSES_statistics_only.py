@@ -29,14 +29,16 @@ def input_file_cleaning(filename):
                         print(val)
     return ret_list
 
-def write_failure_to_file(failures):
+def write_failure_to_file(sims):
+    failures = list()
+    for sim in sims:
+        failures.append(sim.failure_instances)
     with open('test_multiProc_out.txt', 'w') as testHand:
         for x in failures:
             for y in x:
                 testHand.write(("{}\n").format(y))
 
 class component_populations(object):
-    
     def __init__(self, temp_curve_file, failure_dist_files, component_type, component_god_factor_list, component_count, goal_time, starting_index, ending_index, thread_splice, slice_size):
         self.component_type = component_type
         self.god_factor_lists = component_god_factor_list
@@ -65,6 +67,9 @@ class component_populations(object):
             self.distribution_lists = failure_dist_files
         self.exposure_arrays = [[0]*component_count]*len(self.distribution_lists)
         self.god_factor_counts = [[0]*component_count]*len(self.distribution_lists)
+    
+    def set_outfile(self, outfile):
+        self.outfile = outfile
 
     def failure_evaluation(self):
         try:
@@ -83,7 +88,7 @@ class component_populations(object):
                         self.index, self.component_type, self.thread_splice,\
                         self.god_factor_lists[idx][self.index][self.god_factor_counts[idx][self.index]], \
                         self.exposure_arrays[idx][self.index], self.god_factor_counts[idx][self.index]))
-                    # print(self.failure_instances[-1])
+                    print(self.failure_instances[-1])
                     for x in range(0, len(self.distribution_lists)):
                         self.exposure_arrays[x][self.index] = 0
                         self.god_factor_counts[x][self.index] += 1
@@ -95,15 +100,19 @@ class component_populations(object):
         except (IndexError, KeyboardInterrupt) as ex:
             raise ex
 
-
-
     def thread_looping(self):
         try:
             while (self.biHour_counter < self.goal_time):
                 self.failure_evaluation()
             return self.failure_instances
         except (IndexError, KeyboardInterrupt) as ex:
+            self.prog_done()
             raise ex
+    
+    def prog_done(self):
+        with open(self.outfile, 'a') as handle:
+            for failure in self.failure_instances:
+                handle.write(("{}\n").format(failure))
 
 
 if __name__ == "__main__":
@@ -114,12 +123,15 @@ if __name__ == "__main__":
                 # ),]
     # temp_scenarios = [(inquirer.prompt(questions))['size']]
     failures = list()
-    atexit.register(write_failure_to_file, failures=failures)
     temp_scenarios = ["rcp85_1950_2100"]
 
     pop_list = ["pump", "pvc", "iron"]
     god_factor_list = [["mid_case_motor.txt", "mid_case_elec.txt"],\
                         ["pvc_made_cdf.txt"], ["iron_made_cdf.txt"]]
+
+    outfile = "statistics_only_unordered_out.txt"
+    with open(outfile, "w+") as handle: pass
+
     component_count_dict = {"pump": 113, "pvc": 30750, "iron": 30750}
     process_list = []
     goal_time = 54000
@@ -134,26 +146,23 @@ if __name__ == "__main__":
                 god_factor_simulation_syncing[index][x].append(np.ndarray.tolist(np.random.random(100)))
                 count += 1
 
-    # q = mp.Queue()
     for simulation in temp_scenarios:
         statistics_dict = dict()
         temp_curve = ("{}.txt").format(simulation)
         cdf_curves = list()
         cdf_file_data = list()
         temperature_data = input_file_cleaning(temp_curve)
+
         for index, item in enumerate(pop_list):
-            # if (os.name != "nt"):
             cdf_curves.append(god_factor_list[index])
             cdf_file_data.append(input_file_cleaning(god_factor_list[index]))
                     
-            # else:
-                # cdf_curve = (os.path.relpath('new_cdf\\{}_made_cdf.txt').format(item))
             gf = god_factor_simulation_syncing[index]
             temp_comp_count = component_count_dict[item]
-            # slice_size = math.floor(component_count_dict[item] / mp.cpu_count())
             slice_size = 35000
             thread_splice_count = 0
             new_simulation = list()
+
             while (temp_comp_count > 0):
                 if temp_comp_count > slice_size:
                     new_simulation.append(component_populations(temperature_data,\
@@ -168,22 +177,18 @@ if __name__ == "__main__":
                         0, temp_comp_count, thread_splice_count, slice_size))
                 temp_comp_count -= slice_size
                 thread_splice_count += 1
-                
+
             statistics_dict[("{}_{}").format(simulation, item)] = {"sims": new_simulation, "type": item, "process_list":[]}
             for sim in statistics_dict[("{}_{}").format(simulation, item)]['sims']:
+                sim.set_outfile(outfile)
                 process_list.append(sim)
             print(item)
-    # mp.Semaphore(mp.cpu_count())
+
+    pool = mp.Pool(mp.cpu_count())
     try:
-        pool = mp.Pool(mp.cpu_count())
         failures = pool.imap(component_populations.thread_looping, process_list)
         pool.close()
         pool.join()
     except (IndexError, KeyboardInterrupt) as idx:
         print(idx)
         print(idx.with_traceback)
-
-    # with open('test_multiProc_out.txt', 'w') as testHand:
-    #     for x in failures:
-    #         for y in x:
-    #             testHand.write(("{}\n").format(y))
