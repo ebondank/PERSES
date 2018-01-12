@@ -110,7 +110,8 @@ class simulation(object):
             self.data[self.simType]['epanet'].ENnextH(self.timestep)
             biHour += 1
             epaCount += 1
-        return {"failure_data": failure_data, "node_data": node_data}
+        return {"failure_data": failure_data, "node_data": node_data,\
+                "node_data_sub_20": node_data_sub_20, "node_data_sub_40": node_data_sub_40}
         # dbObject.commit()
 
     def failure_evaluation(self, comp, index, tasMaxACT):
