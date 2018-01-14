@@ -37,10 +37,14 @@ epalib = ct.cdll.LoadLibrary('epanet2.dll')
 comps = ['pump', 'iron', 'pvc']
 sim_list = {'temp_curves': ['real'],\
                  'rep_times': [{'pipe':22, 'pump':4}, {'pipe':44, 'pump':8}, {'pipe':88, 'pump':16}]}
-sims_struct_gen_dict = dict()
+sim_list_strings = list()
 for temp in sim_list['temp_curves']:
     for rep in sim_list['rep_times']:
-        sims_struct_gen_dict[("{}_{}").format(temp, rep)] = comps
+        sim_list_strings.append(("{}_{}").format(temp, rep))
+
+sims_struct_gen_dict = dict()
+for sim in sim_list_strings:
+    sims_struct_gen_dict[sim] = comps
 data = simulation_creation().sims_to_run(sims_struct_gen_dict)
 
 # Temperature files, there are available in the github repo

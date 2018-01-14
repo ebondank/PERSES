@@ -6,7 +6,6 @@ class failure_simulation(object):
         self.alive = True
         self.batch = batch
         self.simType = simType
-        self.biHour = 0
         # for key, value in kwargs.items():
         self.data = kwargs['data']
         self.time = kwargs['time']
@@ -22,8 +21,7 @@ class failure_simulation(object):
         self.pipe_rep_time = kwargs['pipe_rep_time']
     def EPANET_simulation(self):
         self.epaCount = 0
-        # self.biHour = (self.batch * 4380)
-        biHour = self.biHour
+        biHour = (self.batch * 4380)
         simType = str(self.simType)
         self.time.contents = ct.c_long(0)
         self.nodeValue = ct.pointer(ct.c_float(0.0))
@@ -114,7 +112,6 @@ class failure_simulation(object):
             self.data[self.simType]['epanet'].ENnextH(self.timestep)
             biHour += 1
             self.epaCount += 1
-        self.biHour = biHour
         return {"failure_data": failure_data, "node_data": node_data,\
                 "node_data_sub_20": node_data_sub_20, "node_data_sub_40": node_data_sub_40}
 
