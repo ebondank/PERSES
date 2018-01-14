@@ -43,22 +43,21 @@ if __name__ == "__main__":
     while batch < 150:
         res = []
         simulation_list = []
-        for var in sim_list['temp_curves']:
-            for val in sim_list['rep_times']:
-                sim_item = failure_simulation(batch, var,\
-                    data=data,\
-                    time=time,\
-                    tasMaxACTList=tasMaxACTList,\
-                    nodeCount=nodeCount,\
-                    nodeValue=nodeValue,\
-                    nodeID=nodeID,\
-                    normal_run_list=normal_run_list,\
-                    distList=distList,\
-                    timestep=timestep,\
-                    biHourToYear=biHourToYear,\
-                    pipe_rep_time=val['pipe'],\
-                    pump_rep_time=val['pump'])
-                simulation_list.append(sim_item)
+        for sim_with_rep in sim_list_strings:
+            sim_item = failure_simulation(batch, sim_with_rep,\
+                data=data,\
+                time=time,\
+                tasMaxACTList=tasMaxACTList,\
+                nodeCount=nodeCount,\
+                nodeValue=nodeValue,\
+                nodeID=nodeID,\
+                normal_run_list=normal_run_list,\
+                distList=distList,\
+                timestep=timestep,\
+                biHourToYear=biHourToYear,\
+                pipe_rep_time=sim_with_rep.split("_")[1],\
+                pump_rep_time=sim_with_rep.split("_")[2])
+            simulation_list.append(sim_item)
         for sim in simulation_list:
             res.append(sim.EPANET_simulation())
         for index in range(0, len(res)):
