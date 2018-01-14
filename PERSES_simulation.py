@@ -52,9 +52,7 @@ class failure_simulation(object):
                             self.data[self.simType]['epanet'].ENsetlinkvalue(\
                                 self.data[self.simType][comp]['index'][index],ct.c_int(11),ct.c_float(1.0))
                             # no-time simulation config stuff
-                            if ((self.simType == 'noTemp') or \
-                                (self.simType == 'real') or \
-                                (self.simType == 'historical')):
+                            if self.simType != "noTime":
                                 self.reset_exposure(self.simType, comp, index)
                         else:
                             # Pipe disable mid run
@@ -137,13 +135,13 @@ class failure_simulation(object):
             per_failed = (float(per_failed2) - float(per_failed1)) * (float(exp_list[index]) - math.floor(float(exp_list[index]))) + float(per_failed1)
             # If component failed, again ignore self.simType testing, very specific use-case
             if (per_failed > float(ctH_from_dict[fail_type][index])):
-                if ((self.simType == 'noTemp') or (self.simType == 'real') or (self.simType == 'historical')):
+                if self.simType != "noTime":
                     exp_list[index] = 0
                     indexOfctH = (ltH_from_dict[fail_type][index].index(ctH_from_dict[fail_type][index])) + 1
                     ctH_from_dict[fail_type][index] = ltH_from_dict[fail_type][index][indexOfctH]
                 failure_flag = True
                 return failure_flag
-        if ((self.simType == 'noTemp') or (self.simType == 'real') or (self.simType == 'historical')):
+        if self.simType != "noTime":
             exp_list[index] = float(exp_list[index]) + (self.biHourToYear * tasMaxACT)
 
         return failure_flag

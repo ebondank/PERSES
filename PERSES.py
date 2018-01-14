@@ -20,12 +20,12 @@ if __name__ == "__main__":
 
     conn_dict = dict()
     cursor_dict = dict()
-    for comp_type in comps:
-        for sim_with_rep in sim_list_strings:
+    for sim_with_rep in sim_list_strings:
+        for comp_type in comps:
             f_ = open(('{}_{}_fail.txt').format(sim_with_rep, comp_type), 'w')
             f_.close()
         try:
-            os.remove(('{}.db').format(sim))
+            os.remove(('{}.db').format(sim_with_rep))
         except Exception as exp:
             print('No database here')
         for sim_with_rep in sim_list_strings:
