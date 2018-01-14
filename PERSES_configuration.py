@@ -40,7 +40,7 @@ sim_list = {'temp_curves': ['real'],\
 sim_list_strings = list()
 for temp in sim_list['temp_curves']:
     for rep in sim_list['rep_times']:
-        sim_list_strings.append(("{}_{}").format(temp, rep))
+        sim_list_strings.append(("{}_{}_{}").format(temp, rep['pipe'], rep['pump']))
 
 sims_struct_gen_dict = dict()
 for sim in sim_list_strings:
