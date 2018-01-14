@@ -100,7 +100,7 @@ with open('north_marin_c.inp', 'r') as f, open('placeholder.rpt', 'w') as fi:
     # Using pure c integers in the lists
     while (linkCounter < linkList.contents.value):
         indexVal = ct.c_int(linkCounter)
-        data['real']['epanet'].ENgetlinkvalue(indexVal, ct.c_int(2), currentRough)
+        data[sim_list_strings[0]]['epanet'].ENgetlinkvalue(indexVal, ct.c_int(2), currentRough)
         if linkCounter != (indexReturn1.contents.value or indexReturn2.contents.value):
             if (int(currentRough.contents.value) > 140):
                 for key in data:
