@@ -47,7 +47,7 @@ if __name__ == "__main__":
             sim_item = failure_simulation(batch, sim_with_rep,\
                 data=data,\
                 time=time,\
-                tasMaxACTList=tasMaxACTList,\
+                tasMaxACTList=sim_with_rep.split("_")[0],\
                 nodeCount=nodeCount,\
                 nodeValue=nodeValue,\
                 nodeID=nodeID,\
