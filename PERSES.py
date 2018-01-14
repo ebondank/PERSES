@@ -28,13 +28,12 @@ if __name__ == "__main__":
             os.remove(('{}.db').format(sim_with_rep))
         except Exception as exp:
             print('No database here')
-        for sim_with_rep in sim_list_strings:
-            conn_dict[sim_with_rep] = sql.connect(('{}.db').format(sim_with_rep))
-            cursor_dict[sim_with_rep] = conn_dict[sim_with_rep].cursor()
-            cursor_dict[sim_with_rep].execute('''CREATE TABLE NodeData (Bihour_Count real, NodeID real, Pressure real)''')
-            cursor_dict[sim_with_rep].execute('''CREATE TABLE NodeDataVLow (Bihour_Count real, NodeID real, Pressure real)''')
-            cursor_dict[sim_with_rep].execute('''CREATE TABLE NodeDataMLow (Bihour_Count real, NodeID real, Pressure real)''')
-            cursor_dict[sim_with_rep].execute('''CREATE TABLE failureData (Bihour_Count real, NodeID real, componentType real)''')
+        conn_dict[sim_with_rep] = sql.connect(('{}.db').format(sim_with_rep))
+        cursor_dict[sim_with_rep] = conn_dict[sim_with_rep].cursor()
+        cursor_dict[sim_with_rep].execute('''CREATE TABLE NodeData (Bihour_Count real, NodeID real, Pressure real)''')
+        cursor_dict[sim_with_rep].execute('''CREATE TABLE NodeDataVLow (Bihour_Count real, NodeID real, Pressure real)''')
+        cursor_dict[sim_with_rep].execute('''CREATE TABLE NodeDataMLow (Bihour_Count real, NodeID real, Pressure real)''')
+        cursor_dict[sim_with_rep].execute('''CREATE TABLE failureData (Bihour_Count real, NodeID real, componentType real)''')
     batch = 0
 
     # Doing batched simulations
