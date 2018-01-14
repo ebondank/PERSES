@@ -18,7 +18,7 @@ class simulation(object):
         self.nodeValue = kwargs['nodeValue']
         self.biHourToYear = kwargs['biHourToYear']
         self.pump_rep_time = kwargs['pump_rep_time']
-        self.pipe_rep_time = (kwargs['pipe_rep_time'])[self.simType]
+        self.pipe_rep_time = kwargs['pipe_rep_time']
     def EPANET_simulation(self):
         epaCount = 0
         biHour = (self.batch * 4380)
