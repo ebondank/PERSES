@@ -1,11 +1,12 @@
 import math
 import ctypes as ct
 
-class simulation(object):
+class failure_simulation(object):
     def __init__(self, batch, simType, **kwargs):
         self.alive = True
         self.batch = batch
         self.simType = simType
+        self.biHour = 0
         # for key, value in kwargs.items():
         self.data = kwargs['data']
         self.time = kwargs['time']
@@ -20,8 +21,9 @@ class simulation(object):
         self.pump_rep_time = kwargs['pump_rep_time']
         self.pipe_rep_time = kwargs['pipe_rep_time']
     def EPANET_simulation(self):
-        epaCount = 0
-        biHour = (self.batch * 4380)
+        self.epaCount = 0
+        # self.biHour = (self.batch * 4380)
+        biHour = self.biHour
         simType = str(self.simType)
         self.time.contents = ct.c_long(0)
         self.nodeValue = ct.pointer(ct.c_float(0.0))
@@ -33,7 +35,7 @@ class simulation(object):
         failure_data = list()
 
         # Currently set to do year long batches
-        while epaCount < 4380:
+        while self.epaCount < 4380:
             dayCount = math.floor(biHour / 12)
             # Temperature at Surface maximum at current timestep
             tasMaxACT = float(self.tasMaxACTList[simType][dayCount])
@@ -111,7 +113,8 @@ class simulation(object):
                 self.time.contents = ct.c_int(0)
             self.data[self.simType]['epanet'].ENnextH(self.timestep)
             biHour += 1
-            epaCount += 1
+            self.epaCount += 1
+        self.biHour = biHour
         return {"failure_data": failure_data, "node_data": node_data,\
                 "node_data_sub_20": node_data_sub_20, "node_data_sub_40": node_data_sub_40}
 

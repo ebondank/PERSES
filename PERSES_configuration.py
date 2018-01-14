@@ -20,7 +20,7 @@ class pump_attributes(object):
         self.prop = {'motor_ctH':list(), 'elec_ctH':list(), 'motor_ltH': list(), \
             'elec_ltH': list(), 'motor_exp': list(),'elec_exp':list(), 'fS':list(), 'index':list()}
 
-class simulation(object):
+class simulation_creation(object):
     def __init__(self):
         self.sim = dict()
     def sims_to_run(self, simulation_dict):
@@ -35,7 +35,13 @@ class simulation(object):
         return self.sim
 epalib = ct.cdll.LoadLibrary('epanet2.dll')
 comps = ['pump', 'iron', 'pvc']
-data = simulation().sims_to_run({'real': comps, 'historical': comps, 'noTemp': comps})
+sim_list = {'temp_curves': ['real'],\
+                 'rep_times': [{'pipe':22, 'pump':4}, {'pipe':44, 'pump':8}, {'pipe':88, 'pump':16}]}
+sims_struct_gen_dict = dict()
+for temp in sim_list['temp_curves']:
+    for rep in sim_list['rep_times']:
+        sims_struct_gen_dict[("{}_{}").format(temp, rep)] = comps
+data = simulation_creation().sims_to_run(sims_struct_gen_dict)
 
 # Temperature files, there are available in the github repo
 if os.name == "nt":
