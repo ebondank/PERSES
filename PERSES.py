@@ -15,7 +15,9 @@ from PERSES_simulation import simulation
 #                 os.remove(file.name)
 # Creating all the databases, failure files, and simulation parametes necessary
 if __name__ == "__main__":
-    simsToRun = ['real', 'historical', 'noTemp']
+    simsToRun = [{'temp_curves': ['real']},\
+                 {'rep_curves': [{'pipe':22, 'pump':4}, {'pipe':44, 'pump':8}, {'pipe':88, 'pump':16}]}]
+
     conn_dict = dict()
     cursor_dict = dict()
     for sim in data.keys():
@@ -43,15 +45,23 @@ if __name__ == "__main__":
         # pool = Pool(3)
         sim_list = []
         res = []
-        for sim in simsToRun:
-            sim_item = simulation(batch, sim,data = data,time = time,tasMaxACTList =
-            tasMaxACTList,nodeCount = nodeCount,nodeValue=nodeValue, nodeID = nodeID, normal_run_list = normal_run_list,distList =
-            distList, timestep = timestep,biHourToYear = biHourToYear)
-            # sim_list.append(sim_item)
-            res.append(sim_item.EPANET_simulation())
-        # res = pool.map(simulation.EPANET_simulation, sim_list)
-        # pool.close()
-        # pool.join()
+        for var_idx, var in enumerate(simsToRun[0]):
+            for var_idx_2 in range(1, len(simsToRun)):
+                for val in simsToRun[var_idx_2].values():
+                    sim_item = simulation(batch, var,\
+                        data=data,\
+                        time=time,\
+                        tasMaxACTList=tasMaxACTList,\
+                        nodeCount=nodeCount,\
+                        nodeValue=nodeValue,\
+                        nodeID=nodeID,\
+                        normal_run_list=normal_run_list,\
+                        distList=distList,\
+                        timestep=timestep,\
+                        biHourToYear=biHourToYear,\
+                        pipe_rep_time=val['pipe'],\
+                        pump_rep_time=val['pump'])
+                    res.append(sim_item.EPANET_simulation())
         for index in range(0, len(res)):
             cursors[index].executemany('''INSERT INTO failureData VALUES (?, ?, ?)''', res[index]['failure_data'])
             conns[index].commit()

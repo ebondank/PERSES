@@ -17,6 +17,8 @@ class simulation(object):
         self.timestep = kwargs['timestep']
         self.nodeValue = kwargs['nodeValue']
         self.biHourToYear = kwargs['biHourToYear']
+        self.pump_rep_time = kwargs['pump_rep_time']
+        self.pipe_rep_time = (kwargs['pipe_rep_time'])[self.simType]
     def EPANET_simulation(self):
         epaCount = 0
         biHour = (self.batch * 4380)
@@ -72,9 +74,9 @@ class simulation(object):
                             # It is now an abnormal run, and we set the failure state of the component according to given values
                             normal_run = 0
                             if (comp != 'pump'):
-                                self.data[self.simType][comp]['fS'][index] = 44
+                                self.data[self.simType][comp]['fS'][index] = self.pipe_rep_time
                             else:
-                                self.data[self.simType][comp]['fS'][index] = 8
+                                self.data[self.simType][comp]['fS'][index] = self.pump_rep_time
         # Does the hydraulic solving via EPANET, saves the results in our DB
             if (normal_run == 0):
                 self.data[self.simType]['epanet'].ENrunH(self.time)
@@ -93,7 +95,7 @@ class simulation(object):
                         self.data[self.simType]['epanet'].ENgetnodeid(ct.c_int(intCount), self.nodeID)
                         nodeID = self.nodeID.value.decode('utf-8')
                         nodeValue = self.nodeValue.contents.value
-                        data_tuple = tuple([biHour,  nodeID, self.nodeValue.contents.value])
+                        data_tuple = tuple([biHour,  nodeID, nodeValue])
                         if nodeValue <= 40:
                             if nodeValue <= 20:
                                 node_data_sub_20.append(data_tuple)
