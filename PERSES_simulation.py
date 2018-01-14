@@ -36,7 +36,7 @@ class failure_simulation(object):
         while self.epaCount < 4380:
             dayCount = math.floor(biHour / 12)
             # Temperature at Surface maximum at current timestep
-            tasMaxACT = float(self.tasMaxACTList[simType][dayCount])
+            tasMaxACT = float(self.tasMaxACTList[simType.split("_")[0]][dayCount])
             # Normal run used to track state of EPANET simulation
             normal_run = 1
             # Comp = Component, iterates over all component types in the simulation
