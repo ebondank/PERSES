@@ -69,11 +69,11 @@ if __name__ == "__main__":
             conns[index].commit()
             cursors[index].executemany('''INSERT INTO NodeDataMLow VALUES (?, ?, ?)''', res[index]['node_data_sub_40'])
             conns[index].commit()
-            for comp in comps:
-                write_list = filter(lambda x: x[2] == comp, res[index]['failure_data'])
-                with open(("{}_{}_fail.txt").format(sim_list_strings[index], comp), 'a') as handle:
-                    for value in write_list:
-                        handle.write(("{} {}\n").format(value[1], value[0]))
+            # for comp in comps:
+            #     write_list = filter(lambda x: x[2] == comp, res[index]['failure_data'])
+            #     with open(("{}_{}_fail.txt").format(sim_list_strings[index], comp), 'a') as handle:
+            #         for value in write_list:
+            #             handle.write(("{} {}\n").format(value[1], value[0]))
         for sim in data:
             data[sim]["epanet"].ENcloseH()
             data[sim]["epanet"].ENclose()
