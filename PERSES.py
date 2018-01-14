@@ -69,11 +69,10 @@ if __name__ == "__main__":
             conns[index].commit()
             cursors[index].executemany('''INSERT INTO NodeDataMLow VALUES (?, ?, ?)''', res[index]['node_data_sub_40'])
             conns[index].commit()
-        for comp in comps:
-            for sim_with_rep in sim_list_strings:
+            for comp in comps:
                 write_list = res[index]['failure_data']
                 write_list = filter(lambda x: x[2] == comp, write_list)
-                with open(("{}_{}_fail.txt").format(sim_with_rep, comp), 'a') as handle:
+                with open(("{}_{}_fail.txt").format(sim_list_strings[index], comp), 'a') as handle:
                     for value in write_list:
                         handle.write(("{} {}\n").format(value[1], value[0]))
         for sim in data:
