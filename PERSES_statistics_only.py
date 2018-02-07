@@ -7,6 +7,7 @@ import multiprocessing as mp
 # import inquirer
 # import threading
 
+
 def input_file_cleaning(filename):
     ret_list = list()
     if not isinstance(filename, list):
@@ -29,6 +30,7 @@ def input_file_cleaning(filename):
                         print(val)
     return ret_list
 
+
 def write_failure_to_file(sims):
     failures = list()
     for sim in sims:
@@ -37,6 +39,7 @@ def write_failure_to_file(sims):
         for x in failures:
             for y in x:
                 testHand.write(("{}\n").format(y))
+
 
 class component_populations(object):
     def __init__(self, temp_curve_file, failure_dist_files, component_type, component_god_factor_list, component_count, goal_time, starting_index, ending_index, thread_splice, slice_size):
@@ -83,7 +86,7 @@ class component_populations(object):
                 per_failed2 = dist[math.ceil(self.exposure_arrays[idx][self.index])]
                 per_failed = (per_failed2 - per_failed1) * (self.exposure_arrays[idx][self.index] - \
                     math.floor(self.exposure_arrays[idx][self.index])) + per_failed1
-                if (per_failed > self.god_factor_lists[idx][self.index][self.god_factor_counts[idx][self.index]]):
+                if per_failed > self.god_factor_lists[idx][self.index][self.god_factor_counts[idx][self.index]]:
                     self.failure_instances.append(("{}|{}|{}|{}|{}|{}|{}").format(self.day_count, \
                         self.index, self.component_type, self.thread_splice,\
                         self.god_factor_lists[idx][self.index][self.god_factor_counts[idx][self.index]], \

@@ -5,19 +5,9 @@ import atexit
 # All code in PERSES_configuration must be ran before PERSES can funtion, DO NOT alter this line
 from PERSES_configuration import *
 from PERSES_simulation import failure_simulation
-# from pathos.multiprocessing import _ProcessPool as Pool
-# import multiprocessing_on_dill as mp
 
-# def file_cleaning():
-#     with os.scandir() as it:
-#         for file in it:
-#             if len(file.name().split('.')) > 1:
-#                 os.remove(file.name)
-# Creating all the databases, failure files, and simulation parametes necessary
+
 if __name__ == "__main__":
-    # simsToRun = {'temp_curves': ['real'],\
-                #  'rep_curves': [{'pipe':22, 'pump':4}, {'pipe':44, 'pump':8}, {'pipe':88, 'pump':16}]}
-
     conn_dict = dict()
     cursor_dict = dict()
     for sim_with_rep in sim_list_strings:

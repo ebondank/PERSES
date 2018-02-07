@@ -3,7 +3,7 @@ import math
 import os
 
 
-Path = 'Output/noTemp.db'
+Path = 'Output/real_88_16.db'
 print(Path)
 db = sql.connect(Path)
 com = db.cursor()
@@ -30,7 +30,7 @@ while (infiniteCount < 150):
     infiniteCount += 1
 print(demandList)
 yrList = list()
-list1 = com.execute('SELECT * FROM NodeDataVLow ORDER BY Bihour_Count ASC')
+list1 = com.execute('SELECT * FROM NodeData ORDER BY Bihour_Count ASC')
 newItem = None
 for row in list1:
     try:
