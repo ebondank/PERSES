@@ -165,9 +165,9 @@ for key in data:
 #     elec_exp_list = elec_exp_f.read().splitlines()
 #     motor_exp_list = motor_exp_f.read().splitlines()
 
-distList = {'high': {'motor': list(), 'elec': list(), 'pvc': list(), 'iron': list()},
-            'med': {'motor': list(), 'elec': list(), 'pvc': list(), 'iron': list()},
-            'low': {'motor': list(), 'elec': list(), 'pvc': list(), 'iron': list()}}
+distList = {'best': {'motor': list(), 'elec': list(), 'pvc': list(), 'iron': list()},
+            'mid': {'motor': list(), 'elec': list(), 'pvc': list(), 'iron': list()},
+            'worst': {'motor': list(), 'elec': list(), 'pvc': list(), 'iron': list()}}
 for scen in distList.keys():
     for comp_ in distList[scen]:
         with open(('component_cdf/{}_{}_cdf.txt').format(comp_, scen), 'r') as handle:
