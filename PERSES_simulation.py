@@ -14,7 +14,6 @@ class failure_simulation(object):
         self.nodeID = kwargs['nodeValue']
         self.normal_run_list = kwargs['normal_run_list']
         self.distList = kwargs['distList']
-        self.dist_type = kwargs['dist_type']
         self.timestep = kwargs['timestep']
         self.nodeValue = kwargs['nodeValue']
         self.biHourToYear = kwargs['biHourToYear']
