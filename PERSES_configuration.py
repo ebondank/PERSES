@@ -37,7 +37,7 @@ class simulation_creation(object):
 epalib = ct.cdll.LoadLibrary('epanet2.dll')
 comps = ['pump', 'iron', 'pvc']
 sim_list = {'temp_curves': ['rcp85', 'rcp45', 'historical'],
-            'dist_types': ['high', 'med', 'low']
+            'dist_types': ['best', 'mid', 'worst']
 }
                 #  'rep_times': [{'pipe':22, 'pump':4}, {'pipe':44, 'pump':8}, {'pipe':88, 'pump':16}]}
 
@@ -170,5 +170,5 @@ distList = {'high': {'motor': list(), 'elec': list(), 'pvc': list(), 'iron': lis
             'low': {'motor': list(), 'elec': list(), 'pvc': list(), 'iron': list()}}
 for scen in distList.keys():
     for comp_ in distList[scen]:
-        with open(('{}_{}_cdf.txt').format(comp_, scen), 'r') as handle:
+        with open(('component_cdf/{}_{}_cdf.txt').format(comp_, scen), 'r') as handle:
             distList[scen][comp_] = handle.read().splitlines()
