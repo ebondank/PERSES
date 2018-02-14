@@ -42,11 +42,11 @@ if __name__ == "__main__":
                 nodeValue=nodeValue,\
                 nodeID=nodeID,\
                 normal_run_list=normal_run_list,\
-                distList=distList,\
+                distList=distList[sim_with_rep.split('_')[1]],\
                 timestep=timestep,\
                 biHourToYear=biHourToYear,\
-                pipe_rep_time=sim_with_rep.split("_")[1],\
-                pump_rep_time=sim_with_rep.split("_")[2])
+                pipe_rep_time=44,\
+                pump_rep_time=8)
             simulation_list.append(sim_item)
         for sim in simulation_list:
             res.append(sim.EPANET_simulation())

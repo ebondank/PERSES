@@ -33,14 +33,21 @@ class simulation_creation(object):
                 else:
                     self.sim[key][component_type] = pipe_attributes().prop
         return self.sim
+
 epalib = ct.cdll.LoadLibrary('epanet2.dll')
 comps = ['pump', 'iron', 'pvc']
-sim_list = {'temp_curves': ['rcp85', 'rcp45', 'historical'],\
-                 'rep_times': [{'pipe':22, 'pump':4}, {'pipe':44, 'pump':8}, {'pipe':88, 'pump':16}]}
+sim_list = {'temp_curves': ['rcp85', 'rcp45', 'historical'],
+            'dist_types': ['high', 'med', 'low']
+}
+                #  'rep_times': [{'pipe':22, 'pump':4}, {'pipe':44, 'pump':8}, {'pipe':88, 'pump':16}]}
+
 sim_list_strings = list()
 for temp in sim_list['temp_curves']:
-    for rep in sim_list['rep_times']:
-        sim_list_strings.append(("{}_{}_{}").format(temp, rep['pipe'], rep['pump']))
+    for dist in sim_list['dist_types']:
+        sim_list_strings.append(("{}_{}").format(temp, dist))
+    # for rep in sim_list['rep_times']:
+        # sim_list_strings.append(("{}_{}_{}").format(temp, rep['pipe'], rep['pump']))
+    
 
 sims_struct_gen_dict = dict()
 for sim in sim_list_strings:
@@ -149,12 +156,19 @@ for key in data:
         data[key]['pump']['elec_ctH'].append(value[0])
 
 # Adding in the exposure files, which are loosely relatable to a CDF
-with open(os.path.relpath('new_cdf\\pvc_made_cdf.txt'), 'r') as pvc_exp_f:
-    pvc_exp_list = pvc_exp_f.read().splitlines()
-with open(os.path.relpath('new_cdf\\iron_made_cdf.txt'), 'r') as iron_exp_f:
-    iron_exp_list = iron_exp_f.read().splitlines()
-with open(os.path.relpath('new_cdf\\elec_made_cdf.txt'), 'r') as elec_exp_f, \
-    open(os.path.relpath('new_cdf\\motor_made_cdf.txt'), 'r') as motor_exp_f:
-    elec_exp_list = elec_exp_f.read().splitlines()
-    motor_exp_list = motor_exp_f.read().splitlines()
-distList = {'motor': motor_exp_list, 'elec': elec_exp_list, 'pvc': pvc_exp_list, 'iron': iron_exp_list}
+# with open(os.path.relpath('new_cdf\\pvc_made_cdf.txt'), 'r') as pvc_exp_f:
+#     pvc_exp_list = pvc_exp_f.read().splitlines()
+# with open(os.path.relpath('new_cdf\\iron_made_cdf.txt'), 'r') as iron_exp_f:
+#     iron_exp_list = iron_exp_f.read().splitlines()
+# with open(os.path.relpath('new_cdf\\elec_made_cdf.txt'), 'r') as elec_exp_f, \
+#     open(os.path.relpath('new_cdf\\motor_made_cdf.txt'), 'r') as motor_exp_f:
+#     elec_exp_list = elec_exp_f.read().splitlines()
+#     motor_exp_list = motor_exp_f.read().splitlines()
+
+distList = {'high': {'motor': list(), 'elec': list(), 'pvc': list(), 'iron': list()},
+            'med': {'motor': list(), 'elec': list(), 'pvc': list(), 'iron': list()},
+            'low': {'motor': list(), 'elec': list(), 'pvc': list(), 'iron': list()}}
+for scen in distList.keys():
+    for comp_ in distList[scen]:
+        with open(('{}_{}_cdf.txt').format(comp_, scen), 'r') as handle:
+            distList[scen][comp_] = handle.read().splitlines()
