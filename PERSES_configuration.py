@@ -3,61 +3,88 @@ import math
 import numpy as np
 import ctypes as ct
 
-biHourToYear = float(.0002283105022831050228310502283105)
-normal_run_list = [list()]*24
-tasMaxACTList = dict()
-biHour = 0
+'''Features of the simulation to create pivots around the lists available'''
+
+Simulation_Features = {
+    'Evaluate_Temperature': {'Test': True, 'Keyword': 'temp_curves'},
+    'Evaluate_Repair_Times' = {'Test': False, 'Keyword': 'rep_times'},
+    'Evaluate_Failure_Distributions' = {'Test':True, 'Keyword': 'dist_curves'}
+}
+
+'''End of simulation features section'''
+
 
 # Current Threshold, List of Thresholds, Exposure, Failure Status, Index
 class pipe_attributes(object):
     def __init__(self):
-        self.prop = {'ctH':list(), 'ltH': list(), 'exp':list(), 'fS':list(), 'index':list()}
-
+        self.prop = {'ctH':list(), 'ltH': list(), 'exp':list(), 'repair_time': None,
+                     'fS':list(), 'index':list(), 'dist': list(), 'id_string': None}
 
 # Motors Current Threshold,Electronics current threshold, List of Thresholds for both, Exposure for both, Failure Status, Index
 class pump_attributes(object):
     def __init__(self):
-        self.prop = {'motor_ctH':list(), 'elec_ctH':list(), 'motor_ltH': list(), \
-            'elec_ltH': list(), 'motor_exp': list(),'elec_exp':list(), 'fS':list(), 'index':list()}
-
+        self.prop = {'motor_ctH':list(), 'elec_ctH':list(), 'motor_ltH': list(), 'elec_ltH': list(),
+                     'motor_exp': list(),'elec_exp':list(), 'repair_time': None, 'fS':list(),
+                     'index':list(), 'motor_dist': list(), 'elec_dist': list(), 'id_string': None}
+# TODO: CREATE this as a list of simulations.
+# This is terrible fucking software you moron
 class simulation_creation(object):
     def __init__(self):
         self.sim = dict()
-    def sims_to_run(self, simulation_dict):
-        for key in simulation_dict.keys():
-            self.sim[key] = dict()
-            self.sim[key]["epanet"] = ct.cdll.LoadLibrary('epanet2.dll')
-            for component_type in simulation_dict[key]:
-                if 'pump' in component_type:
-                    self.sim[key][component_type] = pump_attributes().prop
-                else:
-                    self.sim[key][component_type] = pipe_attributes().prop
+    def generate_sim(self, simulation_dict):
+        for component_type in simulation_dict[key]:
+            if 'pump' in component_type:
+                self.sim[key][component_type] = pump_attributes().prop
+                for 
+            else:
+                self.sim[key][component_type] = pipe_attributes().prop
         return self.sim
-epalib = ct.cdll.LoadLibrary('epanet2.dll')
+
+'''User set features, inclusion in simulation dependant on features selection section above'''
 comps = ['pump', 'iron', 'pvc']
-sim_list = {'temp_curves': ['rcp85', 'rcp45', 'historical'],\
-                 'rep_times': [{'pipe':22, 'pump':4}, {'pipe':44, 'pump':8}, {'pipe':88, 'pump':16}]}
-sim_list_strings = list()
-for temp in sim_list['temp_curves']:
-    for rep in sim_list['rep_times']:
-        sim_list_strings.append(("{}_{}_{}").format(temp, rep['pipe'], rep['pump']))
+
+feature_params = {'temp_curves': ['rcp85', 'rcp45', 'historical'],
+                  'rep_times': [{'pipe':22, 'pump':4}, {'pipe':44, 'pump':8}, {'pipe':88, 'pump':16}],
+                  'dist_curves': ["low", "med", "high"]
+}
+
+temp_files = {'rcp85': 'rcp85_1950_2100.txt',
+              'rcp45':'rcp45_1950_2100.txt',
+              'historical': 'hist_2100.txt'
+}
+
+'''End of user set features section'''
+
+biHourToYear = float(.0002283105022831050228310502283105)
+epalib = ct.cdll.LoadLibrary('epanet2.dll')
+normal_run_list = [list()]*24
+tasMaxACTList = dict()
+biHour = 0
+
+simulations_dict = {'features_to_eval': list(),
+                    'simulations': list()
+                    }
+
+for feat in Simulation_Features.keys():
+    if Simulation_Features[feat]['Test'] == True:
+        simulations['features_to_eval'].append(Simulation_Features['feat']['Keyword'])
+for feat in simulations_dict['features_to_eval']:
+    for spec_feat in feat:
+        for oth_feat in [x for x in simulations_dict['features_to_eval'] if x is not feat]:
+            for sub_oth_feat in oth_feat:
+                temp_sim = simulation_creation().sim
+                if 
+
+# sim_list_strings = list()
+# for temp in sim_list['temp_curves']:
+#     for rep in sim_list['rep_times']:
+#         sim_list_strings.append(("{}_{}_{}").format(temp, rep['pipe'], rep['pump']))
 
 sims_struct_gen_dict = dict()
 for sim in sim_list_strings:
     sims_struct_gen_dict[sim] = comps
 data = simulation_creation().sims_to_run(sims_struct_gen_dict)
-
-# Temperature files, there are available in the github repo
-if os.name == "nt":
-    tempFileList = {'rcp85': 'rcp85_1950_2100.txt', \
-                    # 'noTime_noCC': 'hist45.txt', \
-                    'rcp45':'rcp45_1950_2100.txt', \
-                    'historical': 'hist_2100.txt'}
-else:
-    tempFileList = {'rcp85': 'rcp85_1950_2100.txt', \
-                    # 'noTime_noCC': 'hist45.txt', \
-                    'rcp45':'rcp45_1950_2100.txt', \
-                    'historical': 'hist_2100.txt'}
+    
 for key in tempFileList:
     with open(tempFileList[key], 'r') as f_:
         tasMaxACTList[key] = f_.read().expandtabs().splitlines() 
